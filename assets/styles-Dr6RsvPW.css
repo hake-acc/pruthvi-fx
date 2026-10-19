@@ -126,3 +126,111 @@
     letter-spacing: -0.03em !important;
   }
 }
+
+/* ==============================================
+   SOFTWARE & WORK TOOLS (ARSENAL) SECTION
+============================================== */
+.tools-section {
+  padding: clamp(70px, 8vw, 120px) 24px;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+}
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  margin-top: 48px;
+}
+.tool-card {
+  position: relative;
+  background: rgba(18, 14, 33, 0.72);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.tool-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(192, 132, 252, 0.45);
+  box-shadow: 0 18px 40px -10px rgba(124, 58, 237, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.tool-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.tool-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(26, 17, 48, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.25);
+}
+.tool-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.tool-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.tool-name {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.tool-level {
+  font-size: 0.78rem;
+  color: #a78bfa;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.tool-percent {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #c084fc;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 100px;
+  padding: 4px 11px;
+  letter-spacing: 0.02em;
+}
+.tool-desc {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+.tool-progress-track {
+  width: 100%;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  margin-top: 2px;
+}
+.tool-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a855f7, #c084fc);
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.55);
+}
