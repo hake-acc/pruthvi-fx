@@ -1,0 +1,134 @@
+[
+  {
+    "id": "thumb-01",
+    "title": "Fast Client 100 Days Survival",
+    "image": "/assets/pruthvi-01-fastclient.webp",
+    "category": "100 Days",
+    "client": "FastClient",
+    "alt": "Minecraft 100 Days Fast Client Survival Thumbnail",
+    "order": 1,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-02",
+    "title": "Mega Base Build Progression",
+    "image": "/assets/pruthvi-02-build.webp",
+    "category": "Hardcore",
+    "client": "Solo Project",
+    "alt": "Minecraft Mega Base Build Progression Hardcore Thumbnail",
+    "order": 2,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-03",
+    "title": "Kabeer Baba SMP Challenge",
+    "image": "/assets/pruthvi-03-kabeerbaba.webp",
+    "category": "SMP",
+    "client": "Kabeer Baba",
+    "alt": "Minecraft Kabeer Baba SMP Challenge Thumbnail",
+    "order": 3,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-04",
+    "title": "Monnie SMP Survival World",
+    "image": "/assets/pruthvi-04-monnie.webp",
+    "category": "SMP",
+    "client": "Monnie",
+    "alt": "Minecraft Monnie SMP Survival World Thumbnail",
+    "order": 4,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-05",
+    "title": "Far Lands Mystery Expedition",
+    "image": "/assets/pruthvi-05-untitled413.webp",
+    "category": "Survival",
+    "client": "Mystery Series",
+    "alt": "Minecraft Far Lands Mystery Expedition Thumbnail",
+    "order": 5,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-06",
+    "title": "Insane RMK God Weapon SMP",
+    "image": "/assets/pruthvi-06-rmk.webp",
+    "category": "SMP",
+    "client": "Insane RMK",
+    "alt": "Minecraft Insane RMK God Weapon SMP Thumbnail",
+    "order": 6,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-07",
+    "title": "Shadow Realm Boss Fight",
+    "image": "/assets/pruthvi-07-shadow1.webp",
+    "category": "Hardcore",
+    "client": "Shadow Series",
+    "alt": "Minecraft Shadow Realm Boss Fight Thumbnail",
+    "order": 7,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-08",
+    "title": "Void Trap Escape Chapter 4",
+    "image": "/assets/pruthvi-08-shadow4.webp",
+    "category": "Hardcore",
+    "client": "Shadow Series",
+    "alt": "Minecraft Void Trap Escape Chapter 4 Thumbnail",
+    "order": 8,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-09",
+    "title": "Overrated Minecraft Weapons Tested",
+    "image": "/assets/pruthvi-09-overrated.webp",
+    "category": "Survival",
+    "client": "Solo Project",
+    "alt": "Minecraft Overrated Weapons Tested Thumbnail",
+    "order": 9,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-10",
+    "title": "Kira Anime Crossover 100 Days",
+    "image": "/assets/pruthvi-10-kira.webp",
+    "category": "100 Days",
+    "client": "Kira",
+    "alt": "Minecraft Kira Anime Crossover 100 Days Thumbnail",
+    "order": 10,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-11",
+    "title": "Kabeer Unlocked Illegal Items",
+    "image": "/assets/pruthvi-11-kabeerunlocked.webp",
+    "category": "SMP",
+    "client": "Kabeer Baba",
+    "alt": "Minecraft Kabeer Unlocked Illegal Items Thumbnail",
+    "order": 11,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  },
+  {
+    "id": "thumb-12",
+    "title": "100 Days After The Apocalypse",
+    "image": "/assets/pruthvi-12-after.webp",
+    "category": "100 Days",
+    "client": "Community",
+    "alt": "Minecraft 100 Days After The Apocalypse Thumbnail",
+    "order": 12,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T11:37:01.282Z"
+  }
+]

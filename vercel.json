@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/hehdowjwneodhb", "destination": "/hehdowjwneodhb/index.html" },
+    { "source": "/hehdowjwneodhb/", "destination": "/hehdowjwneodhb/index.html" },
+    { "source": "/admin", "destination": "/hehdowjwneodhb/index.html" },
+    { "source": "/admin/", "destination": "/hehdowjwneodhb/index.html" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "pruthvi-fx",
+  "version": "1.0.0",
+  "description": "Pruthvi FX Portfolio and Thumbnail Management System",
+  "private": true,
+  "scripts": {
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js",
+    "test": "node test-e2e.js"
+  }
+}
