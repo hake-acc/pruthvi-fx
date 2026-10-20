@@ -78,6 +78,7 @@ function CaseStudyComp(){
           (0,G.jsxs)(`div`,{className:`card-footer-row`,children:[(0,G.jsx)(`span`,{className:`footer-specs`,children:d.specs}),(0,G.jsxs)(`a`,{href:d.yt,target:`_blank`,rel:`noreferrer`,className:`cs-youtube-btn`,children:[`YouTube `,(0,G.jsx)(`svg`,{xmlns:`http://www.w3.org/2000/svg`,width:14,height:14,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,strokeWidth:2,strokeLinecap:`round`,strokeLinejoin:`round`,className:`lucide lucide-external-link`,children:(0,G.jsx)(`path`,{d:`M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6`})})]})]})
         ]});
         let poleColEl=(0,G.jsxs)(`div`,{className:`timeline-pole-col`,"aria-hidden":`true`,children:[
+          (0,G.jsxs)(`div`,{className:`creator-pole`,children:[(0,G.jsx)(`div`,{className:`pole-glass-shine`})]}),
           (0,G.jsx)(`div`,{className:`connector-arm `+(isLeft?`arm-left`:`arm-right`)}),
           (0,G.jsx)(`div`,{className:`timeline-node`,children:(0,G.jsx)(`div`,{className:`node-core`})})
         ]});
