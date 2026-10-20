@@ -1,25 +1,25 @@
 [
   {
-    "id": "thumb-01",
-    "title": "Fast Client 100 Days Survival",
-    "image": "/assets/pruthvi-01-fastclient.webp",
-    "category": "100 Days",
-    "client": "FastClient",
-    "alt": "Minecraft 100 Days Fast Client Survival Thumbnail",
-    "order": 1,
-    "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
-  },
-  {
     "id": "thumb-02",
     "title": "Mega Base Build Progression",
     "image": "/assets/pruthvi-02-build.webp",
     "category": "Hardcore",
     "client": "Solo Project",
     "alt": "Minecraft Mega Base Build Progression Hardcore Thumbnail",
+    "order": 1,
+    "createdAt": "2026-10-19T13:45:00Z",
+    "updatedAt": "2026-10-20T13:26:42.626Z"
+  },
+  {
+    "id": "thumb-01",
+    "title": "Fast Client 100 Days Survival",
+    "image": "/assets/pruthvi-01-fastclient.webp",
+    "category": "100 Days",
+    "client": "FastClient",
+    "alt": "Minecraft 100 Days Fast Client Survival Thumbnail",
     "order": 2,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-03",
@@ -30,7 +30,7 @@
     "alt": "Minecraft Kabeer Baba SMP Challenge Thumbnail",
     "order": 3,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-04",
@@ -41,7 +41,7 @@
     "alt": "Minecraft Monnie SMP Survival World Thumbnail",
     "order": 4,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-05",
@@ -52,7 +52,7 @@
     "alt": "Minecraft Far Lands Mystery Expedition Thumbnail",
     "order": 5,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-06",
@@ -63,7 +63,7 @@
     "alt": "Minecraft Insane RMK God Weapon SMP Thumbnail",
     "order": 6,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-07",
@@ -74,7 +74,7 @@
     "alt": "Minecraft Shadow Realm Boss Fight Thumbnail",
     "order": 7,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-08",
@@ -85,7 +85,7 @@
     "alt": "Minecraft Void Trap Escape Chapter 4 Thumbnail",
     "order": 8,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-09",
@@ -96,7 +96,7 @@
     "alt": "Minecraft Overrated Weapons Tested Thumbnail",
     "order": 9,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.626Z"
   },
   {
     "id": "thumb-10",
@@ -107,7 +107,7 @@
     "alt": "Minecraft Kira Anime Crossover 100 Days Thumbnail",
     "order": 10,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.627Z"
   },
   {
     "id": "thumb-11",
@@ -118,7 +118,7 @@
     "alt": "Minecraft Kabeer Unlocked Illegal Items Thumbnail",
     "order": 11,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.627Z"
   },
   {
     "id": "thumb-12",
@@ -129,6 +129,6 @@
     "alt": "Minecraft 100 Days After The Apocalypse Thumbnail",
     "order": 12,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T11:37:01.282Z"
+    "updatedAt": "2026-10-20T13:26:42.627Z"
   }
 ]
