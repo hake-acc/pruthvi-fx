@@ -897,6 +897,8 @@
     function showAuth() {
       document.getElementById('authView').style.display = 'flex';
       document.getElementById('dashboardView').style.display = 'none';
+      const badge = document.getElementById('userBadgeWrap');
+      if (badge) badge.style.display = 'none';
     }
 
     function showDashboard() {

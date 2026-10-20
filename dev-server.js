@@ -101,9 +101,19 @@ const server = http.createServer(async (req, res) => {
 });
 
 if (require.main === module) {
+  if (!process.env.ADMIN_USERNAME) {
+    process.env.ADMIN_USERNAME = 'dev_admin';
+  }
+  if (!process.env.ADMIN_PASSWORD && !process.env.ADMIN_PASSWORD_HASH) {
+    process.env.ADMIN_PASSWORD = 'dev_local_password_123';
+  }
+
   server.listen(PORT, '0.0.0.0', () => {
     console.log(`Portfolio server running on http://localhost:${PORT}`);
     console.log(`Admin dashboard: http://localhost:${PORT}/admin`);
+    if (process.env.ADMIN_USERNAME === 'dev_admin') {
+      console.log(`Development credentials: username=dev_admin, password=dev_local_password_123`);
+    }
   });
 }
 

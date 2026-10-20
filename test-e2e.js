@@ -44,6 +44,13 @@ function parseCookie(setCookieHeader) {
 async function runTests() {
   console.log('🚀 Starting Comprehensive End-to-End Test Suite...\n');
 
+  // Configure isolated mock credentials for local test run
+  const TEST_USERNAME = 'test_mock_admin';
+  const TEST_PASSWORD = 'TestMockPassword_Safe_123!';
+  process.env.ADMIN_USERNAME = TEST_USERNAME;
+  process.env.ADMIN_PASSWORD = TEST_PASSWORD;
+  process.env.SESSION_SECRET = 'mock_session_secret_for_automated_testing_only_12345';
+
   // Start server
   await new Promise((res) => server.listen(PORT, '127.0.0.1', res));
   let cookie = '';
@@ -110,7 +117,7 @@ async function runTests() {
       path: '/api/auth/login',
       method: 'POST',
       headers: { 'x-forwarded-for': '127.0.0.1' }
-    }, { username: 'px_editor_38fdf9', password: 'ZBD@qz)q3V4@aP+QaR_fAwgy' });
+    }, { username: TEST_USERNAME, password: TEST_PASSWORD });
 
     assert(loginRes.statusCode === 200 && loginRes.json.ok === true, 'POST /api/auth/login succeeds with generated credentials');
     assert(loginRes.headers['set-cookie'] !== undefined, 'Login returns Set-Cookie header');
@@ -125,7 +132,7 @@ async function runTests() {
       headers: { Cookie: cookie }
     });
     assert(meAuth.statusCode === 200 && meAuth.json.authenticated === true, 'GET /api/auth/me validates session cookie');
-    assert(meAuth.json.user.username === 'px_editor_38fdf9', 'Session contains correct username');
+    assert(meAuth.json.user.username === TEST_USERNAME, 'Session contains correct username');
 
     // 7. Admin Status
     const statusRes = await request({

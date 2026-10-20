@@ -2,13 +2,11 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
+// Session configuration
 const COOKIE_NAME = 'portfolio_admin_session';
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
-
-// Predefined or environment credentials
-const DEFAULT_USERNAME = 'px_editor_38fdf9';
-const DEFAULT_PASSWORD_HASH = 'af9557d10ce697239eeb18f50a5dc7eed316fc7f01c90ed0afa5a56d19e703f1';
-const DEFAULT_SESSION_SECRET = '02bba6ccee8d18f141a53727f9bec1af17fdcf8eeb736bdc03928673f1b1e970';
+// Ephemeral fallback secret if not configured in environment (regenerates per runtime)
+const RUNTIME_SESSION_SECRET = crypto.randomBytes(32).toString('hex');
 
 // Rate limiting state for brute force protection (in-memory per lambda instance / server)
 const loginAttempts = new Map();
@@ -18,10 +16,10 @@ const RATE_LIMIT_LOCKOUT_MS = 10 * 60 * 1000; // 10 minutes
 
 function getEnvConfig() {
   return {
-    adminUsername: (process.env.ADMIN_USERNAME || DEFAULT_USERNAME).trim(),
+    adminUsername: (process.env.ADMIN_USERNAME || '').trim(),
     adminPasswordHash: (process.env.ADMIN_PASSWORD_HASH || '').trim(),
     adminPasswordPlain: (process.env.ADMIN_PASSWORD || '').trim(),
-    sessionSecret: (process.env.SESSION_SECRET || DEFAULT_SESSION_SECRET).trim(),
+    sessionSecret: (process.env.SESSION_SECRET || RUNTIME_SESSION_SECRET).trim(),
     githubToken: (process.env.GITHUB_TOKEN || '').trim(),
     githubOwner: (process.env.GITHUB_OWNER || 'hake-acc').trim(),
     githubRepo: (process.env.GITHUB_REPO || 'pruthvi-fx').trim(),
@@ -82,8 +80,8 @@ function verifyPassword(inputPassword, expectedUser) {
   const config = getEnvConfig();
   if (!inputPassword || typeof inputPassword !== 'string') return false;
 
-  // Verify username match
-  if (expectedUser !== config.adminUsername) return false;
+  // Fail closed if admin credentials are not configured in environment
+  if (!config.adminUsername || expectedUser !== config.adminUsername) return false;
 
   // 1. If explicit ADMIN_PASSWORD_HASH is set
   if (config.adminPasswordHash) {
@@ -102,12 +100,9 @@ function verifyPassword(inputPassword, expectedUser) {
     return crypto.timingSafeEqual(a, b);
   }
 
-  // 3. Fallback to default hash (admin123)
-  const inputHash = crypto.createHash('sha256').update(inputPassword).digest('hex');
-  const a = Buffer.from(inputHash, 'utf-8');
-  const b = Buffer.from(DEFAULT_PASSWORD_HASH, 'utf-8');
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
+  // Fail closed: no password configured
+  console.warn('Authentication rejected: neither ADMIN_PASSWORD_HASH nor ADMIN_PASSWORD is set in environment.');
+  return false;
 }
 
 // Sign and Verify Session Tokens
