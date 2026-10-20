@@ -39,20 +39,35 @@ module.exports = async function handler(req, res) {
         if (!item || typeof item !== 'object') {
           throw new Error(`Invalid thumbnail entry at index ${index}`);
         }
-        const title = String(item.title || 'Untitled Thumbnail').trim();
-        const image = String(item.image || '').trim();
+        const rawTitle = item.title && String(item.title).trim();
+        const title = (rawTitle && rawTitle !== 'undefined' && rawTitle !== 'null') ? rawTitle : 'Untitled Thumbnail';
+        
+        const rawImage = item.image && String(item.image).trim();
+        const image = (rawImage && rawImage !== 'undefined' && rawImage !== 'null') ? rawImage : '';
         if (!image) {
           throw new Error(`Thumbnail "${title}" requires an image path or URL.`);
         }
 
+        const rawCat = item.category && String(item.category).trim();
+        const category = (rawCat && rawCat !== 'undefined' && rawCat !== 'null') ? rawCat : 'General';
+
+        const rawClient = item.client && String(item.client).trim();
+        const client = (rawClient && rawClient !== 'undefined' && rawClient !== 'null') ? rawClient : 'Solo';
+
+        const rawAlt = item.alt && String(item.alt).trim();
+        const alt = (rawAlt && rawAlt !== 'undefined' && rawAlt !== 'null') ? rawAlt : title;
+
+        const rawId = item.id && String(item.id).trim();
+        const id = (rawId && rawId !== 'undefined' && rawId !== 'null') ? rawId : `thumb-${Date.now()}-${index}`;
+
         return {
-          id: String(item.id || `thumb-${Date.now()}-${index}`),
+          id,
           title,
           image,
-          category: String(item.category || 'General').trim(),
-          client: String(item.client || '').trim(),
-          alt: String(item.alt || title).trim(),
-          order: typeof item.order === 'number' ? item.order : index + 1,
+          category,
+          client,
+          alt,
+          order: (typeof item.order === 'number' && !isNaN(item.order)) ? item.order : index + 1,
           createdAt: item.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };

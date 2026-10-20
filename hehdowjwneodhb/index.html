@@ -704,6 +704,10 @@
         <img src="/assets/pruthvi-avatar-D7mTU8zK.png" alt="Pruthvi FX" />
         <strong>Pruthvi FX</strong>
         <span class="brand-badge">CMS</span>
+        <div id="userBadgeWrap" style="display:none; align-items:center; gap:6px; background:rgba(168,85,247,0.12); color:#c084fc; border:1px solid rgba(168,85,247,0.25); padding:3px 10px; border-radius:9999px; font-size:0.75rem; font-weight:600;">
+          <span style="width:6px; height:6px; border-radius:50%; background:#22c55e;"></span>
+          <span id="userBadgeText">Admin</span>
+        </div>
       </div>
 
       <div class="header-actions">
@@ -878,6 +882,7 @@
         const data = await res.json();
         if (data && data.authenticated) {
           currentUser = data.user;
+          updateUserBadge(currentUser);
           showDashboard();
           await loadStatus();
           await loadThumbnails();
@@ -924,8 +929,10 @@
 
         if (res.ok && data.ok) {
           currentUser = data.user;
-          passwordInput.value = '';
-          showToast('Welcome back, ' + currentUser.username, 'success');
+          passwordInput.value = "";
+          updateUserBadge(currentUser);
+          const uname = (currentUser && currentUser.username) || (typeof currentUser === "string" ? currentUser : "Admin");
+          showToast("Welcome back, " + uname, "success");
           showDashboard();
           await loadStatus();
           await loadThumbnails();
@@ -967,16 +974,20 @@
         const subtitle = document.getElementById('statusSubtitle');
         const actions = document.getElementById('statusActions');
 
-        if (githubStatus.configured && githubStatus.connected) {
-          dot.className = 'status-dot';
-          title.innerText = `Connected to GitHub: ${githubStatus.owner}/${githubStatus.repo}`;
-          subtitle.innerText = `Branch: ${githubStatus.branch} • Commits will trigger automatic Vercel updates`;
-          actions.innerHTML = ``;
-        } else if (githubStatus.configured && !githubStatus.connected) {
-          dot.className = 'status-dot offline';
-          title.innerText = `GitHub Token Configured (${githubStatus.owner}/${githubStatus.repo})`;
-          subtitle.innerText = githubStatus.error || 'Could not verify repository access';
-          actions.innerHTML = ``;
+        const owner = (githubStatus && githubStatus.owner && githubStatus.owner !== "undefined") ? githubStatus.owner : "hake-acc";
+        const repo = (githubStatus && githubStatus.repo && githubStatus.repo !== "undefined") ? githubStatus.repo : "pruthvi-fx";
+        const branch = (githubStatus && githubStatus.branch && githubStatus.branch !== "undefined") ? githubStatus.branch : "main";
+
+        if (githubStatus && githubStatus.configured && githubStatus.connected) {
+          dot.className = "status-dot";
+          title.innerText = `Connected to GitHub: ${owner}/${repo}`;
+          subtitle.innerText = `Branch: ${branch} • Commits will trigger automatic Vercel updates`;
+          actions.innerHTML = "";
+        } else if (githubStatus && githubStatus.configured && !githubStatus.connected) {
+          dot.className = "status-dot offline";
+          title.innerText = `GitHub Token Configured (${owner}/${repo})`;
+          subtitle.innerText = (githubStatus.error && githubStatus.error !== "undefined") ? githubStatus.error : "Could not verify repository access";
+          actions.innerHTML = "";
         } else {
           dot.className = 'status-dot offline';
           title.innerText = 'Local Storage Mode (Configure GITHUB_TOKEN in Vercel)';
@@ -1026,6 +1037,16 @@
       });
     }
 
+    function updateUserBadge(user) {
+      const uname = (user && user.username) || (typeof user === "string" ? user : "Admin");
+      const badgeWrap = document.getElementById("userBadgeWrap");
+      const badgeText = document.getElementById("userBadgeText");
+      if (badgeWrap && badgeText) {
+        badgeText.innerText = uname;
+        badgeWrap.style.display = "inline-flex";
+      }
+    }
+
     // Render Thumbnail Cards
     function renderThumbnails(list) {
       const grid = document.getElementById('thumbnailsGrid');
@@ -1043,31 +1064,40 @@
       }
 
       list.forEach((t, index) => {
-        const card = document.createElement('div');
-        card.className = 'thumb-card';
+        if (!t) return;
+        const id = (t.id && String(t.id) !== "undefined") ? String(t.id) : `thumb-${index + 1}`;
+        const title = (t.title && String(t.title) !== "undefined") ? String(t.title) : "Untitled Project";
+        const image = (t.image && String(t.image) !== "undefined") ? String(t.image) : "";
+        const category = (t.category && String(t.category) !== "undefined") ? String(t.category) : "General";
+        const client = (t.client && String(t.client) !== "undefined") ? String(t.client) : "Solo";
+        const alt = (t.alt && String(t.alt) !== "undefined") ? String(t.alt) : title;
+        const order = (typeof t.order === "number" && !isNaN(t.order)) ? t.order : (index + 1);
+
+        const card = document.createElement("div");
+        card.className = "thumb-card";
         card.innerHTML = `
-          <div class="thumb-preview" onclick="openLightbox('${escapeHtml(t.image)}')">
-            <img src="${escapeHtml(t.image)}" alt="${escapeHtml(t.alt || t.title)}" loading="lazy" />
-            <span class="thumb-order-badge">#${t.order || (index + 1)}</span>
-            <span class="thumb-category-badge">${escapeHtml(t.category || 'General')}</span>
+          <div class="thumb-preview" onclick="openLightbox('${escapeHtml(image)}')">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}" loading="lazy" />
+            <span class="thumb-order-badge">#${order}</span>
+            <span class="thumb-category-badge">${escapeHtml(category)}</span>
           </div>
           <div class="thumb-body">
-            <h4 class="thumb-title" title="${escapeHtml(t.title)}">${escapeHtml(t.title)}</h4>
+            <h4 class="thumb-title" title="${escapeHtml(title)}">${escapeHtml(title)}</h4>
             <div class="thumb-meta">
-              <span>👤 ${escapeHtml(t.client || 'Solo')}</span>
+              <span>👤 ${escapeHtml(client)}</span>
             </div>
             <div class="thumb-actions">
               <div class="reorder-btns">
-                <button class="btn-icon" title="Move Up" onclick="moveThumbnail('${t.id}', -1)" ${index === 0 ? 'disabled' : ''}>
+                <button class="btn-icon" title="Move Up" onclick="moveThumbnail('${escapeHtml(id)}', -1)" ${index === 0 ? "disabled" : ""}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
                 </button>
-                <button class="btn-icon" title="Move Down" onclick="moveThumbnail('${t.id}', 1)" ${index === list.length - 1 ? 'disabled' : ''}>
+                <button class="btn-icon" title="Move Down" onclick="moveThumbnail('${escapeHtml(id)}', 1)" ${index === list.length - 1 ? "disabled" : ""}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </button>
               </div>
               <div class="crud-btns">
-                <button class="btn-secondary" style="padding:6px 12px; font-size:0.8rem;" onclick="openEditModal('${t.id}')">Edit</button>
-                <button class="btn-danger" style="padding:6px 10px; font-size:0.8rem;" onclick="openDeleteModal('${t.id}')" title="Delete">
+                <button class="btn-secondary" style="padding:6px 12px; font-size:0.8rem;" onclick="openEditModal('${escapeHtml(id)}')">Edit</button>
+                <button class="btn-danger" style="padding:6px 10px; font-size:0.8rem;" onclick="openDeleteModal('${escapeHtml(id)}')" title="Delete">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
               </div>
@@ -1137,15 +1167,15 @@
       if (!item) return;
 
       document.getElementById('modalTitle').innerText = 'Edit Thumbnail Details';
-      document.getElementById('editThumbId').value = item.id;
-      document.getElementById('editThumbImage').value = item.image;
-      document.getElementById('editTitle').value = item.title;
-      document.getElementById('editCategory').value = item.category || '';
-      document.getElementById('editClient').value = item.client || '';
-      document.getElementById('editAlt').value = item.alt || '';
+      document.getElementById('editThumbId').value = (item.id && item.id !== 'undefined') ? item.id : '';
+      document.getElementById('editThumbImage').value = (item.image && item.image !== 'undefined') ? item.image : '';
+      document.getElementById('editTitle').value = (item.title && item.title !== 'undefined') ? item.title : '';
+      document.getElementById('editCategory').value = (item.category && item.category !== 'undefined') ? item.category : '';
+      document.getElementById('editClient').value = (item.client && item.client !== 'undefined') ? item.client : '';
+      document.getElementById('editAlt').value = (item.alt && item.alt !== 'undefined') ? item.alt : '';
 
       const preview = document.getElementById('imagePreview');
-      preview.src = item.image;
+      preview.src = (item.image && item.image !== 'undefined') ? item.image : '';
       preview.style.display = 'block';
       document.getElementById('dropzonePrompt').style.display = 'none';
       pendingFile = null;
@@ -1289,8 +1319,8 @@
       const item = allThumbnails.find(t => t.id === id);
       if (!item) return;
       deleteTargetId = id;
-      document.getElementById('deleteTargetTitle').innerText = item.title;
-      document.getElementById('deletePreviewImg').src = item.image;
+      document.getElementById('deleteTargetTitle').innerText = (item.title && item.title !== 'undefined') ? item.title : 'this thumbnail';
+      document.getElementById('deletePreviewImg').src = (item.image && item.image !== 'undefined') ? item.image : '';
       document.getElementById('deleteModal').classList.add('open');
     }
 
@@ -1331,7 +1361,8 @@
 
         document.getElementById('statSync').innerText = data.publishedToGithub ? 'Published' : 'Saved Local';
         if (data.publishedToGithub) {
-          showToast(`Published to GitHub (${data.commitSha ? data.commitSha.slice(0, 7) : 'ok'})`, 'success');
+          const sha = (data.commitSha && String(data.commitSha) !== 'undefined') ? String(data.commitSha).slice(0, 7) : 'latest';
+          showToast(`Published to GitHub (${sha})`, 'success');
         }
       } catch (err) {
         document.getElementById('statSync').innerText = 'Sync Error';
@@ -1365,11 +1396,12 @@
     }
 
     // Utility: Toast Notifications
-    function showToast(message, type = 'default') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type === 'success' ? 'toast-success' : type === 'error' ? 'toast-error' : ''}`;
-      toast.innerText = message;
+    function showToast(message, type = "default") {
+      const safeMsg = (message && String(message) !== "undefined" && String(message) !== "null") ? String(message) : "Operation completed";
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = `toast ${type === "success" ? "toast-success" : type === "error" ? "toast-error" : ""}`;
+      toast.innerText = safeMsg;
       container.appendChild(toast);
 
       requestAnimationFrame(() => toast.classList.add('show'));
@@ -1389,7 +1421,7 @@
     }
 
     function escapeHtml(str) {
-      if (!str) return '';
+      if (!str || str === "undefined" || str === "null") return "";
       return String(str)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')

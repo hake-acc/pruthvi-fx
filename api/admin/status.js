@@ -21,12 +21,12 @@ module.exports = async function handler(req, res) {
 
   const status = {
     authenticated: true,
-    user: session.u,
+    user: session.u || 'Admin',
     github: {
       configured: hasToken,
-      owner: config.githubOwner,
-      repo: config.githubRepo,
-      branch: config.githubBranch,
+      owner: config.githubOwner || 'hake-acc',
+      repo: config.githubRepo || 'pruthvi-fx',
+      branch: config.githubBranch || 'main',
       connected: false,
       error: null,
     },

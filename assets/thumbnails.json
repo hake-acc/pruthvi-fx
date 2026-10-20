@@ -8,7 +8,7 @@
     "alt": "Minecraft Mega Base Build Progression Hardcore Thumbnail",
     "order": 1,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-01",
@@ -19,7 +19,40 @@
     "alt": "Minecraft 100 Days Fast Client Survival Thumbnail",
     "order": 2,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
+  },
+  {
+    "id": "thumb-14",
+    "title": "Sharpness XX Infinite Damage SMP",
+    "image": "/assets/pruthvi-14-lalbaal.webp",
+    "category": "SMP",
+    "client": "SMP Series",
+    "alt": "Minecraft Sharpness XX Infinite Damage Enchanted Sword SMP Thumbnail",
+    "order": 3,
+    "createdAt": "2026-10-20T13:30:00Z",
+    "updatedAt": "2026-10-20T13:44:52.793Z"
+  },
+  {
+    "id": "thumb-15",
+    "title": "Fading Memories Rose Garden Storyline",
+    "image": "/assets/pruthvi-15-untitled21.webp",
+    "category": "Storyline",
+    "client": "Cinematic SMP",
+    "alt": "Minecraft Fading Memories Disintegrating Rose Garden Storyline Thumbnail",
+    "order": 4,
+    "createdAt": "2026-10-20T13:30:00Z",
+    "updatedAt": "2026-10-20T13:44:52.793Z"
+  },
+  {
+    "id": "thumb-13",
+    "title": "Glowing Entity Dungeon Encounter",
+    "image": "/assets/pruthvi-13-work6.webp",
+    "category": "Hardcore",
+    "client": "Mystery Series",
+    "alt": "Minecraft Glowing White Entity Purple Dungeon Encounter Thumbnail",
+    "order": 5,
+    "createdAt": "2026-10-20T13:30:00Z",
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-03",
@@ -28,9 +61,9 @@
     "category": "SMP",
     "client": "Kabeer Baba",
     "alt": "Minecraft Kabeer Baba SMP Challenge Thumbnail",
-    "order": 3,
+    "order": 6,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-04",
@@ -39,9 +72,9 @@
     "category": "SMP",
     "client": "Monnie",
     "alt": "Minecraft Monnie SMP Survival World Thumbnail",
-    "order": 4,
+    "order": 7,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-05",
@@ -50,9 +83,9 @@
     "category": "Survival",
     "client": "Mystery Series",
     "alt": "Minecraft Far Lands Mystery Expedition Thumbnail",
-    "order": 5,
+    "order": 8,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-06",
@@ -61,9 +94,9 @@
     "category": "SMP",
     "client": "Insane RMK",
     "alt": "Minecraft Insane RMK God Weapon SMP Thumbnail",
-    "order": 6,
+    "order": 9,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-07",
@@ -72,9 +105,9 @@
     "category": "Hardcore",
     "client": "Shadow Series",
     "alt": "Minecraft Shadow Realm Boss Fight Thumbnail",
-    "order": 7,
+    "order": 10,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-08",
@@ -83,9 +116,9 @@
     "category": "Hardcore",
     "client": "Shadow Series",
     "alt": "Minecraft Void Trap Escape Chapter 4 Thumbnail",
-    "order": 8,
+    "order": 11,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-09",
@@ -94,9 +127,9 @@
     "category": "Survival",
     "client": "Solo Project",
     "alt": "Minecraft Overrated Weapons Tested Thumbnail",
-    "order": 9,
+    "order": 12,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.626Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-10",
@@ -105,9 +138,9 @@
     "category": "100 Days",
     "client": "Kira",
     "alt": "Minecraft Kira Anime Crossover 100 Days Thumbnail",
-    "order": 10,
+    "order": 13,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.627Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-11",
@@ -116,9 +149,9 @@
     "category": "SMP",
     "client": "Kabeer Baba",
     "alt": "Minecraft Kabeer Unlocked Illegal Items Thumbnail",
-    "order": 11,
+    "order": 14,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.627Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   },
   {
     "id": "thumb-12",
@@ -127,8 +160,8 @@
     "category": "100 Days",
     "client": "Community",
     "alt": "Minecraft 100 Days After The Apocalypse Thumbnail",
-    "order": 12,
+    "order": 15,
     "createdAt": "2026-10-19T13:45:00Z",
-    "updatedAt": "2026-10-20T13:26:42.627Z"
+    "updatedAt": "2026-10-20T13:44:52.793Z"
   }
 ]

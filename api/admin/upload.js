@@ -11,7 +11,9 @@ const {
 const ALLOWED_MIME_TYPES = {
   'image/jpeg': '.jpg',
   'image/jpg': '.jpg',
+  'image/pjpeg': '.jpg',
   'image/png': '.png',
+  'image/x-png': '.png',
   'image/webp': '.webp',
 };
 
@@ -71,7 +73,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Generate safe, collision-resistant filename
-    const ext = ALLOWED_MIME_TYPES[detectedMime];
+    const ext = ALLOWED_MIME_TYPES[detectedMime] || path.extname(filename || '').toLowerCase() || '.png';
     const originalBase = filename
       ? path.basename(filename, path.extname(filename)).replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase().slice(0, 30)
       : 'thumb';
@@ -112,11 +114,11 @@ module.exports = async function handler(req, res) {
       url: publicUrl,
       filename: safeFilename,
       size: buffer.length,
-      mimeType: detectedMime,
-      publishedToGithub,
-      commitSha,
+      mimeType: detectedMime || 'image/png',
+      publishedToGithub: Boolean(publishedToGithub),
+      commitSha: commitSha || null,
       githubConfigured: Boolean(config.githubToken),
-      githubError,
+      githubError: githubError || null,
     });
   } catch (err) {
     console.error('Upload handler error:', err);
