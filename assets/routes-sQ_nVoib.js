@@ -54,20 +54,38 @@ var caseStudies=[
 ];
 
 function CaseStudyComp(){
+  let[inView,setInView]=(0,u.useState)(!1),stageRef=(0,u.useRef)(null);
+  (0,u.useEffect)(()=>{
+    let el=stageRef.current;
+    if(!el)return;
+    if(window.matchMedia&&window.matchMedia(`(prefers-reduced-motion: reduce)`).matches){
+      setInView(!0);return;
+    }
+    let obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          setInView(!0);
+          obs.disconnect();
+        }
+      });
+    },{threshold:0.12});
+    obs.observe(el);
+    return ()=>obs.disconnect();
+  },[]);
   return (0,G.jsxs)(`section`,{id:`case-study`,className:`case-study-section motion-section`,children:[
     (0,G.jsxs)(`div`,{className:`case-study-heading`,children:[
       (0,G.jsx)(`span`,{children:`Proven Results`}),
       (0,G.jsx)(`h2`,{children:`Creator Case Studies`}),
       (0,G.jsx)(`p`,{children:`Real creators. Transformative packaging. Measurable growth.`})
     ]}),
-    (0,G.jsxs)(`div`,{className:`timeline-pole-stage`,children:[
+    (0,G.jsxs)(`div`,{ref:stageRef,className:`timeline-pole-stage`+(inView?` stage--in-view`:``),children:[
       (0,G.jsxs)(`div`,{className:`orbit-texture`,"aria-hidden":`true`,children:[
         (0,G.jsx)(`div`,{className:`orbit-ring orbit-ring-1`}),
         (0,G.jsx)(`div`,{className:`orbit-ring orbit-ring-2`}),
         (0,G.jsx)(`div`,{className:`orbit-ring orbit-ring-3`}),
         (0,G.jsx)(`div`,{className:`orbit-ring orbit-ring-4`})
       ]}),
-      (0,G.jsx)(`div`,{className:`timeline-central-pole`,"aria-hidden":`true`,children:(0,G.jsx)(`div`,{className:`pole-glowing-beam`})}),
+      (0,G.jsx)(`div`,{className:`timeline-central-pole`,"aria-hidden":`true`,children:(0,G.jsxs)(`div`,{className:`pole-glowing-beam`,children:[(0,G.jsx)(`div`,{className:`pole-glass-shine`})]})}),
       (0,G.jsx)(`div`,{className:`timeline-entries-list`,children:caseStudies.map((d,i)=>{
         let isLeft=i%2===0;
         let cardEl=(0,G.jsxs)(`div`,{className:`case-study-card`,children:[
@@ -78,11 +96,10 @@ function CaseStudyComp(){
           (0,G.jsxs)(`div`,{className:`card-footer-row`,children:[(0,G.jsx)(`span`,{className:`footer-specs`,children:d.specs}),(0,G.jsxs)(`a`,{href:d.yt,target:`_blank`,rel:`noreferrer`,className:`cs-youtube-btn`,children:[`YouTube `,(0,G.jsx)(`svg`,{xmlns:`http://www.w3.org/2000/svg`,width:14,height:14,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,strokeWidth:2,strokeLinecap:`round`,strokeLinejoin:`round`,className:`lucide lucide-external-link`,children:(0,G.jsx)(`path`,{d:`M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6`})})]})]})
         ]});
         let poleColEl=(0,G.jsxs)(`div`,{className:`timeline-pole-col`,"aria-hidden":`true`,children:[
-          (0,G.jsxs)(`div`,{className:`creator-pole`,children:[(0,G.jsx)(`div`,{className:`pole-glass-shine`})]}),
           (0,G.jsx)(`div`,{className:`connector-arm `+(isLeft?`arm-left`:`arm-right`)}),
           (0,G.jsx)(`div`,{className:`timeline-node`,children:(0,G.jsx)(`div`,{className:`node-core`})})
         ]});
-        return (0,G.jsxs)(`div`,{className:`timeline-row `+(isLeft?`row-left`:`row-right`),children:[
+        return (0,G.jsxs)(`div`,{className:`timeline-row `+(isLeft?`row-left`:`row-right`)+` row-`+i,children:[
           isLeft?(0,G.jsx)(`div`,{className:`timeline-card-col`,children:cardEl}):(0,G.jsx)(`div`,{className:`timeline-spacer-col`,"aria-hidden":`true`}),
           poleColEl,
           isLeft?(0,G.jsx)(`div`,{className:`timeline-spacer-col`,"aria-hidden":`true`}):(0,G.jsx)(`div`,{className:`timeline-card-col`,children:cardEl})
