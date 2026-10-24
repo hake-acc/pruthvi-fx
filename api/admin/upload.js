@@ -109,6 +109,13 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    if (config.githubToken && !publishedToGithub) {
+      return res.status(502).json({
+        ok: false,
+        error: `Failed to persist image to GitHub repository: ${githubError}`,
+      });
+    }
+
     res.status(200).json({
       ok: true,
       url: publicUrl,
