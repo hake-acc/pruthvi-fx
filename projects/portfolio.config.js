@@ -26,7 +26,7 @@ module.exports = {
 
   showreel: {
     title: "Showreel 2025",
-    playbackId: "ycc6bXk6hOWxGnyb6F3wvUxPPLiDML00P9OPkYMjuSN8"
+    playbackId: "pruthvi_fx_showreel_2025"
   },
 
   projects: [
