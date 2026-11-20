@@ -6128,29 +6128,7 @@ window.LOADER_DATA = {
   ],
   "markers": [],
   "props": {},
-  "chars": [
-    {
-      "ch": "h",
-      "size": 81.1999969482422,
-      "style": "Medium",
-      "w": 59,
-      "data": {
-        "shapes": [
-          {
-            "ty": "gr",
-            "it": [
-              {
-                "ind": 0,
-                "ty": "sh",
-                "ix": 1,
-                "ks": {
-                  "a": 0,
-                  "k": {
-                    "i": [
-                      [
-                        0,
-                        0
-                      ],
+  "chars": [],
                       [
                         0,
                         0

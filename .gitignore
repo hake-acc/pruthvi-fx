@@ -53,6 +53,7 @@ gitlog.txt
 !public/**
 !images/**
 !_nuxt/**
+!videos/**
 final/node_modules/
 public/node_modules/
 .cursor/
