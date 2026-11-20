@@ -1,23 +1,22 @@
 /**
- * Watereye Portfolio Interactive & Motion Engine
- * Inspired by NotZeoX motion physics & WaterEye presentation architecture
+ * Pruthvi FX — Advanced Motion & Interaction Engine
+ * Inspired by NotZeoX motion physics & WaterEye section architecture
  * Features:
  *  - Lenis-grade virtual smooth scroll with exponential damping
- *  - Tilted thumbnail wall IntersectionObserver lifecycle management
- *  - Mathematical cubic ease-out stats counters (50+, 250+, 71.68M+)
+ *  - Tilted thumbnail stream IntersectionObserver lifecycle management
+ *  - Cubic ease-out counter engine (18+ Masterworks, 10M+ Client Views, 100% PSD Source)
  *  - Interactive Before/After comparison slider with touch, mouse & keyboard controls
- *  - Fluid category filter & search for 40+ high-CTR thumbnails
- *  - Full-screen 4K Lightbox modal with keyboard navigation (Esc, Arrows)
- *  - Kinetic text reveals & scroll progress tracking
+ *  - Filterable gallery across 18 high-resolution Minecraft thumbnails
+ *  - Full-screen 4K Lightbox modal with keyboard navigation (Esc, Left/Right arrows)
+ *  - Smooth accordion FAQ system with ARIA controls
  *  - One-click Discord copy with tactile visual feedback
- *  - Mobile navigation drawer
- *  - Accessible prefers-reduced-motion fallbacks
+ *  - Mobile drawer navigation
+ *  - Full prefers-reduced-motion accessibility compliance
  */
 
 (function () {
   'use strict';
 
-  // --- Reduced Motion Check ---
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // --- 1. Virtual Smooth Scroll Engine (Lenis-Inspired) ---
@@ -27,7 +26,7 @@
 
       this.targetY = window.scrollY;
       this.currentY = window.scrollY;
-      this.ease = 0.085;
+      this.ease = 0.088;
       this.isScrolling = false;
       this.rafId = null;
 
@@ -38,7 +37,6 @@
     }
 
     onWheel(e) {
-      // Allow default inside modal or scrollable containers
       if (e.target.closest('.lightbox-dialog, .admin-container, textarea')) return;
 
       e.preventDefault();
@@ -67,14 +65,6 @@
       window.scrollTo(0, this.currentY);
       this.rafId = requestAnimationFrame(this.update);
     }
-
-    scrollTo(targetY, duration = 600) {
-      this.targetY = targetY;
-      if (!this.isScrolling) {
-        this.isScrolling = true;
-        this.rafId = requestAnimationFrame(this.update);
-      }
-    }
   }
 
   const scroller = new SmoothScroll();
@@ -91,7 +81,7 @@
             wall.classList.toggle('is-paused', !entry.isIntersecting);
           });
         },
-        { rootMargin: '120px' }
+        { rootMargin: '100px' }
       );
       observer.observe(wall);
     }
@@ -167,33 +157,33 @@
     const projectDesc = container.querySelector('.renderlab-project-desc');
 
     const projectData = {
-      nether: {
-        title: 'Nether Fortress Raid',
-        desc: 'Raw Cinema 4D character posing & base geometry transformed with dual-tone crimson rim lighting, volumetric fog, and high-impact particle compositing.',
+      apocalypse: {
+        title: 'Apocalypse 100 Days — Survival Hook',
+        desc: 'Raw untextured 3D character pose with flat studio keylights transformed in Photoshop with apocalyptic dust storms, glowing red eyes, and high-retention cinematic rim lighting.',
         before: '/assets/before1.webp',
         after: '/assets/after1.webp',
-        alt: 'Nether Fortress Raid Before and After'
+        alt: 'Apocalypse 100 Days Before and After'
       },
-      void: {
-        title: 'Void Dragon Dimension',
-        desc: 'Wireframe dragon rig with flat lighting refined into a terrifying obsidian skybox with purple energy rifts and high-contrast atmospheric depth.',
+      shadow: {
+        title: 'Shadow Realm Boss Fight',
+        desc: 'Basic Minecraft mob rigs upgraded into an intense dimensional rift encounter with volumetric neon purple particle effects and deep black contrast.',
         before: '/assets/before2.webp',
         after: '/assets/after2.webp',
-        alt: 'Void Dragon Dimension Before and After'
+        alt: 'Shadow Realm Boss Fight Before and After'
       },
-      warden: {
-        title: 'Deep Dark Warden Encounter',
-        desc: 'Base Blender block model upgraded with cinematic cyan sonic boom rays, pitch-black vignette gradients, and heart-pounding survival tension.',
+      sharpness: {
+        title: 'Infinite Sharpness XX God Weapon SMP',
+        desc: 'Unlit Minecraft sword model enhanced with radiant enchanted glow, custom 3D character facial expression, and aggressive mobile-calibrated saturation.',
         before: '/assets/before3.webp',
         after: '/assets/after3.webp',
-        alt: 'Deep Dark Warden Encounter Before and After'
+        alt: 'Infinite Sharpness XX God Weapon Before and After'
       },
-      ancient: {
-        title: 'Ancient City Apocalypse',
-        desc: 'Untextured layout draft composited in Photoshop with custom glowing runic soul fire, high-retention typography, and mobile-calibrated saturation.',
+      megabase: {
+        title: 'Mega Base Build Progression',
+        desc: 'Simple Minecraft terrain blocks composited into an epic scale mega-structure with cinematic sunset god rays and bold visual hierarchy.',
         before: '/assets/before4.webp',
         after: '/assets/after4.webp',
-        alt: 'Ancient City Apocalypse Before and After'
+        alt: 'Mega Base Build Progression Before and After'
       }
     };
 
@@ -210,20 +200,20 @@
       });
     }
 
-    // Direct pointer drag over preview
-    const previewWrap = container.querySelector('.renderlab-stage');
+    // Direct pointer drag over stage
+    const stage = container.querySelector('.renderlab-stage');
     let isDragging = false;
 
-    if (previewWrap) {
+    if (stage) {
       const updateFromPointer = (e) => {
-        const rect = previewWrap.getBoundingClientRect();
+        const rect = stage.getBoundingClientRect();
         const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         const offsetX = clientX - rect.left;
         const percent = (offsetX / rect.width) * 100;
         setPosition(percent);
       };
 
-      previewWrap.addEventListener('mousedown', (e) => {
+      stage.addEventListener('mousedown', (e) => {
         isDragging = true;
         updateFromPointer(e);
       });
@@ -237,7 +227,7 @@
         isDragging = false;
       });
 
-      previewWrap.addEventListener('touchstart', (e) => {
+      stage.addEventListener('touchstart', (e) => {
         isDragging = true;
         updateFromPointer(e);
       }, { passive: true });
@@ -264,11 +254,11 @@
 
         if (beforeImg) {
           beforeImg.src = data.before;
-          beforeImg.alt = `${data.title} Raw 3D Viewport`;
+          beforeImg.alt = `${data.title} Raw 3D Staging`;
         }
         if (afterImg) {
           afterImg.src = data.after;
-          afterImg.alt = `${data.title} Final Photoshop Composite`;
+          afterImg.alt = `${data.title} Final Composite`;
         }
         if (projectTitle) projectTitle.textContent = data.title;
         if (projectDesc) projectDesc.textContent = data.desc;
@@ -282,7 +272,6 @@
 
   // --- 5. Portfolio Gallery & Lightbox Inspection Modal ---
   function initGalleryAndLightbox() {
-    const galleryGrid = document.querySelector('.portfolio-grid');
     const filterButtons = document.querySelectorAll('.filter-pill');
     const lightbox = document.getElementById('portfolio-lightbox');
     const lightboxImg = lightbox ? lightbox.querySelector('.lightbox-image') : null;
@@ -327,7 +316,7 @@
       if (currentIndex === -1) currentIndex = 0;
 
       const img = card.querySelector('img');
-      const title = card.getAttribute('data-title') || (img ? img.alt : 'Thumbnail Design');
+      const title = card.getAttribute('data-title') || (img ? img.alt : 'Pruthvi FX Thumbnail');
       const category = card.getAttribute('data-category') || 'Minecraft';
       const client = card.getAttribute('data-client') || 'Featured Creator';
       const fullSrc = card.getAttribute('data-full-src') || (img ? img.src : '');
@@ -367,7 +356,6 @@
       openLightbox(visibleItems[currentIndex]);
     };
 
-    // Attach click to gallery items
     allItems.forEach((card) => {
       card.addEventListener('click', () => openLightbox(card));
       card.addEventListener('keydown', (e) => {
@@ -390,7 +378,6 @@
       });
     }
 
-    // Keyboard support: Escape, Arrows
     window.addEventListener('keydown', (e) => {
       if (!lightbox || !lightbox.classList.contains('is-open')) return;
 
@@ -418,7 +405,6 @@
       button.addEventListener('click', () => {
         const isExpanded = button.getAttribute('aria-expanded') === 'true';
 
-        // Close other open FAQs for clean presentation
         faqItems.forEach((other) => {
           if (other !== item) {
             const ob = other.querySelector('.faq-question-btn');
@@ -448,7 +434,7 @@
     const copyDiscordBtns = document.querySelectorAll('[data-copy-discord]');
     const copyEmailBtns = document.querySelectorAll('[data-copy-email]');
 
-    const copyText = async (text, btn, defaultLabel = '') => {
+    const copyText = async (text, btn) => {
       try {
         await navigator.clipboard.writeText(text);
       } catch (err) {
@@ -476,7 +462,7 @@
     copyDiscordBtns.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        copyText('watereyetheog', btn);
+        copyText('pruthvifx', btn);
       });
     });
 
@@ -517,32 +503,7 @@
     });
   }
 
-  // --- 9. Kinetic Text & Reveal on Scroll ---
-  function initScrollReveals() {
-    const revealElements = document.querySelectorAll('.reveal-on-scroll');
-    if (!revealElements.length) return;
-
-    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-      revealElements.forEach((el) => el.classList.add('is-inview'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-inview');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    revealElements.forEach((el) => observer.observe(el));
-  }
-
-  // --- 10. Navigation Active State Spy ---
+  // --- 9. Navigation Active State Spy ---
   function initScrollSpy() {
     const navLinks = document.querySelectorAll('.desktop-nav a[href^="#"]');
     const sections = Array.from(navLinks)
@@ -582,7 +543,6 @@
     initFaqAccordion();
     initCopyButtons();
     initMobileNav();
-    initScrollReveals();
     initScrollSpy();
   }
 
