@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-Dk7t3yRR.js";var t=e({trackFathom:()=>n}),n=e=>{typeof window>`u`||!window.fathom?.trackEvent||window.fathom.trackEvent(e.name)};export{n,t};

@@ -1,0 +1,29 @@
+/*
+ * The Typekit service used to deliver this font or fonts for use on websites
+ * is provided by Adobe and is subject to these Terms of Use
+ * http://www.adobe.com/products/eulas/tou_typekit. For font license
+ * information, see the list below.
+ *
+ * indivisible-variable:
+ *   - http://typekit.com/eulas/0000000000000000774bed0d
+ *   - http://typekit.com/eulas/0000000000000000774bed0e
+ *
+ * © 2009-2026 Adobe Systems Incorporated. All Rights Reserved.
+ */
+/*{"last_published":"2026-04-02 13:44:05 UTC"}*/
+
+@import url("");
+
+@font-face {
+font-family:"indivisible-variable";
+src:url("/fonts/font_1.woff2") format("woff2"),url("/fonts/font_2.woff2") format("woff"),url("/fonts/font_3.woff2") format("opentype");
+font-display:auto;font-style:italic;font-weight:200 900;font-stretch:normal;
+}
+
+@font-face {
+font-family:"indivisible-variable";
+src:url("/fonts/font_4.woff2") format("woff2"),url("/fonts/font_5.woff2") format("woff"),url("/fonts/font_6.woff2") format("opentype");
+font-display:auto;font-style:normal;font-weight:110 900;font-stretch:normal;
+}
+
+.tk-indivisible-variable { font-family: "indivisible-variable",sans-serif; }

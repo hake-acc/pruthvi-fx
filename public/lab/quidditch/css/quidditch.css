@@ -1,0 +1,145 @@
+@font-face { font-family: 'Q Suisse'; src: url('/fonts/SuisseBPIntl-Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'Q Suisse'; src: url('/fonts/SuisseBPIntl-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Q Mono'; src: url('/fonts/Sometype-Mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Q Roxborough'; src: url('/fonts/RoxboroughCF-Light.woff') format('woff'); font-weight: 300; font-display: swap; }
+
+:root {
+    --void: #020408;
+    --bone: #ece6da;
+    --dim: rgba(236, 230, 218, 0.65);
+    --faint: rgba(236, 230, 218, 0.28);
+    --cyan: #38bdf8;
+    --gold: #f0bf5a;
+    --signal: #FFED29;
+    --sans: 'Q Suisse', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'Q Mono', ui-monospace, Menlo, Consolas, monospace;
+    --serif: 'Q Roxborough', 'Playfair Display', Georgia, serif;
+    --pad: clamp(24px, 3.8vw, 56px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--void); color: var(--bone); -webkit-font-smoothing: antialiased; }
+body { font-family: var(--sans); overscroll-behavior: none; touch-action: none; }
+@media (hover: hover) and (pointer: fine) { html, body, a, button, label, canvas { cursor: none; } }
+
+.q-gl { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100lvh; display: block; z-index: 0; }
+
+.ap-nav { opacity: 0; pointer-events: none; transition: opacity .5s; }
+body:hover .ap-nav:hover, .ap-nav.is-open { opacity: 1; pointer-events: auto; }
+
+/* ------------------------------------------------------------------ Gate */
+.q-gate {
+    position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: var(--pad);
+    background: radial-gradient(70% 60% at 50% 50%, rgba(2, 4, 8, 0.72), rgba(2, 4, 8, 0.4) 65%, rgba(2, 4, 8, 0.85));
+    transition: opacity 1.4s cubic-bezier(.6, 0, .2, 1), visibility 0s linear 1.4s;
+}
+.q-gate.is-gone { opacity: 0; visibility: hidden; pointer-events: none; }
+.q-gate__inner { width: min(600px, 100%); text-align: center; }
+.q-meta { display: flex; justify-content: center; gap: 1.6em; margin: 0 0 clamp(24px, 4.5vh, 48px); font: 400 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--cyan); }
+.q-gate__title {
+    margin: 0; font: 300 clamp(44px, 8vw, 110px)/0.9 var(--serif); letter-spacing: -0.01em; color: var(--bone);
+    text-shadow: 0 0 45px rgba(56, 189, 248, 0.35);
+}
+.q-gate__line { margin: 1.6em 0 0; font: 300 clamp(13px, 1.1vw, 15.5px)/1.65 var(--sans); letter-spacing: .04em; color: var(--dim); }
+.q-sound { margin: clamp(26px, 5vh, 48px) auto 0; padding: 0; border: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.q-sound__legend { width: 100%; margin-bottom: 14px; font: 400 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--faint); }
+.q-sound__opt { position: relative; }
+.q-sound__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.q-sound__opt span {
+    display: block; padding: 9px 15px 8px; border: 1px solid var(--faint); border-radius: 999px;
+    font: 400 11px/1 var(--mono); letter-spacing: .08em; color: var(--dim); transition: color .4s, border-color .4s, background-color .4s;
+}
+.q-sound__opt input:checked + span { color: #000; background: var(--bone); border-color: var(--bone); }
+.q-sound__opt input:focus-visible + span { outline: 1px solid var(--signal); outline-offset: 3px; }
+.q-sound__opt:hover span { border-color: var(--bone); color: var(--bone); }
+.q-sound__opt:hover input:checked + span { color: #000; }
+.q-gate__go {
+    margin: clamp(26px, 5vh, 48px) auto 0; display: inline-flex; align-items: center; gap: 12px; padding: 0 0 6px; border: 0; border-bottom: 1px solid var(--cyan);
+    background: none; color: var(--bone); font: 300 15px/1 var(--sans); letter-spacing: .32em; text-transform: uppercase;
+}
+.q-gate__go svg { width: 8px; color: var(--cyan); transition: transform .5s cubic-bezier(.2, .7, .1, 1); }
+.q-gate__go:hover svg { transform: translate3d(3px, -3px, 0); }
+.q-gate__go:focus-visible { outline: 1px solid var(--signal); outline-offset: 6px; }
+.q-gate__hint { margin: 24px 0 0; font: 400 10.5px/1.5 var(--mono); letter-spacing: .12em; color: var(--faint); }
+
+/* ------------------------------------------------------------------ Dracarys Luxury Editorial HUD */
+.q-hud { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+.q-hud > * { transition: opacity 1.2s; opacity: 0; }
+html.is-running .q-hud > * { opacity: 1; }
+
+/* Top Left: [ LAB 08 ] · QUIDDITCH */
+.q-top-left {
+    position: absolute; left: var(--pad); top: calc(var(--pad) + 48px);
+}
+.q-tag {
+    font: 400 11.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
+}
+
+/* Top Right: PATRONUS */
+.q-top-right {
+    position: absolute; right: var(--pad); top: calc(var(--pad) + 48px);
+}
+.q-subject {
+    font: 400 12px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--dim);
+}
+
+/* Bottom Left: Diamond Glyph Emblem & Sound */
+.q-diamond-badge {
+    position: absolute; left: var(--pad); bottom: var(--pad);
+    display: flex; align-items: center; gap: 24px;
+    pointer-events: auto;
+}
+.q-diamond {
+    width: 26px; height: 26px; border: 1px solid rgba(236, 230, 218, 0.45);
+    transform: rotate(45deg); display: grid; place-items: center;
+    background: rgba(2, 4, 8, 0.35); backdrop-filter: blur(6px);
+    transition: border-color .3s, transform .4s;
+}
+.q-diamond:hover {
+    border-color: var(--cyan);
+    transform: rotate(45deg) scale(1.08);
+}
+.q-diamond span {
+    transform: rotate(-45deg); font: 400 10.5px/1 var(--serif);
+    color: var(--bone); letter-spacing: 0;
+}
+
+.q-mute {
+    display: flex; align-items: flex-end; gap: 2px; height: 14px; padding: 0; border: 0; background: none;
+    color: var(--dim); pointer-events: auto; transition: color .3s;
+}
+.q-mute i { display: block; width: 2px; height: 100%; background: currentColor; transform-origin: 50% 100%; animation: q-eq 1.25s ease-in-out infinite; }
+.q-mute i:nth-child(2) { animation-delay: -.4s; } .q-mute i:nth-child(3) { animation-delay: -.8s; } .q-mute i:nth-child(4) { animation-delay: -.2s; }
+.q-mute span { margin-left: 10px; font: 400 10.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+.q-mute[aria-pressed="true"] i { animation: none; transform: scaleY(.15); }
+.q-mute:hover { color: var(--bone); }
+.q-mute:focus-visible { outline: 1px solid var(--signal); outline-offset: 6px; }
+@keyframes q-eq { 0%, 100% { transform: scaleY(.25); } 50% { transform: scaleY(1); } }
+
+/* Bottom Right: Running Timecode & Interactive Prompt */
+.q-bottom-right {
+    position: absolute; right: var(--pad); bottom: var(--pad);
+    display: flex; align-items: center; gap: 14px;
+    font: 400 11.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
+}
+.q-timecode {
+    color: var(--dim); font-variant-numeric: tabular-nums;
+}
+.q-timecode-prompt {
+    color: var(--dim);
+}
+
+html.q-clean .q-hud, html.q-clean .ap-nav { display: none; }
+.q-noscript { position: fixed; inset: 0; display: grid; place-items: center; margin: 0; font: 400 12px/1 var(--mono); color: var(--dim); }
+
+/* ------------------------------------------------------------------ cursor: always white, always on top */
+.site-cursor-dot {
+    position: fixed; left: 0; top: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%;
+    background: #ffffff !important; z-index: 99999999 !important; pointer-events: none; opacity: 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+    transition: opacity .3s, width .35s cubic-bezier(.2, .7, .1, 1), height .35s cubic-bezier(.2, .7, .1, 1), margin .35s cubic-bezier(.2, .7, .1, 1);
+    will-change: transform;
+}
+.site-cursor-dot.is-on { opacity: 1; }
+.site-cursor-dot.is-hover { width: 24px; height: 24px; margin: -12px 0 0 -12px; background: transparent !important; border: 1.5px solid #ffffff; }
+@media (hover: none), (pointer: coarse) { .site-cursor-dot { display: none; } }

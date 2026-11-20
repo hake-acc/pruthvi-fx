@@ -1,0 +1,477 @@
+/* The main site's header pill (index.html .ll-header .js-menu) for standalone pages, without the theme bundle.
+   Same metrics: the theme sizes it in rem on a 16px root that becomes 1.11111vw from 1600px. */
+
+/* no "Get in contact" card in the top right on any page */
+.js-sticky-items,
+.ll-header .js-sticky-items,
+.ll-header .js-sticky-items.is-revealed {
+    display: none !important;
+}
+
+@font-face {
+    font-family: SuisseBPIntl;
+    src: url('../fonts/SuisseBPIntl-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Sometype;
+    src: url('../fonts/Sometype-Mono.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+.ap-nav {
+    --u: 1px;
+    --nav-ink: rgb(249, 244, 235);
+    --nav-bg: rgba(0, 0, 0, 0.86);
+    --nav-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --nav-bar: calc(50 * var(--u));
+}
+
+@media (min-width: 1600px) {
+    .ap-nav {
+        --u: calc(1.11111vw / 16);
+    }
+}
+
+/* the main site: the theme's own menu keeps its box (scripts measure it) but hands the header to this one, which
+   appears with the rest of the chrome once the intro reveals it and sits above every slide */
+.ll-header .js-menu,
+.ll-header .js-menu.is-revealed,
+.ll-header .js-menu-blur {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.ap-nav--site .ap-nav__pill {
+    opacity: 0;
+    visibility: hidden;
+    animation: none;
+    transition: clip-path 0.55s var(--nav-ease), opacity 0.6s var(--nav-ease), visibility 0s linear 0.6s;
+}
+
+body:has(.ll-header .js-menu.is-revealed) .ap-nav--site .ap-nav__pill {
+    opacity: 1;
+    visibility: visible;
+    transition: clip-path 0.55s var(--nav-ease), opacity 0.6s var(--nav-ease), visibility 0s;
+}
+
+/* slide 4 and the end screen: the pill lifts out of frame and stays out of the way; specific enough to beat both the
+   reveal rule above and the end screen's own copy in work-together.css */
+html body.is-nav-hidden .ap-nav .ap-nav__pill {
+    animation: none;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+    transform: translate3d(-50%, calc(-100% - 24 * var(--u)), 0);
+    transition: clip-path 0.55s var(--nav-ease), opacity 0.45s ease, transform 0.7s var(--nav-ease), visibility 0s linear 0.7s;
+}
+
+html body:not(.is-nav-hidden) .ap-nav .ap-nav__pill {
+    transition: clip-path 0.55s var(--nav-ease), opacity 0.6s var(--nav-ease), transform 0.8s var(--nav-ease), visibility 0s;
+}
+
+html body.is-nav-hidden .ap-nav__scrim {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.ap-nav__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(0, 0, 0, 0.4);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.ap-nav.is-open .ap-nav__scrim {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0s;
+}
+
+.ap-nav__pill {
+    position: fixed;
+    top: calc(16 * var(--u));
+    left: 50%;
+    z-index: 9001;
+    width: calc(100vw - 32 * var(--u));
+    max-width: calc(438 * var(--u));
+    color: var(--nav-ink);
+    border-radius: calc(4 * var(--u));
+    background: var(--nav-bg);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    transform: translate3d(-50%, 0, 0);
+    clip-path: inset(0 0 calc(100% - var(--nav-bar)) 0 round calc(4 * var(--u)));
+    transition: clip-path 0.55s var(--nav-ease);
+    animation: ap-nav-in 0.6s var(--nav-ease) 0.15s both;
+}
+
+@keyframes ap-nav-in {
+    from {
+        opacity: 0;
+    }
+}
+
+.ap-nav.is-open .ap-nav__pill {
+    clip-path: inset(0 0 0 0 round calc(4 * var(--u)));
+    transition-duration: 0.7s;
+}
+
+.ap-nav__bar {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--nav-bar);
+    padding: 0 calc(13 * var(--u)) 0 calc(9 * var(--u));
+}
+
+.ap-nav__mark {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    width: calc(36 * var(--u));
+    height: calc(36 * var(--u));
+    color: inherit;
+}
+
+.ap-nav__mark svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* the pixel mark sits exactly over the vector one and only shows while it is a glyph or on its way to one */
+.ap-nav__px {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    display: block;
+    width: 100%;
+    aspect-ratio: 803 / 644;
+    opacity: 0;
+    transform: translate3d(0, -50%, 0);
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+.ap-nav__mark.is-px .ap-nav__px {
+    opacity: 1;
+}
+
+.ap-nav__mark.is-px svg {
+    opacity: 0;
+}
+
+/* Contact page: AP logo is completely removed; glitch beetle mascot sits directly in its place */
+body.gc .ap-nav__mark svg,
+.gc .ap-nav__mark svg,
+body.gc .ap-nav__mark .ap-nav__px,
+.gc .ap-nav__mark .ap-nav__px {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.ap-nav__msg {
+    position: absolute;
+    max-width: calc(100% - 112 * var(--u));
+    overflow: hidden;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    font-family: Sometype, Helvetica, Arial, sans-serif;
+    font-size: calc(10 * var(--u));
+    font-weight: 500;
+    line-height: 1.8;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.72;
+    transform: translate3d(-50%, -50%, 0);
+    pointer-events: none;
+}
+
+.ap-nav__burger {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(3 * var(--u));
+    padding: calc(12 * var(--u)) calc(7 * var(--u));
+    margin-right: calc(-7 * var(--u));
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.ap-nav__burger i {
+    display: block;
+    width: calc(16 * var(--u));
+    height: calc(2 * var(--u));
+    background: currentColor;
+    transition: transform 0.45s var(--nav-ease), opacity 0.3s ease;
+}
+
+.ap-nav.is-open .ap-nav__burger i:first-child {
+    transform: translate3d(0, calc(5 * var(--u)), 0);
+}
+
+.ap-nav.is-open .ap-nav__burger i:last-child {
+    transform: translate3d(0, calc(-5 * var(--u)), 0);
+}
+
+/* the bar itself toggles the menu, as on the main site */
+.ap-nav__hit {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.ap-nav__menu {
+    visibility: hidden;
+    transition: visibility 0s linear 0.55s;
+}
+
+.ap-nav.is-open .ap-nav__menu {
+    visibility: visible;
+    transition: visibility 0s;
+}
+
+.ap-nav__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ap-nav__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: calc(50 * var(--u));
+    padding: calc(2 * var(--u)) calc(16 * var(--u)) 0 calc(32 * var(--u));
+    color: inherit;
+    font-family: SuisseBPIntl, Helvetica, Arial, sans-serif;
+    font-size: calc(16 * var(--u));
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+}
+
+.ap-nav__item::before,
+.ap-nav__actions::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.1;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--nav-ease);
+}
+
+.ap-nav__item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.07);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.ap-nav__item:hover::after,
+.ap-nav__item:focus-visible::after {
+    opacity: 1;
+}
+
+.ap-nav__item:focus-visible {
+    outline: none;
+}
+
+.ap-nav__t {
+    position: relative;
+    display: block;
+    clip-path: inset(0 0 100% 0);
+    transform: translate3d(0, 40%, 0);
+    transition: clip-path 0.5s var(--nav-ease), transform 0.6s var(--nav-ease);
+}
+
+/* a 5x5 pixel arrow that steps in on hover; the current page wears a signature square instead */
+.ap-nav__ico {
+    position: absolute;
+    left: calc(12 * var(--u));
+    top: 50%;
+    width: calc(10 * var(--u));
+    height: calc(10 * var(--u));
+    margin-top: calc(-5 * var(--u));
+    opacity: 0;
+    transform: translate3d(calc(-4 * var(--u)), 0, 0);
+    transition: opacity 0.2s ease, transform 0.35s var(--nav-ease);
+}
+
+.ap-nav__item:hover .ap-nav__ico,
+.ap-nav__item:focus-visible .ap-nav__ico {
+    opacity: 1;
+    transform: none;
+}
+
+.ap-nav__item[aria-current='page'] .ap-nav__ico {
+    opacity: 1;
+    transform: none;
+}
+
+.ap-nav__item[aria-current='page'] .ap-nav__ico rect {
+    fill: #ffed29;
+}
+
+.ap-nav__ext {
+    position: absolute;
+    right: calc(16 * var(--u));
+    top: 50%;
+    width: calc(10 * var(--u));
+    height: calc(10 * var(--u));
+    margin-top: calc(-5 * var(--u));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ap-nav__here {
+    position: absolute;
+    right: calc(16 * var(--u));
+    top: 50%;
+    font-family: Sometype, Helvetica, Arial, sans-serif;
+    font-size: calc(10 * var(--u));
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translate3d(0, -45%, 0);
+    transition: opacity 0.3s ease;
+}
+
+.ap-nav__actions {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(6 * var(--u));
+    padding: calc(13 * var(--u));
+}
+
+.ap-nav__btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(50 * var(--u));
+    border: 1px solid transparent;
+    border-radius: calc(4 * var(--u));
+    font-family: Sometype, Helvetica, Arial, sans-serif;
+    font-size: calc(10 * var(--u));
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0;
+    transform: translate3d(0, calc(6 * var(--u)), 0);
+    transition: opacity 0.4s ease, transform 0.6s var(--nav-ease), background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.ap-nav__btn--ghost {
+    grid-column: 1 / -1;
+    background: none;
+    border-color: rgba(249, 244, 235, 0.2);
+    color: inherit;
+}
+
+.ap-nav__btn--ghost:hover,
+.ap-nav__btn--ghost:focus-visible {
+    background: var(--nav-ink);
+    color: #000;
+}
+
+.ap-nav__btn-a {
+    width: calc(7 * var(--u));
+    height: calc(8 * var(--u));
+    margin-left: calc(8 * var(--u));
+    transition: transform 0.45s var(--nav-ease);
+}
+
+.ap-nav__btn:hover .ap-nav__btn-a,
+.ap-nav__btn:focus-visible .ap-nav__btn-a {
+    transform: translate3d(calc(2 * var(--u)), calc(-2 * var(--u)), 0);
+}
+
+.ap-nav__btn--paper {
+    background: var(--nav-ink);
+    color: #000;
+}
+
+.ap-nav__btn--paper:hover,
+.ap-nav__btn--paper:focus-visible {
+    background: #ffed29;
+}
+
+.ap-nav__btn:focus-visible,
+.ap-nav__burger:focus-visible,
+.ap-nav__mark:focus-visible {
+    outline: 1px solid #ffed29;
+    outline-offset: 2px;
+}
+
+/* open: lines draw, labels rise out of their masks, buttons settle, one after another */
+.ap-nav.is-open .ap-nav__item::before,
+.ap-nav.is-open .ap-nav__actions::before {
+    transform: none;
+    transition-delay: calc(var(--i, 0) * 45ms + 80ms);
+}
+
+.ap-nav.is-open .ap-nav__t {
+    clip-path: inset(0 0 -10% 0);
+    transform: none;
+    transition-delay: calc(var(--i, 0) * 45ms + 120ms);
+}
+
+.ap-nav.is-open .ap-nav__ext,
+.ap-nav.is-open .ap-nav__here {
+    opacity: 0.8;
+    transition-delay: calc(var(--i, 0) * 45ms + 260ms);
+}
+
+.ap-nav.is-open .ap-nav__btn {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i, 0) * 45ms + 200ms), calc(var(--i, 0) * 45ms + 200ms), 0s, 0s, 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ap-nav__pill,
+    .ap-nav__scrim,
+    .ap-nav__t,
+    .ap-nav__btn,
+    .ap-nav__item::before,
+    .ap-nav__burger i {
+        transition: none !important;
+        animation: none !important;
+    }
+}

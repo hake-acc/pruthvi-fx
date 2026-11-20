@@ -1,0 +1,21 @@
+{
+  "name": "pacome-pertant-portfolio",
+  "version": "1.0.0",
+  "description": "1:1 Interactive 3D WebGL Portfolio Replica of pacomepertant.com",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "sync": "node apply_portfolio_config.js"
+  },
+  "keywords": [
+    "threejs",
+    "webgl",
+    "portfolio",
+    "lottie",
+    "howler",
+    "gsap"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,8 +1,56 @@
-.pocketdev/
-.DS_Store
-*.log
-attachments/
-.env
-.env.*
-.env*.local
+# Dependency directories
 node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+*.tmp
+*.bak
+*.bak_*
+
+# Scratch & Experiment Directories
+scratch/
+backups/
+_tmp_extract/
+tools/
+super final/
+edge_lusion_slow_1790539596778/
+lando norris/
+lunaluna/
+lusion/
+coded-avatar/
+pacomepertant/
+test_showreel_snippet.mp4
+gitlog.txt
+*.png
+*.jpg
+*.webp
+!final/**
+!public/**
+final/node_modules/
+public/node_modules/
+.cursor/
+.cursorrules

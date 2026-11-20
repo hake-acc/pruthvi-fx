@@ -1,0 +1,598 @@
+/* ===================================================
+   LAMA LAMA RECREATION - CORE STYLES & ANIMATIONS
+   =================================================== */
+
+@font-face {
+  font-family: SuisseBPIntl;
+  src: url('/fonts/SuisseBPIntl-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SuisseBPIntl;
+  src: url('/fonts/SuisseBPIntl-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SuisseBPIntl;
+  src: url('/fonts/SuisseBPIntl-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SuisseBPIntl;
+  src: url('/fonts/SuisseBPIntl-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Sometype;
+  src: url('/fonts/Sometype-Mono.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ll-grid-gap: 1.5rem;
+  --ll-grid-margin: 2rem;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --ll-grid-gap: 1rem;
+    --ll-grid-margin: 1rem;
+  }
+}
+
+html,
+body {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background-color: #000000;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  font-family: 'Sometype', monospace;
+}
+
+main,
+.ll-main {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.ll-scroller,
+.js-scroller {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  z-index: 2 !important;
+}
+
+/* Headings use SuisseBPIntl */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.ll-heading-1,
+.ll-heading-2,
+.ll-heading-3,
+.ll-heading-4,
+.ll-heading-5,
+.ll-heading-6,
+.ll-display-sm,
+.ll-display-md,
+.ll-display-lg {
+  font-family: 'SuisseBPIntl', sans-serif !important;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.ll-body-rg,
+.ll-body-md {
+  font-family: 'SuisseBPIntl', sans-serif !important;
+  line-height: 1.5;
+}
+
+/* Preloader */
+.ll-loader {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-family: 'Sometype', monospace;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.5s ease 0.4s;
+}
+
+.ll-loader.is-loaded {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.js-page-transition-counter-container {
+  font-family: 'Sometype', Helvetica, Arial, sans-serif !important;
+  font-size: 11px !important;
+  letter-spacing: -0.2px !important;
+  text-transform: uppercase !important;
+  color: #f9f4eb !important;
+}
+
+.js-page-transition-counter-container .text-textPrimary,
+.js-page-transition-counter-container .js-page-transition-counter {
+  color: inherit !important;
+}
+
+.js-page-transition-counter-container.ll-theme-dark,
+.ll-theme-dark .js-page-transition-counter-container {
+  color: #010101 !important;
+}
+
+.js-page-transition-counter-container.ll-theme-light,
+.ll-theme-light .js-page-transition-counter-container {
+  color: #f9f4eb !important;
+}
+
+
+/* Entrance & Reveal States */
+.ll-text-reveal {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(28px);
+  will-change: opacity, transform;
+}
+
+.ll-text-reveal.is-revealed,
+.ll-section--hero_extended .ll-text-reveal.is-revealed {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.js-header,
+.js-menu,
+.js-sticky-items,
+.js-sticky-bar {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: none !important;
+}
+
+/* NAVBAR FIX: Keep left: 50% and transform: translateX(-50%) perfectly centered! */
+.js-menu {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.js-menu.is-revealed {
+  opacity: 1 !important;
+  visibility: visible !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.js-header.is-revealed,
+.js-sticky-items.is-revealed,
+.js-sticky-bar.is-revealed {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Header Dropdown Menu Transitions */
+.js-menu {
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  overflow: hidden;
+}
+
+.js-menu-items-container {
+  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js-dropdown-items {
+  transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js-form-container {
+  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Nav Item hover lines and icons */
+.ll-add-navItem {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.ll-add-navItem:hover .js-backdrop {
+  opacity: 1 !important;
+}
+
+.ll-add-navItem:hover .js-line {
+  transform: scaleX(1) !important;
+}
+
+.ll-add-navItemChild:hover .js-backdrop {
+  opacity: 1 !important;
+}
+
+/* Buttons Hover Animation */
+.ll-part--buttons-button {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-part--buttons-button:hover .js-backdrop-hover {
+  opacity: 1 !important;
+}
+
+.ll-part--buttons-button:hover .js-text {
+  opacity: 0 !important;
+}
+
+.ll-part--buttons-button:hover .js-text-hover {
+  opacity: 1 !important;
+}
+
+.ll-part--buttons-button:hover .js-arrow {
+  transform: translate(3px, -3px) !important;
+}
+
+.ll-part--buttons-button:hover .js-arrow-hover {
+  transform: scale(1) translate(0px, 0px) !important;
+}
+
+
+
+
+/* Swiper Slider layout */
+.swiper-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  scrollbar-width: none;
+}
+
+.swiper-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.ll-swiper-slide {
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #161616;
+  position: relative;
+}
+
+.ll-swiper-slide img,
+.ll-swiper-slide video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===================================================
+   BOUTIQUE WHITE CURSOR SYSTEM
+   Consistently bright white (#ffffff) at z-index: 99999999 !important
+   =================================================== */
+html,
+body,
+button,
+a,
+canvas,
+[role="button"],
+input[type="submit"],
+.cursor-pointer,
+.projects__entry,
+.hero-shrink-card,
+.s.is-impact-home,
+.js-scroller {
+  cursor: none !important;
+}
+
+.site-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999999 !important;
+  background-color: #ffffff !important;
+  border: none !important;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.site-cursor-dot.is-hidden {
+  opacity: 0 !important;
+}
+
+/* Fullscreen Video Modal */
+.js-video-modal-container {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js-video-modal-container.is-active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Pitchdeck Modal */
+.js-pitchdeck-container {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.js-pitchdeck-container.is-active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Marquee / Logos continuous animation */
+@keyframes ll-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.js-logos-track {
+  display: flex;
+  width: max-content;
+  animation: ll-marquee 35s linear infinite;
+}
+
+.js-logos-track:hover {
+  animation-play-state: paused;
+}
+
+/* Red pulsing dot in Clock */
+@keyframes ll-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.js-clock .js-ball {
+  animation: ll-pulse 2s infinite ease-in-out;
+  display: inline-block;
+  background-color: #ff3b30 !important;
+}
+
+
+.js-menu {
+  background-color: rgba(16, 16, 16, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.js-menu>.bg-bgSecondary {
+  opacity: 0 !important;
+}
+
+.js-sticky-bar {
+  mix-blend-mode: difference !important;
+  color: #ffffff !important;
+}
+
+.ll-block--canvas-2d {
+  image-rendering: pixelated !important;
+}
+
+/* ===================================================
+   SERVICES ("WHAT WE DO") AUTHENTIC LAMA LAMA SECTION
+   =================================================== */
+canvas.js-canvas {
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+canvas.js-upper-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 45 !important;
+  pointer-events: none !important;
+  transition: opacity 0.6s ease;
+}
+
+canvas.js-upper-canvas.is-hidden {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+#section-projects {
+  background-color: transparent !important;
+  padding-bottom: 200px !important;
+  margin-bottom: 120px !important;
+}
+
+.ll-section--services {
+  position: relative !important;
+  background-color: transparent !important;
+  color: #f9f4eb !important;
+  z-index: 10 !important;
+  overflow: visible !important;
+  padding-top: 140px !important;
+}
+
+.ll-section--services .ll-container {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.ll-section--services .js-text-reveal,
+.ll-section--services .js-mono-text-reveal,
+.ll-section--services .js-text-container,
+.ll-section--services .ll-text-reveal,
+.ll-section--services .ll-text-reveal *,
+.ll-section--services .js-text-container *,
+.ll-section--services h2,
+.ll-section--services h2 *,
+.ll-section--services .ll-heading-4,
+.ll-section--services .ll-heading-4 *,
+.ll-section--services .ll-display-rg,
+.ll-section--services .ll-part--label,
+.ll-section--services .ll-body-md,
+.ll-section--services .ll-body-rg,
+.ll-section--services .ll-block--contact-card {
+  opacity: 1 !important;
+  visibility: visible !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+  transform: none !important;
+  color: #f9f4eb !important;
+}
+
+/* Pitchdeck sticky drawer */
+.js-sticky-item {
+  background: rgba(18, 18, 18, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-radius: 6px !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.js-sticky-item-pitchdeck button.js-title-toggle {
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 11px !important;
+}
+
+/* Authentic Buttons Inverted Hover Slides */
+.ll-section--services .ll-part--buttons-button {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-section--services .ll-part--buttons-button .js-backdrop-hover {
+  transition: opacity 0.3s ease;
+}
+
+.ll-section--services .ll-part--buttons-button .js-text {
+  transition: opacity 0.25s ease;
+}
+
+.ll-section--services .ll-part--buttons-button .js-text-hover {
+  transition: opacity 0.25s ease;
+}
+
+.ll-section--services .ll-part--buttons-button .js-arrow {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-section--services .ll-part--buttons-button .js-arrow-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-section--services .ll-part--buttons-button:hover .js-backdrop-hover {
+  opacity: 1 !important;
+}
+
+.ll-section--services .ll-part--buttons-button:hover .js-text {
+  opacity: 0 !important;
+}
+
+.ll-section--services .ll-part--buttons-button:hover .js-text-hover {
+  opacity: 1 !important;
+}
+
+.ll-section--services .ll-part--buttons-button:hover .js-arrow {
+  transform: translate(3px, -3px) !important;
+}
+
+.ll-section--services .ll-part--buttons-button:hover .js-arrow-hover {
+  transform: scale(1) translate(0px, 0px) !important;
+}
+
+/* Lars Contact Card Hover */
+.ll-section--services .ll-block--contact-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-section--services .ll-block--contact-card .js-backdrop {
+  transition: opacity 0.3s ease;
+}
+
+.ll-section--services .ll-block--contact-card:hover .js-backdrop {
+  opacity: 1 !important;
+}
+
+.ll-section--services .ll-block--contact-card:hover .js-contact-card-reveal {
+  opacity: 0 !important;
+}
+
+.ll-section--services .ll-block--contact-card:hover .js-contact-card-reveal-hover {
+  opacity: 1 !important;
+}
+
+
+
+

@@ -1,0 +1,1 @@
+import{n as e,t}from"./CSSPlugin-5K9CJVu3.js";import{a as s}from"./gsapConfig-BpbtjO5_.js";var n=e.registerPlugin(t,s)||e;n.core.Tween;export{n as t};

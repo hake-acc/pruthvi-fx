@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro — AP Grid Pull-Back</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000000;
+        }
+
+        #heroFrame {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            border: 0;
+            display: block;
+            background: #000000;
+            transform-origin: 50% 50%;
+            will-change: transform;
+        }
+
+        #apGridIntro {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            z-index: 999998;
+            pointer-events: auto;
+        }
+
+        #apGridIntro.is-done {
+            display: none;
+        }
+
+        .intro-replay {
+            position: fixed;
+            left: clamp(16px, 2vw, 28px);
+            bottom: clamp(16px, 2.4vh, 28px);
+            z-index: 999999;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #ffffff;
+            background: rgba(18, 19, 22, 0.82);
+            border: 1px solid rgba(255, 237, 41, 0.35);
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+        }
+
+        .intro-replay.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .intro-replay:hover {
+            border-color: #FFED29;
+        }
+
+        .intro-replay span {
+            color: #FFED29;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="heroFrame" src="/index.html" title="Portfolio"></iframe>
+    <canvas id="apGridIntro" aria-hidden="true"></canvas>
+    <button type="button" class="intro-replay" id="introReplay"><span>↺</span> Replay intro</button>
+
+    <script id="apGridFrag" type="x-shader/x-fragment">
+        precision highp float;
+
+        uniform vec2 uRes;          // viewport, CSS px
+        uniform float uDpr;
+        uniform float uTime;
+        uniform float uScale;       // camera scale (1 = final tile size)
+        uniform float uRot;         // camera rotation, radians
+        uniform float uFill;        // centre mark fill 0 → 1 (bottom → top)
+        uniform float uGrow;        // grid population progress
+        uniform float uReveal;      // reveal wave progress
+        uniform float uMarkH;       // tile mark height, CSS px
+        uniform vec2 uPitch;        // tile pitch, CSS px
+
+        const vec3 INK = vec3(0.0);
+        const vec3 SILHOUETTE = vec3(0.1333);
+        const vec3 PAPER = vec3(1.0);
+        const vec3 SIGNAL = vec3(1.0, 0.929, 0.161); // #FFED29
+
+        // Chebyshev box distance keeps dilation square, so the mark grows like pixels, not blobs
+        float sdBox(vec2 p, vec4 r) {
+            vec2 c = (r.xy + r.zw) * 0.5;
+            vec2 h = (r.zw - r.xy) * 0.5;
+            vec2 q = abs(p - c) - h;
+            return max(q.x, q.y);
+        }
+
+        // The navbar AP mark (viewBox 803 × 644, y down) as a union of its pixel blocks
+        float sdAP(vec2 u) {
+            float d = sdBox(u, vec4(0.0, 95.0, 99.0, 644.0));
+            d = min(d, sdBox(u, vec4(99.0, 0.0, 352.0, 95.0)));
+            d = min(d, sdBox(u, vec4(99.0, 254.0, 353.0, 359.0)));
+            d = min(d, sdBox(u, vec4(352.0, 95.0, 468.0, 644.0)));
+            d = min(d, sdBox(u, vec4(410.0, 0.0, 711.0, 95.0)));
+            d = min(d, sdBox(u, vec4(711.0, 95.0, 803.0, 339.0)));
+            d = min(d, sdBox(u, vec4(662.0, 95.0, 711.0, 141.0)));
+            d = min(d, sdBox(u, vec4(662.0, 292.0, 711.0, 341.0)));
+            d = min(d, sdBox(u, vec4(468.0, 341.0, 706.0, 440.0)));
+            return d;
+        }
+
+        float hash(vec2 p) {
+            p = fract(p * vec2(123.34, 456.21));
+            p += dot(p, p + 45.32);
+            return fract(p.x * p.y);
+        }
+
+        mat2 rot(float a) {
+            float c = cos(a), s = sin(a);
+            return mat2(c, -s, s, c);
+        }
+
+        void main() {
+            vec2 px = gl_FragCoord.xy / uDpr - uRes * 0.5;
+            px.y = -px.y;
+
+            vec2 w = rot(-uRot) * px / uScale;
+            vec2 idx = floor((w + uPitch * 0.5) / uPitch);
+            vec2 local = w - idx * uPitch;
+
+            float unitsPerPx = 644.0 / uMarkH;
+            float markW = uMarkH * 803.0 / 644.0;
+            vec2 u = (local + vec2(markW, uMarkH) * 0.5) * unitsPerPx;
+
+            float sd = sdAP(u);
+            float aa = unitsPerPx / (uScale * uDpr);
+            float cov = clamp(0.5 - sd / aa, 0.0, 1.0);
+
+            bool isCentre = idx.x == 0.0 && idx.y == 0.0;
+            float h = hash(idx + 17.0);
+            vec2 cellScreen = rot(uRot) * (idx * uPitch) * uScale;
+            float dn = length(cellScreen) / length(uRes * 0.5);
+
+            float presence = 1.0;
+            float fill = uFill;
+            if (!isCentre) {
+                float lag = dn * 0.55 + h * 0.15;
+                presence = clamp((uGrow - lag) / 0.12, 0.0, 1.0);
+                fill = clamp((uGrow - 0.12 - lag) / 0.3, 0.0, 1.0);
+            }
+
+            float fillLine = 644.0 * (1.0 - fill);
+            float filled = clamp((u.y - fillLine) / aa + 0.5, 0.0, 1.0);
+            vec3 markCol = mix(SILHOUETTE, PAPER, filled);
+            float markA = cov * presence;
+
+            vec3 rgb = markCol * markA;
+            float alpha = 1.0;
+
+            float q = clamp((uReveal - (dn * 0.55 + h * 0.2)) / 0.35, 0.0, 1.0);
+            if (q > 0.0) {
+                if (q < 0.18) {
+                    rgb = mix(PAPER, SIGNAL, q / 0.18) * markA;
+                } else {
+                    float t = (q - 0.18) / 0.82;
+                    float grow = 560.0 * t * t * (3.0 - 2.0 * t);
+                    float edgeW = 52.0 * (1.0 - t);
+                    float hole = clamp(0.5 - (sd - grow) / aa, 0.0, 1.0);
+                    float edge = clamp(0.5 - (sd - grow - edgeW) / aa, 0.0, 1.0) - hole;
+                    rgb = SIGNAL * edge;
+                    alpha = 1.0 - hole;
+                }
+            }
+
+            float grain = (hash(gl_FragCoord.xy + fract(uTime) * 91.7) - 0.5) * 0.035;
+            rgb += grain * (alpha - markA * alpha) * step(q, 0.18);
+
+            gl_FragColor = vec4(max(rgb, 0.0), alpha);
+        }
+    </script>
+
+    <script>
+    (function () {
+        const frame = document.getElementById('heroFrame');
+        const canvas = document.getElementById('apGridIntro');
+        const replayBtn = document.getElementById('introReplay');
+
+        const MARK_H = 40;
+        const PITCH = [MARK_H * 803 / 644 + MARK_H * 0.5, MARK_H * 1.6];
+
+        const FILL_MIN = 2.0;
+        const HOLD = 0.35;
+        const PULL = 1.5;
+        const SETTLE = 0.3;
+        const REVEAL = 1.5;
+
+        let heroReady = false;
+
+        // The real site runs behind the loader; skip its own intro so the hero sits there, finished
+        function claimHero() {
+            const iw = frame.contentWindow;
+            if (!iw || heroReady) return;
+            try {
+                if (typeof iw.__setIntroManual === 'function' && typeof iw.__renderIntroAt === 'function' &&
+                    iw.document.readyState !== 'loading' && iw.__heroAvatarEngine) {
+                    iw.__setIntroManual();
+                    iw.__renderIntroAt(99);
+                    iw.document.body.classList.add('is-loaded');
+                    iw.dispatchEvent(new iw.CustomEvent('intro-complete'));
+                    heroReady = true;
+                    return;
+                }
+            } catch (e) { /* cross-origin guard */ }
+            setTimeout(claimHero, 60);
+        }
+        claimHero();
+        setTimeout(() => { heroReady = true; }, 8000);
+
+        const gl = canvas.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: false });
+        if (!gl) {
+            canvas.classList.add('is-done');
+            return;
+        }
+
+        function compile(type, src) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+            return s;
+        }
+
+        const prog = gl.createProgram();
+        gl.attachShader(prog, compile(gl.VERTEX_SHADER, 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }'));
+        gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, document.getElementById('apGridFrag').textContent));
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+        const loc = gl.getAttribLocation(prog, 'p');
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+        const U = {};
+        ['uRes', 'uDpr', 'uTime', 'uScale', 'uRot', 'uFill', 'uGrow', 'uReveal', 'uMarkH', 'uPitch'].forEach((n) => {
+            U[n] = gl.getUniformLocation(prog, n);
+        });
+
+        let vw = 0, vh = 0, dpr = 1, startScale = 1;
+        function resize() {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            vw = window.innerWidth;
+            vh = window.innerHeight;
+            canvas.width = Math.round(vw * dpr);
+            canvas.height = Math.round(vh * dpr);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            // Same big-mark size as the main intro: 4.3 units of min(42, vw / 30) px
+            const unit = Math.floor(Math.min(42, vw / 30));
+            startScale = Math.max(1, (4.3 * unit) / MARK_H);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const clamp01 = (x) => Math.max(0, Math.min(1, x));
+        const easeInOutCubic = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+        const easeOutExpo = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+
+        let t0 = 0, last = 0, fill = 0, fullAt = -1, rafId = 0;
+
+        function start() {
+            t0 = performance.now();
+            last = t0;
+            fill = 0;
+            fullAt = -1;
+            canvas.classList.remove('is-done');
+            replayBtn.classList.remove('is-visible');
+            frame.style.transform = 'scale(1.06)';
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(frameLoop);
+        }
+
+        function frameLoop(now) {
+            const dt = (now - last) / 1000;
+            last = now;
+            const elapsed = (now - t0) / 1000;
+
+            // Fill tracks time, parks at 92% until the hero behind is ready, then completes
+            const target = Math.min(elapsed / FILL_MIN, heroReady ? 1 : 0.92);
+            fill = Math.min(target, fill + dt / 1.2);
+            if (fill >= 1 && fullAt < 0) fullAt = elapsed;
+
+            if (render(elapsed)) rafId = requestAnimationFrame(frameLoop);
+        }
+
+        function render(elapsed) {
+            let scale = startScale, rotation = 0, grow = 0, reveal = 0;
+            if (fullAt >= 0) {
+                const g = (elapsed - fullAt - HOLD) / PULL;
+                const e = easeInOutCubic(clamp01(g));
+                scale = Math.pow(startScale, 1 - e);
+                rotation = -0.2 * Math.sin(Math.PI * e);
+                grow = Math.max(0, g);
+
+                const r = clamp01((elapsed - fullAt - HOLD - PULL - SETTLE) / REVEAL);
+                reveal = r * 1.1;
+                frame.style.transform = 'scale(' + (1.06 - 0.06 * easeOutExpo(r)) + ')';
+
+                if (r >= 1) {
+                    canvas.classList.add('is-done');
+                    frame.style.transform = '';
+                    replayBtn.classList.add('is-visible');
+                    return false;
+                }
+            }
+
+            gl.uniform2f(U.uRes, vw, vh);
+            gl.uniform1f(U.uDpr, dpr);
+            gl.uniform1f(U.uTime, elapsed);
+            gl.uniform1f(U.uScale, scale);
+            gl.uniform1f(U.uRot, rotation);
+            gl.uniform1f(U.uFill, fill);
+            gl.uniform1f(U.uGrow, grow);
+            gl.uniform1f(U.uReveal, reveal);
+            gl.uniform1f(U.uMarkH, MARK_H);
+            gl.uniform2f(U.uPitch, PITCH[0], PITCH[1]);
+            gl.clearColor(0, 0, 0, 0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.drawArrays(gl.TRIANGLES, 0, 3);
+            return true;
+        }
+
+        replayBtn.addEventListener('click', start);
+
+        // Frame-stepping hook for previews: renders the timeline at `t` seconds with an on-time fill
+        window.__apGridRenderAt = function (t) {
+            cancelAnimationFrame(rafId);
+            canvas.classList.remove('is-done');
+            fill = clamp01(t / FILL_MIN);
+            fullAt = fill >= 1 ? FILL_MIN : -1;
+            render(t);
+        };
+
+        start();
+    })();
+    </script>
+</body>
+</html>

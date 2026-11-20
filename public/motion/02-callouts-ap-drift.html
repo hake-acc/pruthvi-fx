@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion 02 — Callouts + AP Drift</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="motion-core.css">
+</head>
+<body>
+    <script src="motion-core.js"></script>
+    <script>
+    MotionProto({
+        id: '02-callouts-ap-drift',
+        css: `
+            .mp-co-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+            .mp-drift { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+            .mp-co-label, .mp-dim { position: absolute; left: 0; top: 0; white-space: nowrap; will-change: transform, clip-path; }
+            .mp-co-label { display: flex; align-items: center; gap: 8px; font-family: 'Covered By Your Grace', 'Just Another Hand', cursive; font-size: clamp(18px, 1.45vw, 25px); line-height: 1; letter-spacing: 0.03em; }
+            .mp-co-label i { font-style: normal; font-family: 'Sometype', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 5px 2px; border-radius: 3px; }
+            .mp-co-label span { padding: 0 4px; background-repeat: no-repeat; background-position: 0 64%; background-size: var(--hl, 0%) 46%; }
+            .mp-dim { font-family: 'Sometype', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 2px 5px; }
+            .mp-s1 .mp-co-label, .mp-s1 .mp-dim { color: #121316; }
+            .mp-s1 .mp-co-label i { background: #121316; color: #FFED29; }
+            .mp-s1 .mp-co-label span { background-image: linear-gradient(rgba(255, 237, 41, 0.8), rgba(255, 237, 41, 0.8)); }
+            .mp-s1 .mp-dim { background: #FFED29; }
+            .mp-s2 .mp-dim { color: #f0f0eb; }
+            .mp-s2 .mp-dim b { color: #FFED29; font-weight: 400; }
+        `,
+        mount(S) {
+            const INK = '#121316', SIGNAL = '#FFED29';
+            const c01 = MotionProto.clamp01;
+            const ease = (x) => 1 - Math.pow(1 - x, 3);
+            const hash = (n) => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
+
+            const drift = S.el('canvas', 'mp-drift', S.s2);
+            const ctx = drift.getContext('2d');
+            const svg1 = S.el('svg', 'mp-co-svg', S.s1, true);
+            const svg2 = S.el('svg', 'mp-co-svg', S.s2, true);
+            const L1 = { host: S.s1, svg: svg1, theme: { line: INK, dot: INK, ring: SIGNAL, w: 1.3 } };
+            const L2 = { host: S.s2, svg: svg2, theme: { line: 'rgba(240,240,235,0.78)', dot: SIGNAL, ring: SIGNAL, w: 1.1 } };
+
+            function svgEl(tag, parent, attrs) {
+                const n = S.el(tag, null, parent, true);
+                for (const k in attrs) n.setAttribute(k, attrs[k]);
+                return n;
+            }
+
+            function callout(L, text, idx) {
+                const g = svgEl('g', L.svg, {});
+                const path = svgEl('path', g, { fill: 'none', stroke: L.theme.line, 'stroke-width': L.theme.w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+                const ring = svgEl('circle', g, { fill: 'none', stroke: L.theme.ring, 'stroke-width': 1.4, r: 8 });
+                const dot = svgEl('circle', g, { fill: L.theme.dot, r: 3 });
+                const lab = S.el('div', 'mp-co-label', L.host);
+                lab.innerHTML = '<i>' + idx + '</i><span>' + text + '</span>';
+                return { L, path, ring, dot, lab, hot: 0 };
+            }
+
+            function dim(L) {
+                const path = svgEl('path', L.svg, { fill: 'none', stroke: L.theme.line, 'stroke-width': 1, 'stroke-linecap': 'round' });
+                const lab = S.el('div', 'mp-dim', L.host);
+                return { L, path, lab };
+            }
+
+            // Hand-drawn boil: every point shivers on a 120ms beat
+            function jit(p, seed, beat) {
+                return { x: p.x + (hash(seed + beat) - 0.5) * 1.4, y: p.y + (hash(seed * 1.7 + beat) - 0.5) * 1.4 };
+            }
+
+            function drawCallout(c, A, E, T, p, seed, beat, rightward) {
+                const a = jit(A, seed, beat), e = jit(E, seed + 3, beat), t = jit(T, seed + 7, beat);
+                c.path.setAttribute('d', 'M' + a.x + ' ' + a.y + ' L' + e.x + ' ' + e.y + ' L' + t.x + ' ' + t.y);
+                const len = Math.hypot(e.x - a.x, e.y - a.y) + Math.hypot(t.x - e.x, t.y - e.y);
+                const lp = ease(c01(p / 0.55));
+                c.path.setAttribute('stroke-dasharray', len + ' ' + len);
+                c.path.setAttribute('stroke-dashoffset', len * (1 - lp));
+
+                const near = Math.hypot(S.mouse.x - A.gx, S.mouse.y - A.gy) < 80 ? 1 : 0;
+                c.hot += (near - c.hot) * 0.15;
+                c.path.setAttribute('stroke-width', c.L.theme.w + c.hot * 1.1);
+
+                const dp = ease(c01(p / 0.15));
+                c.dot.setAttribute('cx', a.x); c.dot.setAttribute('cy', a.y);
+                c.dot.setAttribute('r', 3 * dp);
+                c.ring.setAttribute('cx', a.x); c.ring.setAttribute('cy', a.y);
+                c.ring.setAttribute('r', (6 + 3 * Math.sin(S.t * 4 + seed) * c.hot + c.hot * 4) * dp);
+                c.ring.setAttribute('opacity', 0.35 + 0.65 * c.hot);
+
+                const tp = c01((p - 0.5) / 0.35);
+                const hl = c01((p - 0.78) / 0.3);
+                c.lab.style.transform = 'translate3d(' + (t.x + (rightward ? 8 : -8)) + 'px,' + t.y + 'px,0) translate(' + (rightward ? '0' : '-100%') + ',-50%)';
+                c.lab.style.clipPath = rightward ? 'inset(-6px ' + ((1 - tp) * 100) + '% -6px -6px)' : 'inset(-6px -6px -6px ' + ((1 - tp) * 100) + '%)';
+                c.lab.style.setProperty('--hl', Math.max(hl * 100, c.hot * 100) + '%');
+            }
+
+            function drawDim(d, A, B, p, text, off, beat, seed) {
+                const dx = B.x - A.x, dy = B.y - A.y;
+                const len = Math.hypot(dx, dy) || 1;
+                const nx = -dy / len, ny = dx / len;
+                const a = jit({ x: A.x + nx * off, y: A.y + ny * off }, seed, beat);
+                const b = jit({ x: B.x + nx * off, y: B.y + ny * off }, seed + 5, beat);
+                const lp = ease(c01(p / 0.6));
+                const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+                const ax = mx + (a.x - mx) * lp, ay = my + (a.y - my) * lp;
+                const bx = mx + (b.x - mx) * lp, by = my + (b.y - my) * lp;
+                const tk = 6 * lp;
+                let dstr = 'M' + ax + ' ' + ay + ' L' + bx + ' ' + by;
+                dstr += ' M' + (ax - nx * tk) + ' ' + (ay - ny * tk) + ' L' + (ax + nx * tk) + ' ' + (ay + ny * tk);
+                dstr += ' M' + (bx - nx * tk) + ' ' + (by - ny * tk) + ' L' + (bx + nx * tk) + ' ' + (by + ny * tk);
+                d.path.setAttribute('d', dstr);
+                const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+                const flip = ang > 90 || ang < -90 ? 180 : 0;
+                d.lab.innerHTML = text;
+                d.lab.style.opacity = c01((p - 0.45) / 0.3);
+                d.lab.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) rotate(' + (ang + flip) + 'deg) translate(-50%,-50%)';
+            }
+
+            // ---------- Slide 1: plotter callouts on the portrait (from Motion 01) ----------
+            const S1 = [
+                { a: [767, 441], e: [-150, -118], run: -54, text: 'lens −3.25 · both eyes', idx: '01' },
+                { a: [868, 226], e: [128, -92], run: 54, text: 'hair: git blame → nobody', idx: '02' },
+                { a: [990, 398], e: [156, 34], run: 54, text: 'ear: always listening', idx: '03' },
+                { a: [835, 628], e: [176, 104], run: 54, text: 'beard v4 (unshipped)', idx: '04' },
+                { a: [569, 765], e: [-128, -66], run: -54, text: 'shirt: black. always.', idx: '05' },
+            ].map((s) => Object.assign(s, { c: callout(L1, s.text, s.idx) }));
+            const glassesDim = dim(L1);
+
+            // ---------- Slide 2: live card dimensions + the loader's leftover APs ----------
+            const dimW = dim(L2), dimH = dim(L2);
+            const cross = svgEl('path', L2.svg, { fill: 'none', stroke: SIGNAL, 'stroke-width': 1.2, 'stroke-linecap': 'round' });
+
+            const AP = new Path2D('M 0 644 L 98 644 L 99 359 L 352 359 L 353 644 L 468 644 L 469 440 L 706 440 L 706 341 L 803 339 L 803 95 L 711 94 L 711 0 L 411 0 L 410 95 L 352 94 L 352 0 L 100 0 L 99 95 L 0 95 Z M 468 95 L 662 94 L 663 141 L 712 143 L 712 292 L 663 293 L 662 341 L 469 341 Z M 99 95 L 352 94 L 353 253 L 100 254 Z');
+            const RING_GAP = 34, FREE = 36, PAD = 42;
+            let parts = [], builtFor = '', entered = false, enterT = 0;
+
+            // Home on the card's perimeter, `s` in 0..1 clockwise from the top-left corner
+            function perim(r, s) {
+                const w = r.width + PAD * 2, h = r.height + PAD * 2;
+                let d = (((s % 1) + 1) % 1) * 2 * (w + h);
+                const x0 = r.left - PAD, y0 = r.top - PAD;
+                if (d < w) return { x: x0 + d, y: y0 };
+                d -= w;
+                if (d < h) return { x: x0 + w, y: y0 + d };
+                d -= h;
+                if (d < w) return { x: x0 + w - d, y: y0 + h };
+                return { x: x0, y: y0 + h - (d - w) };
+            }
+
+            function build() {
+                const t = S.target;
+                const ringN = Math.max(24, Math.round(2 * (t.width + t.height + PAD * 4) / RING_GAP));
+                parts = [];
+                for (let i = 0; i < ringN; i++) {
+                    parts.push({ ring: true, s: i / ringN, size: 13, yellow: i % 9 === 0, seed: i + 1 });
+                }
+                for (let i = 0; i < FREE; i++) {
+                    let fx, fy, n = 0;
+                    do {
+                        fx = 0.04 + hash(i * 3.1 + n) * 0.92;
+                        fy = 0.08 + hash(i * 7.7 + n * 1.3) * 0.84;
+                        n++;
+                    } while (n < 30 && fx * S.winW > t.left - 70 && fx * S.winW < t.right + 70 && fy * S.winH > t.top - 70 && fy * S.winH < t.bottom + 70);
+                    parts.push({ ring: false, fx, fy, size: 9 + hash(i * 5.3) * 8, yellow: hash(i * 9.1) > 0.84, seed: 100 + i });
+                }
+                parts.forEach((p) => { p.x = p.y = 0; p.vx = p.vy = 0; p.rot = 0; p.heat = 0; p.delay = 0; });
+                builtFor = S.winW + 'x' + S.winH;
+            }
+
+            function home(p) {
+                if (p.ring) return perim(S.card, p.s + S.t * 0.012);
+                return {
+                    x: p.fx * S.winW + Math.sin(S.t * 0.35 + p.seed) * 16,
+                    y: p.fy * S.winH + Math.cos(S.t * 0.28 + p.seed * 1.7) * 12,
+                };
+            }
+
+            // Fly in from the viewport edge along the ray from the card centre, where the loader grid used to be
+            function enter() {
+                const c = S.target;
+                parts.forEach((p, i) => {
+                    const h = home(p);
+                    let dx = h.x - c.cx, dy = h.y - c.cy;
+                    const l = Math.hypot(dx, dy) || 1;
+                    dx /= l; dy /= l;
+                    const kx = dx > 0 ? (S.winW + 30 - c.cx) / dx : dx < 0 ? (-30 - c.cx) / dx : 1e9;
+                    const ky = dy > 0 ? (S.winH + 30 - c.cy) / dy : dy < 0 ? (-30 - c.cy) / dy : 1e9;
+                    const k = Math.min(kx, ky);
+                    p.x = c.cx + dx * k;
+                    p.y = c.cy + dy * k;
+                    p.vx = p.vy = 0;
+                    p.delay = (p.ring ? 0.1 : 0.3) + hash(p.seed * 2.3) * 0.5;
+                });
+                entered = true;
+                enterT = S.t;
+            }
+
+            function stepDrift(S) {
+                const dpr = Math.min(S.win.devicePixelRatio || 1, 2);
+                const W = Math.round(S.s2Rect.width * dpr), H = Math.round(S.s2Rect.height * dpr);
+                if (drift.width !== W || drift.height !== H) { drift.width = W; drift.height = H; }
+                if (builtFor !== S.winW + 'x' + S.winH) { build(); entered = false; }
+                if (!S.s2Active) { entered = false; return; }
+                if (!entered) enter();
+
+                const dt = S.dt, since = S.t - enterT;
+                const m = S.mouse;
+                const shocks = m.down;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, S.s2Rect.width, S.s2Rect.height);
+
+                for (const p of parts) {
+                    const live = since - p.delay;
+                    if (live < 0) continue;
+                    const h = home(p);
+                    let ax = (h.x - p.x) * 38 - p.vx * 8.5;
+                    let ay = (h.y - p.y) * 38 - p.vy * 8.5;
+
+                    const dx = p.x - m.x, dy = p.y - m.y;
+                    const d = Math.hypot(dx, dy);
+                    if (d < 110 && d > 0.01) {
+                        const f = Math.pow(1 - d / 110, 2) * 5200;
+                        ax += dx / d * f;
+                        ay += dy / d * f;
+                    }
+                    p.heat = Math.max(p.heat - dt * 1.6, d < 90 ? 1 : 0);
+                    for (const sh of shocks) {
+                        const sx = p.x - sh.x, sy = p.y - sh.y, sd = Math.hypot(sx, sy);
+                        if (sd < 260 && sd > 0.01) {
+                            const imp = (1 - sd / 260) * 1100;
+                            p.vx += sx / sd * imp;
+                            p.vy += sy / sd * imp;
+                            p.heat = 1;
+                        }
+                    }
+
+                    p.vx += ax * dt;
+                    p.vy += ay * dt;
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.rot += (Math.max(-0.7, Math.min(0.7, p.vx * 0.0014)) - p.rot) * Math.min(1, dt * 10);
+
+                    const appear = ease(c01(live / 0.5));
+                    const a = appear * (p.ring ? 0.85 : 0.42 + 0.3 * p.heat);
+                    const q = S.local(S.s2, p.x, p.y);
+                    ctx.save();
+                    ctx.globalAlpha = a;
+                    ctx.fillStyle = p.yellow || p.heat > 0.5 ? SIGNAL : '#f0f0eb';
+                    ctx.translate(q.x, q.y);
+                    ctx.rotate(p.rot);
+                    const k = p.size / 644;
+                    ctx.scale(k, k);
+                    ctx.translate(-401.5, -322);
+                    ctx.fill(AP, 'evenodd');
+                    ctx.restore();
+                }
+            }
+
+            let s1Start = 0.5, s1Armed = false, s2Start = -99, s2Was = false;
+
+            return {
+                frame(S) {
+                    const beat = Math.floor(S.t / 0.12);
+                    const u = S.winH / 900;
+
+                    if (S.shrinkP > 0.3) s1Armed = true;
+                    if (s1Armed && S.shrinkP < 0.02) { s1Armed = false; s1Start = S.t; }
+                    if (S.s2Active && !s2Was) s2Start = S.t;
+                    s2Was = S.s2Active;
+
+                    if (S.s1Alpha > 0.001) {
+                        S1.forEach((s, i) => {
+                            const g = S.art(s.a[0], s.a[1]);
+                            const A = S.local(S.s1, g.x, g.y);
+                            A.gx = g.x; A.gy = g.y;
+                            const E = { x: A.x + s.e[0] * u, y: A.y + s.e[1] * u };
+                            const T = { x: E.x + s.run * u, y: E.y };
+                            drawCallout(s.c, A, E, T, (S.t - s1Start - i * 0.22) / 1.1, i * 11 + 1, beat, s.run > 0);
+                        });
+                        const ga = S.art(712, 462), gb = S.art(952, 430);
+                        drawDim(glassesDim, S.local(S.s1, ga.x, ga.y), S.local(S.s1, gb.x, gb.y),
+                            (S.t - s1Start - 1.3) / 1.0, '138 mm', -46 * ga.k, beat, 91);
+                    }
+
+                    if (S.s2Active || S.t - s2Start < 1) {
+                        const c = S.card;
+                        const tl = S.local(S.s2, c.left, c.top), br = S.local(S.s2, c.right, c.bottom);
+                        const p = (S.t - s2Start) / 1.0;
+                        drawDim(dimW, tl, { x: br.x, y: tl.y }, p, Math.round(c.width) + ' <b>px</b>', -12, beat, 31);
+                        drawDim(dimH, { x: br.x, y: tl.y }, br, p - 0.15, Math.round(c.height) + ' <b>px</b>', -12, beat, 41);
+                        const cs = 6 * ease(c01((p - 0.2) / 0.4)), o = 12;
+                        let cd = '';
+                        [[tl.x - o, tl.y - o], [br.x + o, tl.y - o], [tl.x - o, br.y + o], [br.x + o, br.y + o]].forEach(([x, y]) => {
+                            cd += 'M' + (x - cs) + ' ' + y + ' L' + (x + cs) + ' ' + y + ' M' + x + ' ' + (y - cs) + ' L' + x + ' ' + (y + cs) + ' ';
+                        });
+                        cross.setAttribute('d', cd);
+                    }
+
+                    stepDrift(S);
+                }
+            };
+        }
+    });
+    </script>
+</body>
+</html>

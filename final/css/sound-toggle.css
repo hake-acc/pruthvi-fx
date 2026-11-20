@@ -1,0 +1,326 @@
+/* Site-wide sound gate + toggle (js/sound-toggle.js). Pages may override the tokens. */
+.ss-gate,
+.ss-toggle {
+    --ss-void: #121316;
+    --ss-paper: #f4f2ea;
+    --ss-sig: #ffed29;
+    --ss-sans: SuisseBPIntl, Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --ss-text: Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --ss-mono: 'IBM Plex Mono', 'Sometype', ui-monospace, monospace;
+    --ss-ease: cubic-bezier(0.2, 0.7, 0, 1);
+    --ss-beat: 0.438s;
+}
+
+/* ---------- gate: a dialog floating over the live, full-colour page ---------- */
+.ss-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+}
+
+/* the page waits behind frosted glass until the visitor is in */
+.ss-gate__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 19, 22, 0.5);
+    -webkit-backdrop-filter: blur(48px) saturate(0.7);
+    backdrop-filter: blur(48px) saturate(0.7);
+}
+
+.ss-gate.is-out .ss-gate__scrim {
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.3, 0, 0.2, 1) 0.08s;
+}
+
+/* the way in is a flashbang: the page blinks to paper as the dialog goes */
+.ss-gate__flash {
+    position: absolute;
+    inset: 0;
+    background: var(--ss-paper);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ss-gate__card {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    width: min(420px, 100%);
+    padding: 22px 22px 18px;
+    border: 1px solid rgba(244, 242, 234, 0.12);
+    border-radius: 6px;
+    background: rgba(18, 19, 22, 0.94);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 0 6px rgba(18, 19, 22, 0.08), 0 18px 60px rgba(18, 19, 22, 0.32);
+    color: var(--ss-paper);
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.97);
+    transition: opacity 0.45s ease, transform 0.8s var(--ss-ease);
+}
+
+.ss-gate__kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-family: var(--ss-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.ss-gate__kicker i {
+    width: 6px;
+    height: 6px;
+    background: var(--ss-sig);
+    animation: ss-tick var(--ss-beat) steps(1, end) infinite;
+}
+
+@keyframes ss-tick {
+    50% { opacity: 0.25; }
+}
+
+.ss-gate__title {
+    margin: 0;
+    font-family: var(--ss-sans);
+    font-size: clamp(26px, 3.2vw, 34px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+
+.ss-gate__body {
+    margin: -4px 0 0;
+    font-family: var(--ss-text);
+    font-size: 14px;
+    line-height: 1.45;
+    opacity: 0.66;
+}
+
+.ss-gate.is-in .ss-gate__card {
+    opacity: 1;
+    transform: none;
+}
+
+.ss-gate.is-out {
+    pointer-events: none;
+}
+
+.ss-gate.is-out .ss-gate__card {
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 0.18s ease, transform 0.4s var(--ss-ease);
+}
+
+.ss-gate.is-out .ss-gate__flash {
+    animation: ss-flash 0.85s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+}
+
+@keyframes ss-flash {
+    0% { opacity: 0; }
+    14% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.ss-gate__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.ss-gate__btn {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    align-items: end;
+    gap: 18px 8px;
+    min-height: 84px;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-family: var(--ss-text);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.6s var(--ss-ease);
+}
+
+.ss-gate__ico {
+    grid-column: 1 / -1;
+    align-self: start;
+    width: 18px;
+    height: 18px;
+}
+
+.ss-gate__ico svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.ss-gate__t {
+    line-height: 1.1;
+}
+
+.ss-gate__btn kbd {
+    justify-self: end;
+    font-family: var(--ss-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+
+.ss-gate__btn:hover {
+    transform: translate3d(0, -2px, 0);
+}
+
+.ss-gate__btn--on {
+    background: var(--ss-sig);
+    color: var(--ss-void);
+}
+
+.ss-gate__btn--on:hover {
+    background: #fff27a;
+}
+
+.ss-gate__btn--on .ss-w1,
+.ss-gate__btn--on .ss-w2,
+.ss-gate__btn--on .ss-w3 {
+    animation: ss-wave calc(var(--ss-beat) * 4) steps(1, end) infinite;
+}
+
+.ss-gate__btn--on .ss-w2 { animation-delay: var(--ss-beat); }
+.ss-gate__btn--on .ss-w3 { animation-delay: calc(var(--ss-beat) * 2); }
+
+@keyframes ss-wave {
+    0%, 75% { opacity: 1; }
+    76%, 100% { opacity: 0; }
+}
+
+.ss-gate__btn--off {
+    border-color: rgba(244, 242, 234, 0.2);
+    background: none;
+    color: var(--ss-paper);
+}
+
+.ss-gate__btn--off:hover {
+    border-color: var(--ss-paper);
+    background: rgba(244, 242, 234, 0.06);
+}
+
+.ss-gate__btn:focus-visible {
+    outline: 1px solid var(--ss-sig);
+    outline-offset: 3px;
+}
+
+/* ---------- toggle ---------- */
+.ss-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 34px;
+    padding: 0 12px 0 11px;
+    border: 0;
+    border-radius: 4px;
+    background: rgba(18, 19, 22, 0.88);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    color: var(--ss-paper);
+    font-family: var(--ss-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.2s;
+}
+
+.ss-toggle.is-in {
+    opacity: 1;
+}
+
+.ss-toggle--fixed {
+    position: fixed;
+    top: var(--ss-top, 16px);
+    right: var(--ss-right, 16px);
+    z-index: 21;
+}
+
+.ss-toggle:focus-visible {
+    outline: 1px solid var(--ss-sig);
+    outline-offset: 2px;
+}
+
+/* four meeting blocks, the lit one is this beat, the yellow one the downbeat */
+.ss-toggle__beat {
+    display: grid;
+    grid-template-columns: 6px 6px;
+    grid-template-rows: 6px 6px;
+    gap: 2px;
+}
+
+.ss-toggle__beat i {
+    border-radius: 1px;
+    background: var(--ss-paper);
+    opacity: 0.3;
+    transform: scale(0.8);
+    will-change: transform, opacity;
+}
+
+.ss-toggle__beat i.is-down {
+    background: var(--ss-sig);
+}
+
+.ss-toggle.is-muted .ss-toggle__beat i {
+    transition: transform 0.4s var(--ss-ease), opacity 0.4s ease;
+}
+
+.ss-toggle.is-muted .ss-toggle__beat i:nth-child(1),
+.ss-toggle.is-muted .ss-toggle__beat i:nth-child(4) {
+    transform: scale(0.8) rotate(45deg);
+}
+
+.ss-toggle__label {
+    position: relative;
+    display: block;
+    width: 3ch;
+    height: 14px;
+    overflow: hidden;
+    line-height: 14px;
+}
+
+.ss-toggle__roll {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s cubic-bezier(0.5, 1.6, 0.4, 1);
+}
+
+.ss-toggle.is-muted .ss-toggle__roll {
+    transform: translate3d(0, -14px, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ss-gate__card,
+    .ss-gate__btn,
+    .ss-toggle,
+    .ss-toggle__roll {
+        transition: none !important;
+    }
+
+    .ss-gate__kicker i,
+    .ss-gate__btn--on rect,
+    .ss-gate.is-out .ss-gate__flash {
+        animation: none !important;
+    }
+}

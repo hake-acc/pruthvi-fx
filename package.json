@@ -1,11 +1,21 @@
 {
-  "name": "pruthvi-fx",
+  "name": "pacome-pertant-portfolio",
   "version": "1.0.0",
-  "description": "Pruthvi FX Portfolio and Thumbnail Management System",
-  "private": true,
+  "description": "1:1 Interactive 3D WebGL Portfolio Replica of pacomepertant.com",
+  "main": "server.js",
   "scripts": {
-    "start": "node dev-server.js",
-    "dev": "node dev-server.js",
-    "test": "node test-e2e.js"
-  }
+    "start": "node server.js",
+    "dev": "node server.js",
+    "sync": "node apply_portfolio_config.js"
+  },
+  "keywords": [
+    "threejs",
+    "webgl",
+    "portfolio",
+    "lottie",
+    "howler",
+    "gsap"
+  ],
+  "author": "",
+  "license": "ISC"
 }

@@ -1,0 +1,840 @@
+[
+  {
+    "state": 1,
+    "once": 5,
+    "_errors": 6,
+    "serverRendered": 8,
+    "path": 9,
+    "pinia": 10,
+    "prerenderedAt": 289
+  },
+  [
+    "Reactive",
+    2
+  ],
+  {
+    "$ssanity-preview": 3,
+    "$ssanity-preview-environment": 4
+  },
+  false,
+  "checking",
+  [
+    "Set"
+  ],
+  [
+    "ShallowReactive",
+    7
+  ],
+  {
+    "sanity-mS7COX_zDJKM8rzZvD4NDy25-L7JE85nnLDVd8SsY6E": -1
+  },
+  true,
+  "/",
+  {
+    "experience": 11,
+    "homeview": 14,
+    "content": 17,
+    "menu": 286,
+    "audio": 287
+  },
+  {
+    "experience": 12,
+    "progress": 13,
+    "targetProgress": 13,
+    "isReady": 3,
+    "hasEntered": 3,
+    "_rafId": 13
+  },
+  null,
+  0,
+  {
+    "mode": 15
+  },
+  [
+    "Ref",
+    16
+  ],
+  "spiral",
+  {
+    "projects": 18,
+    "socialLinks": 262,
+    "email": 277,
+    "showreel": 279
+  },
+  [
+    "Ref",
+    19
+  ],
+  [
+    "Reactive",
+    20
+  ],
+  [
+    21,
+    53,
+    80,
+    108,
+    135,
+    161,
+    187,
+    214,
+    235
+  ],
+  {
+    "behanceUrl": 22,
+    "shortDescription": 23,
+    "slug": 24,
+    "styleframes": 27,
+    "thumbnail": 42,
+    "title": 45,
+    "video": 46,
+    "year": 52
+  },
+  "https://www.behance.net/gallery/201777435/Paths-Of-Life",
+  "Paths of Life is a short film about the different paths we take through life; it features a main character and graphic forms that metaphorically and conceptually illustrate the journey of this main character.",
+  {
+    "_type": 25,
+    "current": 26
+  },
+  "slug",
+  "paths-of-life",
+  [
+    28,
+    34,
+    38
+  ],
+  {
+    "_key": 29,
+    "_type": 30,
+    "asset": 31
+  },
+  "559faa97073c",
+  "image",
+  {
+    "_ref": 32,
+    "_type": 33
+  },
+  "image-c0339b80af376198eb9824c9147b1716d98f25f4-1401x787-webp",
+  "reference",
+  {
+    "_key": 35,
+    "_type": 30,
+    "asset": 36
+  },
+  "7cb650e29a3e",
+  {
+    "_ref": 37,
+    "_type": 33
+  },
+  "image-0682241c8abec328eae3063cd78cbb6bdf7f33ec-1396x786-webp",
+  {
+    "_key": 39,
+    "_type": 30,
+    "asset": 40
+  },
+  "883dbfd51389",
+  {
+    "_ref": 41,
+    "_type": 33
+  },
+  "image-d74a16d8d2e88d26d00f347147e197ca8ddd46c1-1396x787-webp",
+  {
+    "_type": 30,
+    "asset": 43
+  },
+  {
+    "_ref": 44,
+    "_type": 33
+  },
+  "image-53f8a4a889052e6d9f92fc347533062abaf7c28a-1396x770-png",
+  "Paths of life",
+  {
+    "_type": 47,
+    "asset": 48
+  },
+  "mux.video",
+  {
+    "assetId": 49,
+    "filename": 50,
+    "playbackId": 51
+  },
+  "fR2100A00tio2N9VQ4g9ro5BB1tyU77lgHM003hFdb6kq4",
+  "Path of life",
+  "79CoZbPvtdGp00mUU3pkRZujFUDwR02LHciDlc9Gl7G7k",
+  2024,
+  {
+    "behanceUrl": 54,
+    "shortDescription": 55,
+    "slug": 56,
+    "styleframes": 58,
+    "thumbnail": 71,
+    "title": 74,
+    "video": 75,
+    "year": 52
+  },
+  "https://www.behance.net/gallery/221358177/The-disease-spread-on-Tiktok",
+  "Youtube content creator Leo Duff commissioned me for his video “The disease spread on TikTok”, in which he tackles the problem of ADD (attention deficit disorder). The goal was to create an animation that would simplify and popularize how the ADD brain works.",
+  {
+    "_type": 25,
+    "current": 57
+  },
+  "the-disease-spread-on-tiktok",
+  [
+    59,
+    63,
+    67
+  ],
+  {
+    "_key": 60,
+    "_type": 30,
+    "asset": 61
+  },
+  "6706729b0a42",
+  {
+    "_ref": 62,
+    "_type": 33
+  },
+  "image-8c83cd2256e6e28750060836ba761ea4dcef427b-2048x1024-webp",
+  {
+    "_key": 64,
+    "_type": 30,
+    "asset": 65
+  },
+  "b15dd6dbdadd",
+  {
+    "_ref": 66,
+    "_type": 33
+  },
+  "image-cac001b4124310995ff7af4d2b4b2b2b8d6f5826-2800x1400-webp",
+  {
+    "_key": 68,
+    "_type": 30,
+    "asset": 69
+  },
+  "bb92c921157b",
+  {
+    "_ref": 70,
+    "_type": 33
+  },
+  "image-785c967e8b81619e6d952152eda4de5501ebe3e9-2800x1400-webp",
+  {
+    "_type": 30,
+    "asset": 72
+  },
+  {
+    "_ref": 73,
+    "_type": 33
+  },
+  "image-19fa225f5d92c65608e2234c0b0bd1fb2e3d681c-3840x1920-png",
+  "The disease spread on Tiktok",
+  {
+    "_type": 47,
+    "asset": 76
+  },
+  {
+    "assetId": 77,
+    "filename": 78,
+    "playbackId": 79
+  },
+  "wc1DF6O02UFDvtSe6ZKA3E927IGjIWzxnOsJ4HCA3b2Q",
+  "Leo Duff",
+  "tl4p3L4FYyKx6S4j2Vo1ONIsUu1q5QR3YoTvb76f0202o",
+  {
+    "behanceUrl": 81,
+    "shortDescription": 82,
+    "slug": 83,
+    "styleframes": 85,
+    "thumbnail": 98,
+    "title": 101,
+    "video": 102,
+    "year": 107
+  },
+  "https://www.behance.net/gallery/223730619/Ah-PsychedelicsExplainer",
+  "What if psychedelics weren't just drugs, but medical treatments? This motion design explores the therapeutic potential of psychedelics, using scientific research to deconstruct preconceived ideas.",
+  {
+    "_type": 25,
+    "current": 84
+  },
+  "ah-psychedelics",
+  [
+    86,
+    90,
+    94
+  ],
+  {
+    "_key": 87,
+    "_type": 30,
+    "asset": 88
+  },
+  "dfebae7abe4c",
+  {
+    "_ref": 89,
+    "_type": 33
+  },
+  "image-e6b91fc118c818b6f9bdca3d7c9097e45f4728f7-1920x1080-webp",
+  {
+    "_key": 91,
+    "_type": 30,
+    "asset": 92
+  },
+  "a17ffb8d0770",
+  {
+    "_ref": 93,
+    "_type": 33
+  },
+  "image-a94d7ac7b864bdc99757d0ef67420f255ca6b328-1920x1080-webp",
+  {
+    "_key": 95,
+    "_type": 30,
+    "asset": 96
+  },
+  "b7087624992a",
+  {
+    "_ref": 97,
+    "_type": 33
+  },
+  "image-0ab7b4afefb865bb52f4c21910637cd004c8f56e-1920x1080-webp",
+  {
+    "_type": 30,
+    "asset": 99
+  },
+  {
+    "_ref": 100,
+    "_type": 33
+  },
+  "image-1ca122cfaaff3f8b109554a29cc7a1132d13a0c6-1280x717-png",
+  "Ah, Psychedelics",
+  {
+    "_type": 47,
+    "asset": 103
+  },
+  {
+    "assetId": 104,
+    "filename": 105,
+    "playbackId": 106
+  },
+  "Iexzz31cQ9b1IrBH0202mBqPWB01hm00EPcCVINUTPFSFEA",
+  "Ah, psychedelics",
+  "4T5ePLKwMgGBHjNGk018tJ198RPD5qEaIIc6HQ02MjF5c",
+  2025,
+  {
+    "behanceUrl": 109,
+    "shortDescription": 110,
+    "slug": 111,
+    "styleframes": 113,
+    "thumbnail": 126,
+    "title": 129,
+    "video": 130,
+    "year": 107
+  },
+  "https://www.behance.net/gallery/217440473/Thought",
+  "Exploring the emergence of new, spontaneous ideas.",
+  {
+    "_type": 25,
+    "current": 112
+  },
+  "thought",
+  [
+    114,
+    118,
+    122
+  ],
+  {
+    "_key": 115,
+    "_type": 30,
+    "asset": 116
+  },
+  "cc1124e49830",
+  {
+    "_ref": 117,
+    "_type": 33
+  },
+  "image-b914fc76feb83565da1443ddde76460ca53a628a-1920x1080-webp",
+  {
+    "_key": 119,
+    "_type": 30,
+    "asset": 120
+  },
+  "d6daaf6948e2",
+  {
+    "_ref": 121,
+    "_type": 33
+  },
+  "image-ecd26b748f6480d043f23da1c11742843e1d5e96-1920x1080-webp",
+  {
+    "_key": 123,
+    "_type": 30,
+    "asset": 124
+  },
+  "4c9330a5a2be",
+  {
+    "_ref": 125,
+    "_type": 33
+  },
+  "image-72bb1c5c6980b6ef269c5daf343f80fe1dba7ceb-1920x1080-webp",
+  {
+    "_type": 30,
+    "asset": 127
+  },
+  {
+    "_ref": 128,
+    "_type": 33
+  },
+  "image-41a99c4ae85965e19dcc6befe7caaae6c2d54d9c-1146x644-png",
+  "Thought",
+  {
+    "_type": 47,
+    "asset": 131
+  },
+  {
+    "assetId": 132,
+    "filename": 133,
+    "playbackId": 134
+  },
+  "bZTbUxWGSCTUHmaQ4cEW6mcWNFgLJ6YUhLIW4UosGlk",
+  "Thoughts",
+  "xID01eUh12oDNh5MRbAh6fRHQtlq6upbqwinWRzWnE38",
+  {
+    "behanceUrl": 12,
+    "shortDescription": 136,
+    "slug": 137,
+    "styleframes": 139,
+    "thumbnail": 152,
+    "title": 155,
+    "video": 156,
+    "year": 160
+  },
+  "Release motion created a few months ago for Jupiter, to mark the launch of their stablecoin.",
+  {
+    "_type": 25,
+    "current": 138
+  },
+  "jupiter",
+  [
+    140,
+    144,
+    148
+  ],
+  {
+    "_key": 141,
+    "_type": 30,
+    "asset": 142
+  },
+  "630d220c0777",
+  {
+    "_ref": 143,
+    "_type": 33
+  },
+  "image-210a5bf2623baa889a063d57eed6b6691f7b8d0a-1920x1080-png",
+  {
+    "_key": 145,
+    "_type": 30,
+    "asset": 146
+  },
+  "e5447e3448c1",
+  {
+    "_ref": 147,
+    "_type": 33
+  },
+  "image-2a7abb8206251d838e6098e22c7138b14ab6a626-1920x1080-png",
+  {
+    "_key": 149,
+    "_type": 30,
+    "asset": 150
+  },
+  "a9b029516771",
+  {
+    "_ref": 151,
+    "_type": 33
+  },
+  "image-c81cb0cff370a067b2b9ef4d5fccc45da93513e8-1920x1080-png",
+  {
+    "_type": 30,
+    "asset": 153
+  },
+  {
+    "_ref": 154,
+    "_type": 33
+  },
+  "image-bff6c9518d1b998df04c33101d61ad965fd23a98-1413x760-png",
+  "Jupiter",
+  {
+    "_type": 47,
+    "asset": 157
+  },
+  {
+    "assetId": 158,
+    "filename": 155,
+    "playbackId": 159
+  },
+  "3WgVHdOxvdgnVmrCUXpt3ji01eDVqEyqt01zzQjIfJeoo",
+  "00j0002c6600iaejjGj002bhmaJqSlW02PstH7do6QJRPJImM",
+  2026,
+  {
+    "behanceUrl": 162,
+    "shortDescription": 163,
+    "slug": 164,
+    "styleframes": 166,
+    "thumbnail": 179,
+    "title": 182,
+    "video": 183,
+    "year": 107
+  },
+  "https://www.behance.net/gallery/238825325/CHROMATIK",
+  "A visual and sound experiment. Shapes, blend tones, and retro tones collide to create a playful study in motion & texture.",
+  {
+    "_type": 25,
+    "current": 165
+  },
+  "chromatik",
+  [
+    167,
+    171,
+    175
+  ],
+  {
+    "_key": 168,
+    "_type": 30,
+    "asset": 169
+  },
+  "1e80bce4c2f2",
+  {
+    "_ref": 170,
+    "_type": 33
+  },
+  "image-e051555ca7b36d957930af02322d9ad5d2ba4a89-1080x1080-webp",
+  {
+    "_key": 172,
+    "_type": 30,
+    "asset": 173
+  },
+  "10118d60d446",
+  {
+    "_ref": 174,
+    "_type": 33
+  },
+  "image-76f2105215ab670f9b708cbd5bbda24af440ddfc-1080x1080-webp",
+  {
+    "_key": 176,
+    "_type": 30,
+    "asset": 177
+  },
+  "72d7840a23c7",
+  {
+    "_ref": 178,
+    "_type": 33
+  },
+  "image-22d77c92b7c5483e62d7e83d206f1a3326440bc9-1080x1080-webp",
+  {
+    "_type": 30,
+    "asset": 180
+  },
+  {
+    "_ref": 181,
+    "_type": 33
+  },
+  "image-80de59a860bc12ff92d9d349ffe319cfb92a8de8-1258x984-png",
+  "Chromatik",
+  {
+    "_type": 47,
+    "asset": 184
+  },
+  {
+    "assetId": 185,
+    "filename": 182,
+    "playbackId": 186
+  },
+  "iQkNruwzTmEXfIvFwlV44MYauhw00jaHuuRLXygJgFA4",
+  "02Bf00ukchvF00C017njOiuDYNLW6HjDDgCFq6FL8eal1k8",
+  {
+    "behanceUrl": 188,
+    "shortDescription": 189,
+    "slug": 190,
+    "styleframes": 192,
+    "thumbnail": 205,
+    "title": 208,
+    "video": 209,
+    "year": 52
+  },
+  "https://www.behance.net/gallery/191741223/DIgital-Travel",
+  "A personal project in which a user logs on to his computer ans clicks on a simple play button, leading to the appearance of shapes, colors and anything else that might happen inside a computer while it's loading.",
+  {
+    "_type": 25,
+    "current": 191
+  },
+  "digital-travel",
+  [
+    193,
+    197,
+    201
+  ],
+  {
+    "_key": 194,
+    "_type": 30,
+    "asset": 195
+  },
+  "934ddadc28f8",
+  {
+    "_ref": 196,
+    "_type": 33
+  },
+  "image-e4883a908b634c82a380c6de3a46cae8e3bacb4c-950x538-webp",
+  {
+    "_key": 198,
+    "_type": 30,
+    "asset": 199
+  },
+  "0a03d00279af",
+  {
+    "_ref": 200,
+    "_type": 33
+  },
+  "image-ba830865f555c4cb43e89395aab77d636523dee9-956x537-webp",
+  {
+    "_key": 202,
+    "_type": 30,
+    "asset": 203
+  },
+  "e2cdbc121d3f",
+  {
+    "_ref": 204,
+    "_type": 33
+  },
+  "image-67bacd3b38aefef4e0b55d46ea880330d1f821dd-954x537-webp",
+  {
+    "_type": 30,
+    "asset": 206
+  },
+  {
+    "_ref": 207,
+    "_type": 33
+  },
+  "image-219c0768c852e48380fd831ed0772f7c173ac0ea-1280x719-png",
+  "Digital Travel",
+  {
+    "_type": 47,
+    "asset": 210
+  },
+  {
+    "assetId": 211,
+    "filename": 212,
+    "playbackId": 213
+  },
+  "t7juayIYiNCy6d01EfV3018NuxKhMPSZir3CCdKO9u00z8",
+  "Digital travel",
+  "ju6elgST7uaWqO9MLc4ODA9V8dkOLmYFdrbSPtXTFaM",
+  {
+    "behanceUrl": 12,
+    "shortDescription": 215,
+    "slug": 216,
+    "styleframes": 218,
+    "thumbnail": 227,
+    "title": 230,
+    "video": 231,
+    "year": 107
+  },
+  "AMG-GT is a 3D motion study project made at school, using Cinema4D and AfterEffects.",
+  {
+    "_type": 25,
+    "current": 217
+  },
+  "mercedes-amg",
+  [
+    219,
+    223
+  ],
+  {
+    "_key": 220,
+    "_type": 30,
+    "asset": 221
+  },
+  "f1825e98d46c",
+  {
+    "_ref": 222,
+    "_type": 33
+  },
+  "image-c7598f69c07a132203463f8c226fdc22a74bb2dc-1200x675-jpg",
+  {
+    "_key": 224,
+    "_type": 30,
+    "asset": 225
+  },
+  "e1a615c3747d",
+  {
+    "_ref": 226,
+    "_type": 33
+  },
+  "image-da0d2c21fa9279670b5cc32418b90c36895bd5fc-1920x1080-jpg",
+  {
+    "_type": 30,
+    "asset": 228
+  },
+  {
+    "_ref": 229,
+    "_type": 33
+  },
+  "image-f430b963c80253937547780211cd3abe7b23924c-1920x1080-png",
+  "Mercedes AMG",
+  {
+    "_type": 47,
+    "asset": 232
+  },
+  {
+    "assetId": 233,
+    "filename": 230,
+    "playbackId": 234
+  },
+  "dz2dg0002GJhif6nRTfdgX02DrTj6SZ2XS02mUZeogHFcu00",
+  "J6q7eMxUJgjTxJbliCliQSeZtUQYN00iAONNIkyFEZYE",
+  {
+    "behanceUrl": 236,
+    "shortDescription": 237,
+    "slug": 238,
+    "styleframes": 240,
+    "thumbnail": 253,
+    "title": 256,
+    "video": 257,
+    "year": 107
+  },
+  "https://www.behance.net/gallery/221365289/The-purity-revealed",
+  "A personal project in which I imagined a collaboration between the Swarovski brand and Evian. The collaboration would involve distributing limited edition products from both brands at events such as Roland Garros, Fashion Week, Dubai Week and the Met Gala.",
+  {
+    "_type": 25,
+    "current": 239
+  },
+  "the-purity-revealed",
+  [
+    241,
+    245,
+    249
+  ],
+  {
+    "_key": 242,
+    "_type": 30,
+    "asset": 243
+  },
+  "2527f540fed1",
+  {
+    "_ref": 244,
+    "_type": 33
+  },
+  "image-f81118f82a6de006c2e7cd1f9536fb8bde0a4f5c-1920x1080-webp",
+  {
+    "_key": 246,
+    "_type": 30,
+    "asset": 247
+  },
+  "16b1df84639b",
+  {
+    "_ref": 248,
+    "_type": 33
+  },
+  "image-5e9a5260adfb4958efacee863d5f760906a2d131-960x540-webp",
+  {
+    "_key": 250,
+    "_type": 30,
+    "asset": 251
+  },
+  "520e6a54dc1f",
+  {
+    "_ref": 252,
+    "_type": 33
+  },
+  "image-cd25e78cc10daec35a2b1f9ba270cbb2dc3c2df5-2800x1575-webp",
+  {
+    "_type": 30,
+    "asset": 254
+  },
+  {
+    "_ref": 255,
+    "_type": 33
+  },
+  "image-689cc8437a49fac1ba8f12012d73cf9d20ce46fb-3840x2160-png",
+  "The purity revealed",
+  {
+    "_type": 47,
+    "asset": 258
+  },
+  {
+    "assetId": 259,
+    "filename": 260,
+    "playbackId": 261
+  },
+  "LcNuzaF02lIIWIWt02bd2201BlmZCWnxfqHdO43KfuDSlg",
+  "Evian X Swarovski",
+  "qAQWnnz023A00z77cnBAm18r6vyFgkcde9EKurPYVIZAM",
+  [
+    "Ref",
+    263
+  ],
+  [
+    "Reactive",
+    264
+  ],
+  [
+    265,
+    268,
+    271,
+    274
+  ],
+  {
+    "label": 266,
+    "url": 267
+  },
+  "Instagram",
+  "https://www.instagram.com",
+  {
+    "label": 269,
+    "url": 270
+  },
+  "X / Twitter",
+  "https://www.x.com/pacomepertant",
+  {
+    "label": 272,
+    "url": 273
+  },
+  "Behance",
+  "https://www.behance.net/pacomepertant",
+  {
+    "label": 275,
+    "url": 276
+  },
+  "LinkedIn",
+  "https://www.linkedin.com/in/pac%C3%B4me-pertant-b4437126b/",
+  [
+    "Ref",
+    278
+  ],
+  "pertantpacome@gmail.com",
+  [
+    "Ref",
+    280
+  ],
+  [
+    "Reactive",
+    281
+  ],
+  {
+    "_type": 47,
+    "asset": 282
+  },
+  {
+    "assetId": 283,
+    "filename": 284,
+    "playbackId": 285
+  },
+  "nb25dCU3Lv8EcHuZdjVct7Pvrv3gGFDnYaEbvHer3600",
+  "Showreel 2025",
+  "ycc6bXk6hOWxGnyb6F3wvUxPPLiDML00P9OPkYMjuSN8",
+  {
+    "isOpened": 3
+  },
+  {
+    "enabled": 288
+  },
+  [
+    "Ref",
+    8
+  ],
+  1781706272096
+]

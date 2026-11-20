@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacôme Pertant ✲ Portfolio</title>
+  <link rel="stylesheet" href="/fonts/typekit.css">
+  <link rel="stylesheet" href="/fonts/inter.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Main Center Loader Container -->
+    <main class="loader-container">
+      <!-- 1. The Exact Lottie Animation Container -->
+      <div id="lottie-wrapper" class="lottie-box"></div>
+
+      <!-- 2. Resting Hero Subtitle & Tap-to-Enter Buttons -->
+      <div id="entry-content" class="entry-content">
+        <p class="subtitle">
+          motion &amp; sound designer<br>based in paris
+        </p>
+
+        <button id="btn-enter-sound" class="btn-enter" title="Enter with sound">
+          <span>enter with sound</span>
+          <span class="dot"></span>
+        </button>
+      </div>
+
+      <!-- Bottom link pinned to viewport bottom -->
+      <button id="btn-enter-no-sound" class="btn-no-sound">
+        enter without sound
+      </button>
+
+      <!-- 3. Screen Revealed After Tapping to Enter -->
+      <div id="entered-screen" class="entered-screen">
+        <div class="entered-badge">Welcome to Pacôme Pertant</div>
+        <p class="entered-sub">Motion &amp; Sound Design Showcase</p>
+        <button id="btn-replay-all" class="btn-primary">Replay Intro Animation (R)</button>
+      </div>
+    </main>
+
+    <!-- Sleek Minimal Controls Overlay (press 'C' or click to toggle) -->
+    <div id="ui-overlay" class="ui-collapsed">
+      <button id="ui-toggle-btn" title="Toggle Controls (Key: C)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Controls</span>
+      </button>
+
+      <div id="controls-card">
+        <div class="control-header">
+          <h3>Pacôme Pertant Intro</h3>
+          <span class="hint-key">[Press C to close]</span>
+        </div>
+
+        <div class="control-row">
+          <label for="slider-speed">Playback Speed: <span id="val-speed">1.0x</span></label>
+          <input type="range" id="slider-speed" min="0.2" max="2.0" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-actions">
+          <button id="btn-replay" class="btn-primary">Replay Animation (R)</button>
+        </div>
+
+        <div class="tip-text">
+          Exact vector replica of pacomepertant.com intro: 'hey !' &rarr; blue ball bounce &rarr; 'I’m Pacôme' expanding box &rarr; internal kinetic geometry (purple bar, red rotating square, green circle &amp; 7x dark ball) &rarr; resting state &rarr; tap to enter!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <script src="loaderData.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

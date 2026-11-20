@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-Dk7t3yRR.js";var t=e({motion:()=>n}),n={easings:{default:{in:`power2.in`,out:`power2.out`,inOut:`power2.inOut`}},durations:{xs:.25,sm:.5,md:.75,lg:1,xl:1.5}};export{n,t};

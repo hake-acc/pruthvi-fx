@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script>if (!/\/$|\.html$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);</script>
+    <title>Quidditch: a lab piece by Aarav Pilania</title>
+    <meta name="description" content="An ethereal flight over the Black Lake. Harry Potter & The Firebolt rendered as a luminescent 3D particle swarm with chromatic dispersion liquid reflection.">
+    <meta name="theme-color" content="#000000">
+    <meta name="color-scheme" content="dark">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Quidditch / Lab: Aarav Pilania">
+    <meta property="og:description" content="Ethereal 3D particle Patronus flight with chromatic dispersion liquid mirror reflection.">
+    <meta property="og:image" content="assets/og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Quidditch / Lab: Aarav Pilania">
+    <meta name="twitter:image" content="assets/og.jpg">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+    <link rel="preload" href="/fonts/SuisseBPIntl-Light.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Sometype-Mono.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/site-nav.css">
+    <link rel="stylesheet" href="css/quidditch.css">
+    <script src="/js/page-transition.js"></script>
+    <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+
+<body data-page="lab">
+    <header class="ap-nav">
+        <div class="ap-nav__scrim"></div>
+        <nav class="ap-nav__pill" aria-label="Main">
+            <div class="ap-nav__bar">
+                <button class="ap-nav__hit" type="button" tabindex="-1" aria-hidden="true"></button>
+                <a class="ap-nav__mark" href="/" aria-label="Aarav Pilania, home">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 803 644" aria-hidden="true">
+                        <path fill="currentColor" fill-rule="evenodd" d="M 0 644 L 98 644 L 99 359 L 352 359 L 353 644 L 468 644 L 469 440 L 706 440 L 706 341 L 803 339 L 803 95 L 711 94 L 711 0 L 411 0 L 410 95 L 352 94 L 352 0 L 100 0 L 99 95 L 0 95 Z M 468 95 L 662 94 L 663 141 L 712 143 L 712 292 L 663 293 L 662 341 L 469 341 Z M 99 95 L 352 94 L 353 253 L 100 254 Z" />
+                    </svg>
+                </a>
+                <span class="ap-nav__msg" aria-hidden="true">Lab / Quidditch</span>
+                <button class="ap-nav__burger" type="button" aria-expanded="false" aria-controls="apNavMenu" aria-label="Open menu"><i></i><i></i><i></i></button>
+            </div>
+            <div class="ap-nav__menu" id="apNavMenu">
+                <ul class="ap-nav__list">
+                    <li><a class="ap-nav__item" href="/" data-scroll="projects" style="--i:0">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="2" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="2" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Back to portfolio</span></a></li>
+                    <li><a class="ap-nav__item" href="/" data-scroll="projects" style="--i:1">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Work</span></a></li>
+                    <li><a class="ap-nav__item" href="https://github.com/AaravPilania/lab-quidditch" target="_blank" rel="noopener noreferrer" style="--i:2">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Source on GitHub</span>
+                        <svg class="ap-nav__ext" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="2" y="0" width="8" height="2" /><rect x="8" y="2" width="2" height="4" /><rect x="5" y="3" width="2" height="2" /><rect x="3" y="5" width="2" height="2" /><rect x="0" y="8" width="2" height="2" /><rect x="1" y="7" width="2" height="2" /></g></svg>
+                    </a></li>
+                    <li><a class="ap-nav__item" href="/contact" data-nav="contact" data-no-swup style="--i:3">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Contact</span></a></li>
+                </ul>
+                <div class="ap-nav__actions" style="--i:4">
+                    <a class="ap-nav__btn ap-nav__btn--ghost" href="/contact" data-intent="form" data-no-swup style="--i:4">Fill up the form<svg class="ap-nav__btn-a" viewBox="0 0 7 8" aria-hidden="true"><path fill="currentColor" d="M7.002.499v7h-1V2.206L.707 7.501 0 6.794l5.295-5.295H.002v-1h7Z" /></svg></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <canvas class="q-gl" id="gl" aria-label="An ethereal particle swarm flight over the Black Lake, live in WebGL"></canvas>
+
+    <!-- The Gate -->
+    <div class="q-gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+        <div class="q-gate__inner">
+            <p class="q-meta"><span>[ LAB 08 ]</span><span>[ WebGL / Three.js / GPGPU Particles ]</span></p>
+            <h1 class="q-gate__title" id="gateTitle">PATRONUS</h1>
+            <p class="q-gate__line">An ethereal flight over the Black Lake. 32,000 luminescent stardust particles in fluid flight, ancient Celtic runes, and spectral chromatic dispersion mirroring the night sky.</p>
+            <fieldset class="q-sound">
+                <legend class="q-sound__legend">Sound</legend>
+                <label class="q-sound__opt"><input type="radio" name="snd" value="on" checked><span>Celesta, wind &amp; water</span></label>
+                <label class="q-sound__opt"><input type="radio" name="snd" value="off"><span>Silence</span></label>
+            </fieldset>
+            <button class="q-gate__go" id="gateGo" type="button"><span>Enter Experience</span><svg viewBox="0 0 7 8" aria-hidden="true"><path fill="currentColor" d="M7.002.499v7h-1V2.206L.707 7.501 0 6.794l5.295-5.295H.002v-1h7Z" /></svg></button>
+            <p class="q-gate__hint">Drag to orbit &middot; Scroll to zoom &middot; Hover the Patronus to awaken turbulence</p>
+        </div>
+    </div>
+
+    <!-- Dracarys-Style Minimalist Luxury Editorial HUD -->
+    <div class="q-hud">
+        <!-- Top Left -->
+        <div class="q-top-left" id="title">
+            <span class="q-tag">[ LAB 08 ] &middot; QUIDDITCH</span>
+        </div>
+
+        <!-- Top Right -->
+        <div class="q-top-right">
+            <span class="q-subject">PATRONUS</span>
+        </div>
+
+        <!-- Bottom Left: Diamond Glyph -->
+        <div class="q-diamond-badge" aria-hidden="true">
+            <div class="q-diamond">
+                <span>I</span>
+            </div>
+            <button class="q-mute" id="mute" type="button" aria-pressed="false" aria-label="Mute sound">
+                <i></i><i></i><i></i><i></i>
+                <span>Sound</span>
+            </button>
+        </div>
+
+        <!-- Bottom Right: Running Timecode & Interactive Prompt -->
+        <div class="q-bottom-right">
+            <span class="q-timecode" id="timecode">00:00:000</span>
+            <span class="q-timecode-prompt">&block; HOVER THE PATRONUS</span>
+        </div>
+    </div>
+
+    <noscript><p class="q-noscript">This piece is drawn live in WebGL and needs JavaScript.</p></noscript>
+
+    <div class="site-cursor-dot" aria-hidden="true"></div>
+
+    <script type="module" src="js/main.js"></script>
+    <script src="/js/site-nav.js"></script>
+</body>
+
+</html>

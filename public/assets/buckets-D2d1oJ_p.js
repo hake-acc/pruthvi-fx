@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-Dk7t3yRR.js";var t=e({bucketLoadProgress:()=>r,bucketLoadTime:()=>n}),n=e=>{let t=Math.round(e);for(let e=1;e<=8;e++)if(t<e)return`under ${e}s`;return t<=15?`8 to 15s`:t<=30?`15 to 30s`:`over 30s`},r=e=>{let t=Math.min(Math.round(e),99);return t<=33?`early`:t<=66?`mid`:`late`};export{n,t as r,r as t};

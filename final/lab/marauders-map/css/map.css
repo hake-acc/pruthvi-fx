@@ -1,0 +1,119 @@
+@font-face { font-family: 'MM Fell'; src: url('../assets/fonts/fell.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'MM Fell'; src: url('../assets/fonts/fell-italic.woff2') format('woff2'); font-style: italic; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'MM Fell SC'; src: url('../assets/fonts/fell-sc.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'MM Pinyon'; src: url('../assets/fonts/pinyon.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+:root {
+    --mm-void: #050403;
+    --mm-parch: #e9d8ae;
+    --mm-parch-dim: rgba(233, 216, 174, 0.62);
+    --mm-ink: #2a180c;
+    --mm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--mm-void); }
+body.mm { color: var(--mm-parch); font-family: 'MM Fell', Georgia, serif; -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
+
+.mm-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+.mm-stage { position: fixed; inset: 0; }
+#mmGL { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; opacity: 0; transition: opacity 1.2s var(--mm-ease); }
+body.is-ready #mmGL { opacity: 1; }
+@media (pointer: fine) { #mmGL { cursor: none; } }
+body.is-dragging #mmGL { cursor: grabbing; }
+
+/* the hidden quill: an off-screen input that receives typing and the mobile keyboard */
+.mm-spell { position: fixed; left: 50%; bottom: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; font-size: 16px; pointer-events: none; transform: translateX(-50%); }
+
+/* ------------------------------------------------------------------ hints & controls */
+.mm-hint {
+    position: fixed; left: 50%; bottom: max(22px, env(safe-area-inset-bottom)); margin: 0; transform: translateX(-50%);
+    font-style: italic; font-size: clamp(13px, 1.05vw, 15px); letter-spacing: 0.01em; color: var(--mm-parch-dim); white-space: nowrap; pointer-events: none;
+}
+.mm-hint i, .mm-dock__cap i { font-style: normal; opacity: 0.5; padding: 0 0.4em; }
+.mm-hint { transition: opacity 0.9s var(--mm-ease), transform 0.9s var(--mm-ease); }
+body.is-sworn .mm-hint { opacity: 0; transform: translate(-50%, -6px); }
+
+/* soft void under the controls so they read over parchment */
+.mm-scrim {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 150px; pointer-events: none;
+    background: linear-gradient(to top, rgba(5, 4, 3, 0.86), rgba(5, 4, 3, 0.5) 45%, rgba(5, 4, 3, 0));
+    opacity: 0; transition: opacity 1.2s var(--mm-ease);
+}
+body.is-open .mm-scrim { opacity: 1; }
+
+.mm-dock {
+    position: fixed; left: max(24px, env(safe-area-inset-left)); bottom: max(20px, env(safe-area-inset-bottom)); max-width: calc(100vw - 360px);
+    opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity 0.9s var(--mm-ease), transform 0.9s var(--mm-ease);
+}
+body.is-open .mm-dock { opacity: 1; transform: none; pointer-events: auto; transition-delay: 0.4s; }
+.mm-dock__cap { margin: 0 0 0.55em; font-style: italic; font-size: 13px; color: rgba(233, 216, 174, 0.5); }
+.mm-areas { display: flex; flex-wrap: wrap; gap: 0.2em 1.5em; }
+.mm-area {
+    position: relative; appearance: none; background: none; border: 0; padding: 0.15em 0 0.3em; cursor: pointer;
+    font: 400 clamp(13px, 1vw, 15px)/1.2 'MM Fell SC', Georgia, serif; letter-spacing: 0.03em; color: var(--mm-parch-dim); transition: color 0.4s var(--mm-ease);
+}
+.mm-area::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform-origin: left; transform: scaleX(0); transition: transform 0.55s var(--mm-ease); }
+.mm-area:hover, .mm-area:focus-visible, .mm-area.is-here { color: var(--mm-parch); outline: none; }
+.mm-area:hover::after, .mm-area:focus-visible::after, .mm-area.is-here::after { transform: scaleX(1); }
+
+.mm-tools {
+    position: fixed; right: max(22px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 18px;
+}
+.mm-sound, .mm-manage { appearance: none; background: none; border: 0; color: var(--mm-parch-dim); cursor: pointer; padding: 6px 0; }
+.mm-sound { display: inline-flex; align-items: center; gap: 0.45em; font: italic 400 14px/1 'MM Fell', Georgia, serif; transition: color 0.4s var(--mm-ease); }
+.mm-sound svg { width: 20px; height: 20px; }
+.mm-sound[aria-pressed='false'] .mm-sound__wave { opacity: 0; }
+.mm-sound:hover, .mm-sound:focus-visible { color: var(--mm-parch); outline: none; }
+
+.mm-manage {
+    position: relative; padding: 0.7em 1.15em 0.62em; font: 400 15px/1 'MM Fell SC', Georgia, serif; letter-spacing: 0.06em; color: var(--mm-parch);
+    opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity 0.8s var(--mm-ease), transform 0.8s var(--mm-ease), color 0.45s var(--mm-ease);
+}
+.mm-manage::before, .mm-manage::after { content: ''; position: absolute; inset: 0; border: 1px solid currentColor; opacity: 0.55; pointer-events: none; }
+.mm-manage::after { inset: 3px; opacity: 0.3; }
+.mm-manage span { position: relative; z-index: 1; }
+.mm-manage span::before { content: ''; position: absolute; inset: -0.7em -1.15em -0.62em; background: var(--mm-parch); z-index: -1; transform: scaleY(0); transform-origin: bottom; transition: transform 0.5s var(--mm-ease); }
+.mm-manage:hover, .mm-manage:focus-visible { color: var(--mm-ink); outline: none; }
+.mm-manage:hover span::before, .mm-manage:focus-visible span::before { transform: scaleY(1); }
+body.is-open .mm-manage { opacity: 1; transform: none; pointer-events: auto; transition-delay: 1s; }
+
+/* ------------------------------------------------------------------ wand tip: always white */
+.site-cursor-dot {
+    position: fixed; left: 0; top: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%;
+    background: #ffffff; z-index: 99999999 !important; pointer-events: none;
+    box-shadow: 0 0 10px 2px rgba(255, 250, 230, 0.55), 0 0 26px 6px rgba(255, 236, 190, 0.18);
+    transition: width 0.35s var(--mm-ease), height 0.35s var(--mm-ease), margin 0.35s var(--mm-ease), background-color 0.35s, box-shadow 0.35s, opacity 0.3s;
+    will-change: transform;
+}
+.site-cursor-dot.is-ring { width: 34px; height: 34px; margin: -17px 0 0 -17px; background: transparent; border: 1.5px solid #ffffff; box-shadow: none; }
+.site-cursor-dot.is-away { opacity: 0; }
+body.is-named .site-cursor-dot:not(.is-ring) { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; }
+.js-cursor-label {
+    position: absolute; left: calc(100% + 10px); top: calc(100% + 4px); white-space: nowrap; font: 400 10px/1 ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 0.08em;
+    color: #ffffff; opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s var(--mm-ease);
+}
+.site-cursor-dot.is-ring .js-cursor-label:not(:empty) { opacity: 0.9; transform: none; }
+@media (pointer: coarse) { .site-cursor-dot { display: none; } }
+
+/* ------------------------------------------------------------------ fallbacks */
+.mm-fallback { display: none; position: fixed; inset: 0; place-content: center; text-align: center; padding: 24px; font-style: italic; color: var(--mm-parch-dim); }
+.mm-fallback__t { font: 400 clamp(22px, 3vw, 34px)/1.2 'MM Pinyon', 'MM Fell', serif; color: var(--mm-parch); font-style: normal; }
+body.mm-nogl .mm-fallback { display: grid; }
+body.mm-nogl #mmGL, body.mm-nogl .mm-hint, body.mm-nogl .mm-tools { display: none; }
+.mm-noscript { position: fixed; inset: auto 0 40% 0; text-align: center; font-style: italic; }
+
+@media (max-width: 760px) {
+    .mm-hint { white-space: normal; width: min(92vw, 420px); text-align: center; bottom: max(30px, env(safe-area-inset-bottom)); }
+    .mm-dock { left: 0; right: 0; max-width: none; bottom: max(14px, env(safe-area-inset-bottom)); }
+    .mm-dock__cap { display: none; }
+    .mm-areas { flex-wrap: nowrap; gap: 1.2em; overflow-x: auto; padding: 0 20px; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 28px), transparent); }
+    .mm-areas::-webkit-scrollbar { display: none; }
+    .mm-area { font-size: 13px; white-space: nowrap; flex: none; }
+    .mm-tools { right: 20px; left: 20px; justify-content: space-between; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 40px); }
+    .mm-scrim { height: 200px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+}

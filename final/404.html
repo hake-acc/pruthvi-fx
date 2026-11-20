@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>404, off the grid — Aarav Pilania</title>
+    <meta name="description" content="This page was never drawn. Head back to Aarav Pilania's portfolio.">
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0b0b0b">
+    <link rel="preload" href="/fonts/Brier-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Sometype-Mono.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/site-nav.css">
+    <script src="/js/page-transition.js"></script>
+    <style>
+        @font-face {
+            font-family: Brier;
+            src: url('/fonts/Brier-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        :root {
+            --void: #0b0b0b;
+            --off: #f9f4eb;
+            --sun: #ffed29;
+            --cell: clamp(10px, 1.6vw, 26px);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            background: var(--void);
+            color: var(--off);
+        }
+
+        body {
+            overflow: hidden;
+            font-family: Sometype, ui-monospace, monospace;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* graph paper, the hero card's own, gone dark */
+        .nf-paper {
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgb(249 244 235 / 0.07) 1px, transparent 1px) 0 0 / var(--cell) var(--cell),
+                linear-gradient(90deg, rgb(249 244 235 / 0.07) 1px, transparent 1px) 0 0 / var(--cell) var(--cell),
+                linear-gradient(rgb(249 244 235 / 0.035) 1px, transparent 1px) 0 0 / calc(var(--cell) / 4) calc(var(--cell) / 4),
+                linear-gradient(90deg, rgb(249 244 235 / 0.035) 1px, transparent 1px) 0 0 / calc(var(--cell) / 4) calc(var(--cell) / 4);
+            -webkit-mask: radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 85%);
+            mask: radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 85%);
+            pointer-events: none;
+        }
+
+        .nf-px {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+
+        .nf {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100%;
+            padding: calc(84px + 2vh) clamp(18px, 3vw, 48px) clamp(18px, 3vw, 40px);
+            pointer-events: none;
+        }
+
+        .nf-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 2em;
+            font-size: 11px;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .nf-meta span:last-child {
+            max-width: 50vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .nf-copy {
+            align-self: end;
+            max-width: 34rem;
+        }
+
+        .nf-title {
+            margin: 0 0 0.35em;
+            font-family: Brier, Georgia, serif;
+            font-size: clamp(44px, 7.4vw, 124px);
+            font-weight: 700;
+            line-height: 0.88;
+            letter-spacing: -0.03em;
+        }
+
+        .nf-title em {
+            font-style: normal;
+            color: var(--sun);
+        }
+
+        .nf-line {
+            margin: 0 0 2em;
+            font-size: 13px;
+            line-height: 1.6;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            opacity: 0.78;
+        }
+
+        .nf-home {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            height: 50px;
+            padding: 0 18px;
+            border-radius: 4px;
+            background: var(--off);
+            color: #000;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            text-decoration: none;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .nf-home::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--sun);
+            transform: translate3d(0, 101%, 0);
+            transition: transform 0.5s var(--ease);
+        }
+
+        .nf-home span,
+        .nf-home svg {
+            position: relative;
+        }
+
+        .nf-home svg {
+            width: 7px;
+            height: 8px;
+            transition: transform 0.45s var(--ease);
+        }
+
+        .nf-home:hover::before,
+        .nf-home:focus-visible::before {
+            transform: none;
+        }
+
+        .nf-home:hover svg,
+        .nf-home:focus-visible svg {
+            transform: translate3d(2px, -2px, 0);
+        }
+
+        .nf-home:focus-visible {
+            outline: 1px solid var(--sun);
+            outline-offset: 3px;
+        }
+
+        .nf-foot {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3vh;
+            font-size: 11px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 720px) {
+            .nf-foot span:last-child {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body data-page="404">
+    <header class="ap-nav">
+        <div class="ap-nav__scrim"></div>
+        <nav class="ap-nav__pill" aria-label="Main">
+            <div class="ap-nav__bar">
+                <button class="ap-nav__hit" type="button" tabindex="-1" aria-hidden="true"></button>
+                <a class="ap-nav__mark" href="/" aria-label="Aarav Pilania, home">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 803 644" aria-hidden="true">
+                        <path fill="currentColor" fill-rule="evenodd" d="M 0 644 L 98 644 L 99 359 L 352 359 L 353 644 L 468 644 L 469 440 L 706 440 L 706 341 L 803 339 L 803 95 L 711 94 L 711 0 L 411 0 L 410 95 L 352 94 L 352 0 L 100 0 L 99 95 L 0 95 Z M 468 95 L 662 94 L 663 141 L 712 143 L 712 292 L 663 293 L 662 341 L 469 341 Z M 99 95 L 352 94 L 353 253 L 100 254 Z" />
+                    </svg>
+                </a>
+                <span class="ap-nav__msg" aria-hidden="true">This page wandered off</span>
+                <button class="ap-nav__burger" type="button" aria-expanded="false" aria-controls="apNavMenu" aria-label="Open menu"><i></i><i></i><i></i></button>
+            </div>
+            <div class="ap-nav__menu" id="apNavMenu">
+                <ul class="ap-nav__list">
+                    <li><a class="ap-nav__item" href="/" data-scroll="projects" style="--i:0">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Work</span></a></li>
+                    <li><a class="ap-nav__item" href="/" data-scroll="stack" style="--i:1">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Stack</span></a></li>
+                    <li><a class="ap-nav__item" href="https://github.com/AaravPilania" target="_blank" rel="noopener noreferrer" style="--i:2">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">GitHub</span>
+                        <svg class="ap-nav__ext" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="2" y="0" width="8" height="2" /><rect x="8" y="2" width="2" height="4" /><rect x="5" y="3" width="2" height="2" /><rect x="3" y="5" width="2" height="2" /><rect x="0" y="8" width="2" height="2" /><rect x="1" y="7" width="2" height="2" /></g></svg>
+                    </a></li>
+                    <li><a class="ap-nav__item" href="/contact" data-nav="contact" data-no-swup style="--i:3">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Contact</span></a></li>
+                </ul>
+                <div class="ap-nav__actions" style="--i:4">
+                    <a class="ap-nav__btn ap-nav__btn--ghost" href="/contact" data-intent="form" data-no-swup style="--i:4">Fill up the form<svg class="ap-nav__btn-a" viewBox="0 0 7 8" aria-hidden="true"><path fill="currentColor" d="M7.002.499v7h-1V2.206L.707 7.501 0 6.794l5.295-5.295H.002v-1h7Z" /></svg></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="nf-paper" aria-hidden="true"></div>
+    <canvas class="nf-px" id="nfPx" aria-hidden="true"></canvas>
+
+    <main class="nf">
+        <p class="nf-meta"><span>[ Error 404 ]</span><span id="nfPath">[ / ]</span></p>
+        <div class="nf-copy">
+            <h1 class="nf-title">Off the <em>grid.</em></h1>
+            <p class="nf-line">This page was never drawn. Or the bug from slide one got peckish. Either way, there is nothing here but graph paper.</p>
+            <a class="nf-home" href="/"><span>Back to the drawing board</span><svg viewBox="0 0 7 8" aria-hidden="true"><path fill="currentColor" d="M7.002.499v7h-1V2.206L.707 7.501 0 6.794l5.295-5.295H.002v-1h7Z" /></svg></a>
+        </div>
+        <p class="nf-foot"><span>Aarav Pilania, creative developer</span><span>Cells lost: <b id="nfLost">0</b></span></p>
+    </main>
+
+    <script>
+        // A 404 set in the loader's pixels on the graph paper, inked in through the 4x4 dither ramp; the cursor scuffs
+        // cells loose in signal yellow and they settle back a moment later
+        (() => {
+            const path = location.pathname;
+            document.getElementById('nfPath').textContent = '[ ' + (path.length > 1 ? path : '/404') + ' ]';
+            const cv = document.getElementById('nfPx'), cx = cv.getContext('2d'), lost = document.getElementById('nfLost');
+            const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+            const DIGIT = {
+                4: ['#..#', '#..#', '#..#', '####', '...#', '...#', '...#'],
+                0: ['####', '#..#', '#..#', '#..#', '#..#', '#..#', '####'],
+            };
+            const rows = DIGIT[4].map((r, j) => r + '.' + DIGIT[0][j] + '.' + DIGIT[4][j]);
+            const GW = rows[0].length, GH = rows.length, SUN = '#ffed29', OFF = '#f9f4eb';
+            const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let W = 0, H = 0, dpr = 1, cell = 0, ox = 0, oy = 0, sub = 4, cells = [], t0 = 0, mx = -1e4, my = -1e4, scuffed = 0;
+
+            function layout() {
+                W = innerWidth; H = innerHeight; dpr = Math.min(2, devicePixelRatio || 1);
+                cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+                const grid = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 20;
+                const fit = Math.min(W * 0.9 / GW, H * 0.38 / GH);
+                cell = Math.max(grid, Math.floor(fit / grid) * grid);
+                ox = Math.round((W - GW * cell) / 2 / grid) * grid;
+                oy = Math.round((H * 0.36 - GH * cell / 2) / grid) * grid;
+                cells = [];
+                const s = cell / sub;
+                for (let j = 0; j < GH; j++) for (let i = 0; i < GW; i++) {
+                    if (rows[j][i] !== '#') continue;
+                    for (let v = 0; v < sub; v++) for (let u = 0; u < sub; u++) {
+                        const x = ox + i * cell + u * s, y = oy + j * cell + v * s;
+                        const d = Math.hypot(x - W / 2, y - H / 2) / Math.hypot(W / 2, H / 2);
+                        cells.push({ x, y, s, at: 0.6 * d + 0.4 * BAYER[(v & 3) * 4 + (u & 3)] / 15, hit: 0 });
+                    }
+                }
+            }
+
+            function frame(now) {
+                if (!t0) t0 = now;
+                const k = reduce ? 2 : (now - t0) / 900;
+                cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                cx.clearRect(0, 0, W, H);
+                const r = cell * 1.1;
+                for (const c of cells) {
+                    if (k < c.at) continue;
+                    const cxm = c.x + c.s / 2, cym = c.y + c.s / 2;
+                    if (Math.abs(cxm - mx) < r && Math.abs(cym - my) < r && Math.hypot(cxm - mx, cym - my) < r) {
+                        if (!c.hit) scuffed++;
+                        c.hit = now;
+                    }
+                    const age = c.hit ? now - c.hit : 1e9;
+                    if (age < 900) {
+                        if (age > 260 && ((c.x / c.s + c.y / c.s) & 1)) continue;
+                        cx.fillStyle = SUN;
+                    } else {
+                        c.hit = 0;
+                        cx.fillStyle = k - c.at < 0.08 ? SUN : OFF;
+                    }
+                    cx.fillRect(c.x + 0.5, c.y + 0.5, c.s - 1, c.s - 1);
+                }
+                lost.textContent = String(scuffed);
+                requestAnimationFrame(frame);
+            }
+
+            layout();
+            addEventListener('resize', layout);
+            addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+            document.addEventListener('pointerleave', () => { mx = my = -1e4; });
+            const start = () => requestAnimationFrame(frame);
+            if (window.__ptIncoming) setTimeout(start, 700); else start();
+        })();
+    </script>
+    <script src="/js/site-nav.js"></script>
+</body>
+
+</html>

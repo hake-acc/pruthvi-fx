@@ -1,0 +1,1 @@
+import e from"./logo_marquee-BCQdRugJ.js";var t=class extends e{direction=1;constructor(e){super(e.querySelector(`.js-marquee-container`)),this.slide=e,this.marquee&&this.init()}tick=()=>{this.direction=this.xPercent<=this.xPercentTarget?1:-1,this.handleDrag({deltaX:-1*this.direction})}};export{t as default};

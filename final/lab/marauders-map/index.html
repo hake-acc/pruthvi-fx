@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en-GB">
+
+<head>
+    <meta charset="utf-8">
+    <script>if (!/\/$|\.html$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Marauder&rsquo;s Map — Lab — Aarav Pilania</title>
+    <meta name="description" content="A lab piece by Aarav Pilania: the Marauder's Map, drawn entirely in code. Swear the oath and the ink blooms from your wand, the parchment unfolds, and Hogwarts walks around in footprints.">
+    <meta name="theme-color" content="#050403">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The Marauder&rsquo;s Map — Aarav Pilania Lab">
+    <meta property="og:description" content="I solemnly swear that I am up to no good. Parchment, iron-gall ink and wandering footprints, drawn in WebGL.">
+    <meta property="og:image" content="/lab/marauders-map/assets/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Marauder&rsquo;s Map — Aarav Pilania Lab">
+    <meta name="twitter:image" content="/lab/marauders-map/assets/og.jpg">
+    <link rel="canonical" href="/lab/marauders-map/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="assets/fonts/fell-italic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/fell-sc.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/pinyon.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/site-nav.css">
+    <link rel="stylesheet" href="css/map.css">
+    <script src="/js/page-transition.js"></script>
+</head>
+
+<body class="mm">
+    <h1 class="mm-sr">The Marauder&rsquo;s Map</h1>
+    <p class="mm-sr">An interactive lab piece. The parchment is blank until you type “I solemnly swear that I am up to no good”, or tap it three times. Ink then draws Hogwarts from the point of your wand, the map unfolds, and named footprints wander the corridors. Hover a name for a remark from Messrs Moony, Wormtail, Padfoot and Prongs. Type “mischief managed” to close it.</p>
+
+    <header class="ap-nav">
+        <div class="ap-nav__scrim"></div>
+        <nav class="ap-nav__pill" aria-label="Main">
+            <div class="ap-nav__bar">
+                <button class="ap-nav__hit" type="button" tabindex="-1" aria-hidden="true"></button>
+                <a class="ap-nav__mark" href="/" aria-label="Aarav Pilania, home">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 803 644" aria-hidden="true">
+                        <path fill="currentColor" fill-rule="evenodd" d="M 0 644 L 98 644 L 99 359 L 352 359 L 353 644 L 468 644 L 469 440 L 706 440 L 706 341 L 803 339 L 803 95 L 711 94 L 711 0 L 411 0 L 410 95 L 352 94 L 352 0 L 100 0 L 99 95 L 0 95 Z M 468 95 L 662 94 L 663 141 L 712 143 L 712 292 L 663 293 L 662 341 L 469 341 Z M 99 95 L 352 94 L 353 253 L 100 254 Z" />
+                    </svg>
+                </a>
+                <span class="ap-nav__msg" aria-hidden="true">I solemnly swear…</span>
+                <button class="ap-nav__burger" type="button" aria-expanded="false" aria-controls="apNavMenu" aria-label="Open menu"><i></i><i></i><i></i></button>
+            </div>
+            <div class="ap-nav__menu" id="apNavMenu">
+                <ul class="ap-nav__list">
+                    <li><a class="ap-nav__item" href="/" data-scroll="projects" style="--i:0">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Work</span></a></li>
+                    <li><a class="ap-nav__item" href="/" data-scroll="stack" style="--i:1">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Stack</span></a></li>
+                    <li><a class="ap-nav__item" href="https://github.com/AaravPilania" target="_blank" rel="noopener noreferrer" style="--i:2">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">GitHub</span>
+                        <svg class="ap-nav__ext" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="2" y="0" width="8" height="2" /><rect x="8" y="2" width="2" height="4" /><rect x="5" y="3" width="2" height="2" /><rect x="3" y="5" width="2" height="2" /><rect x="0" y="8" width="2" height="2" /><rect x="1" y="7" width="2" height="2" /></g></svg>
+                    </a></li>
+                    <li><a class="ap-nav__item" href="/contact" data-nav="contact" data-no-swup style="--i:3">
+                        <svg class="ap-nav__ico" viewBox="0 0 10 10" aria-hidden="true"><g fill="currentColor"><rect x="4" y="0" width="2" height="2" /><rect x="6" y="2" width="2" height="2" /><rect x="0" y="4" width="10" height="2" /><rect x="6" y="6" width="2" height="2" /><rect x="4" y="8" width="2" height="2" /></g></svg>
+                        <span class="ap-nav__t">Contact</span></a></li>
+                </ul>
+                <div class="ap-nav__actions" style="--i:4">
+                    <a class="ap-nav__btn ap-nav__btn--ghost" href="/contact" data-intent="form" data-no-swup style="--i:4">Fill up the form<svg class="ap-nav__btn-a" viewBox="0 0 7 8" aria-hidden="true"><path fill="currentColor" d="M7.002.499v7h-1V2.206L.707 7.501 0 6.794l5.295-5.295H.002v-1h7Z" /></svg></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="mm-stage">
+        <canvas id="mmGL" aria-label="The Marauder's Map, an interactive parchment" role="img"></canvas>
+
+        <div class="mm-scrim" aria-hidden="true"></div>
+        <p class="mm-hint" id="mmHint" aria-hidden="true">Speak the oath to wake the parchment <i>·</i> or tap it three times</p>
+
+        <div class="mm-dock">
+            <p class="mm-dock__cap" aria-hidden="true">Drag or scroll to wander <i>·</i> hover a name <i>·</i> type “mischief managed” to close</p>
+            <nav class="mm-areas" id="mmAreas" aria-label="Areas of Hogwarts"></nav>
+        </div>
+
+        <div class="mm-tools">
+            <button class="mm-sound" id="mmSound" type="button" aria-pressed="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20c3-1 5-3 7-6 2.4-3.6 5-7.6 9-10-1 4-3.3 7.6-6.4 10.4C11.4 16.7 8 18.4 4 20Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /><path d="M4 20l5.5-5.5" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" /><path class="mm-sound__wave" d="M15 18.5c1.2.3 2.3.1 3.4-.6M16.2 21c2 .4 3.8 0 5.3-1.2" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" /></svg>
+                <span>Sound on</span>
+            </button>
+            <button class="mm-manage" id="mmManage" type="button"><span>Mischief managed</span></button>
+        </div>
+
+        <label class="mm-sr" for="mmSpell">Write on the map</label>
+        <input class="mm-spell" id="mmSpell" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done">
+        <p class="mm-sr" id="mmLive" aria-live="polite"></p>
+
+        <div class="mm-fallback">
+            <p class="mm-fallback__t">This parchment only reveals itself to browsers that speak WebGL.</p>
+            <p>Messrs Moony, Wormtail, Padfoot &amp; Prongs suggest a different broom.</p>
+        </div>
+    </main>
+
+    <div class="site-cursor-dot is-away" aria-hidden="true"><span class="js-cursor-label"></span></div>
+
+    <noscript><p class="mm-noscript">The map needs JavaScript to reveal itself. Mischief managed.</p></noscript>
+
+    <script src="lib/three.min.js"></script>
+    <script src="/js/site-nav.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,236 @@
+/* Slide 04 skills wheel, layered over the services particle backdrop (which this file never styles) */
+
+/* Row 16's asterisk hides while its clone flies */
+#section-projects .projects__entry-index.sk-detached::before {
+    opacity: 0 !important;
+    transition: none !important;
+}
+
+/* The fixed nav chrome lifts away while the stage holds the scroll (body.sk-nav-hidden, set by skills-wheel.js).
+   The header's revealed rules (custom.css and the inline head style) are !important and inline styles pin opacity and
+   transform, so these outrank them by specificity and move with `translate`, which composes with the inline
+   translateX(-50%). The header itself never moves: a transform there would re-anchor its fixed children. */
+body .ll-header .js-menu.is-revealed,
+body .ll-header .js-sticky-items.is-revealed {
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        translate 0.75s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0s !important;
+}
+
+body.sk-nav-hidden .ll-header .js-menu,
+body.sk-nav-hidden .ll-header .js-sticky-items,
+body.sk-nav-hidden .ll-header .js-menu.is-revealed,
+body.sk-nav-hidden .ll-header .js-sticky-items.is-revealed {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    translate: 0 calc(-100% - 1.25rem) !important;
+    transition: opacity 0.42s cubic-bezier(0.55, 0, 0.75, 0.25), translate 0.5s cubic-bezier(0.65, 0, 0.35, 1),
+        visibility 0s linear 0.5s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.sk-nav-hidden .ll-header .js-menu,
+    body.sk-nav-hidden .ll-header .js-sticky-items,
+    body.sk-nav-hidden .ll-header .js-menu.is-revealed,
+    body.sk-nav-hidden .ll-header .js-sticky-items.is-revealed {
+        translate: none !important;
+    }
+}
+
+/* Scroll length: one stage height plus 0.3 of it per detent; the stage sticks inside it.
+   --sk-h is the scroller's client height (set by skills-wheel.js), so 50% of the stage is the viewport's centre line. */
+.sk {
+    --sk-pad: clamp(18px, 3.2vw, 56px);
+    --sk-sun: #FFED29;
+    --sk-hair: rgba(244, 242, 234, 0.22);
+    --sk-mono: 'IBM Plex Mono', 'Sometype Mono', monospace;
+    --sk-sans: 'PP-Mori', 'Suisse Intl', sans-serif;
+    --sk-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg stroke='%23000' stroke-width='3.2' stroke-linecap='square'%3E%3Cpath d='M3 12h18'/%3E%3Cpath d='M7.5 4.2l9 15.6'/%3E%3Cpath d='M16.5 4.2l-9 15.6'/%3E%3C/g%3E%3C/svg%3E");
+    grid-column: 1 / -1;
+    justify-self: start;
+    position: relative;
+    z-index: 2;
+    width: var(--sk-w, 100vw);
+    margin-left: var(--sk-x, calc(50% - 50vw));
+    height: calc(var(--sk-h, 100vh) * (1 + var(--sk-step, 0.3) * var(--sk-steps, 4)));
+    pointer-events: none;
+}
+
+.sk__stage {
+    position: sticky;
+    top: 0;
+    height: var(--sk-h, 100vh);
+    overflow: visible;
+}
+
+/* GLITCH's trail of dead pixels along the (unseen) Lusion ribbon route; under the rail, text and star */
+.sk-damage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* The axis: one hairline through the stage's vertical centre, cut into segments that stop short of the words */
+.sk-rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    margin-top: -0.5px;
+    z-index: 1;
+}
+.sk-rail__seg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+}
+/* Experience is its own cycle: the rail drains, then refills in the signature yellow */
+.sk--exp .sk-rail__seg {
+    background: var(--sk-sun, #FFED29);
+    will-change: transform;
+}
+
+.sk-star {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: 3;
+    width: var(--sk-S, 55vmin);
+    height: var(--sk-S, 55vmin);
+    margin-top: calc(var(--sk-S, 55vmin) / -2);
+    background: var(--sk-sun);
+    -webkit-mask: var(--sk-star) center / contain no-repeat;
+    mask: var(--sk-star) center / contain no-repeat;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    opacity: 0;
+}
+
+/* Meer "legacy" swap: one category at a time; title and skills are each centred on the axis as whole blocks.
+   --sk-ty / --sk-sy lift each block by its font's cap-centre offset so the ink, not the line box, sits on the axis. */
+.sk-legacy { position: absolute; inset: 0; z-index: 2; }
+.sk-cat { position: absolute; inset: 0; }
+.sk:not(.is-live) .sk-cat + .sk-cat { visibility: hidden; }
+
+.ll-section--services .sk-title {
+    position: absolute;
+    left: var(--sk-tx, 29%);
+    top: 50%;
+    width: var(--sk-tw, 40%);
+    margin: 0;
+    transform: translate(0, calc(-50% - var(--sk-ty, 0px)));
+    font-family: 'Brier', Georgia, serif !important;
+    font-weight: 700;
+    font-size: calc(clamp(2.6rem, 5.4vw, 6.25rem) * var(--sk-fit, 1));
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--sk-sun);
+}
+/* Out of flow, so the counter never shifts the title's centring box */
+.sk-kicker {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    margin-bottom: 1.1rem;
+    font: 500 11px/1 var(--sk-mono);
+    letter-spacing: 0.16em;
+    white-space: nowrap;
+    color: var(--sk-sun);
+}
+.sk-set {
+    position: absolute;
+    right: var(--sk-pad);
+    top: 50%;
+    transform: translate(0, calc(-50% - var(--sk-sy, 0px)));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: right;
+    white-space: nowrap;
+    font-family: var(--sk-sans);
+    font-weight: 400;
+    font-size: clamp(15px, 1.35vw, 24px);
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--sk-sun);
+}
+.sk-set li { display: block; margin: 0; padding: 0; }
+
+/* Per-glyph masks: each word (title) or item (skills) clips its own glyphs. The padding gives ascenders, descenders and
+   side bearings room inside the clip; the equal negative margin keeps every row exactly one line-height tall. */
+.sk-mk {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    white-space: nowrap;
+    padding: 0.12em 0.08em 0.2em;
+    margin: -0.12em -0.08em -0.2em;
+}
+.sk-ch { display: inline-block; }
+
+/* Narrow screens: title and skills stack into one block centred on the axis, right of the star's arm */
+@media (max-width: 700px) {
+    .sk-cat {
+        inset: auto;
+        left: var(--sk-tx, 40%);
+        right: var(--sk-pad);
+        top: 50%;
+        transform: translate(0, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .ll-section--services .sk-title,
+    .sk-set {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        width: auto;
+        transform: none;
+    }
+    .ll-section--services .sk-title { font-size: calc(clamp(1.9rem, 8vw, 3rem) * var(--sk-fit, 1)); }
+    .sk-kicker { margin-bottom: 0.7rem; }
+    .sk-set { text-align: left; font-size: 13px; }
+}
+
+/* Reduced motion: no sticky wheel or stepping; the star sits in the slide and every category is listed statically */
+@media (prefers-reduced-motion: reduce) {
+    .sk { height: auto; }
+    .sk__stage { position: relative; height: auto; min-height: var(--sk-h, 100vh); }
+    .sk-star { opacity: 1; }
+    .sk-rail { display: none; }
+    .sk-legacy { position: relative; inset: auto; padding: 16vh var(--sk-pad) 10vh var(--sk-tx, 29%); }
+    .sk:not(.is-live) .sk-cat + .sk-cat { visibility: visible; }
+    .sk-cat {
+        position: relative;
+        inset: auto;
+        transform: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 4vw;
+        padding: 4.5vh 0 3vh;
+        border-top: 1px solid var(--sk-hair);
+    }
+    .ll-section--services .sk-title,
+    .sk-set { position: relative; left: auto; right: auto; top: auto; transform: none; }
+    .ll-section--services .sk-title { width: auto; flex: 1 1 55%; font-size: clamp(2rem, 3.6vw, 4rem); }
+    .sk-set { max-width: 40%; white-space: normal; }
+    .sk-cat--intro { border-top: 0; padding-top: 0; }
+    .sk-cat--intro .sk-set { display: none; }
+}
