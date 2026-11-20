@@ -51,6 +51,8 @@ gitlog.txt
 *.webp
 !final/**
 !public/**
+!images/**
+!_nuxt/**
 final/node_modules/
 public/node_modules/
 .cursor/
