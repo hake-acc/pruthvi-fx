@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pruthvi FX — Elite Minecraft &amp; YouTube Thumbnail Designer</title>
   <meta name="author" content="Pruthvi FX (@pruthvifx)" />
-  <meta name="description" content="Official portfolio of Pruthvi FX — Elite Minecraft 100 Days, Hardcore Survival &amp; SMP Thumbnail Designer &amp; Visual Artist. High-CTR thumbnail engineering, custom 3D staging, and mobile-calibrated composites." />
+  <meta name="description" content="Official portfolio of Pruthvi FX — Elite Minecraft 100 Days, Hardcore Survival &amp; SMP Thumbnail Designer &amp; Visual Artist. High-CTR thumbnail engineering, 3D character rigging, and mobile-calibrated composites." />
   <meta name="keywords" content="Pruthvi FX, pruthvifx, Minecraft thumbnail designer, YouTube thumbnail designer, Minecraft 100 Days thumbnail, Minecraft Hardcore, high CTR thumbnails, Cinema 4D Minecraft renders, Photoshop compositing" />
 
   <!-- Open Graph / Meta -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Pruthvi FX Portfolio" />
   <meta property="og:title" content="Pruthvi FX — Elite Minecraft &amp; YouTube Thumbnail Designer" />
-  <meta property="og:description" content="Transforming Minecraft narratives into high-CTR visual spectacles. Custom 3D poses, cinematic dual-tone lighting, and mobile-first contrast calibration." />
+  <meta property="og:description" content="Transforming Minecraft narratives into high-CTR visual spectacles. Custom 3D character poses, volumetric lighting, and mobile-first contrast calibration." />
   <meta property="og:image" content="/assets/pruthvi-avatar-D7mTU8zK.png" />
   <meta property="og:url" content="https://pruthvi-fx.vercel.app/" />
 
@@ -27,16 +27,16 @@
   <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="/assets/pruthvi-avatar-D7mTU8zK.png" />
 
-  <!-- Google Fonts: Unbounded + Manrope + JetBrains Mono -->
+  <!-- Google Fonts: Unbounded + Manrope + IBM Plex Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet" />
 
   <!-- Critical Asset Preload -->
   <link rel="preload" as="image" href="/assets/pruthvi-avatar-D7mTU8zK.png" fetchpriority="high" />
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="/assets/pruthvi-design-system.css" />
+  <link rel="stylesheet" href="/assets/pruthvi-theme.css" />
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -59,9 +59,48 @@
   </script>
 </head>
 <body>
-  <!-- Ambient Depth & Vignette Layers (Inspired by NotZeoX) -->
+  <!-- Studio White Cursor Dot -->
+  <div class="site-cursor-dot" id="siteCursorDot" aria-hidden="true"></div>
+
+  <!-- Ambient Depth & Vignette Layers -->
   <div class="site-ambient-depth" aria-hidden="true"></div>
   <div class="site-noise-overlay" aria-hidden="true"></div>
+
+  <!-- ======================================================================
+       CINEMATIC KINETIC ENTRANCE LOADER
+       ====================================================================== -->
+  <div id="site-loader" role="dialog" aria-modal="true" aria-label="Welcome to Pruthvi FX">
+    <div class="loader-top">
+      <span>● PRUTHVI FX // 2026 EDITION</span>
+      <span>HIGH-CTR THUMBNAIL STUDIO</span>
+    </div>
+
+    <div class="loader-center">
+      <img src="/assets/pruthvi-avatar-D7mTU8zK.png" alt="Pruthvi FX Logo" class="loader-brandmark" />
+      <h1 class="loader-name">Pruthvi FX</h1>
+      <p class="loader-role">Minecraft 100 Days &amp; Hardcore Thumbnail Designer</p>
+
+      <div class="loader-actions">
+        <button type="button" class="loader-btn loader-btn-audio" id="loaderEnterAudio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <span>Enter with Audio</span>
+        </button>
+        <button type="button" class="loader-btn loader-btn-muted" id="loaderEnterMuted">
+          <span>Enter Muted</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="loader-bottom">
+      <div class="loader-progress-bar">
+        <div class="loader-progress-fill" id="loaderProgressFill"></div>
+      </div>
+      <div class="loader-progress-text">
+        <span>INITIALIZING 3D WEBGL SHADERS</span>
+        <span id="loaderPercent">0%</span>
+      </div>
+    </div>
+  </div>
 
   <!-- ======================================================================
        1. GLOBAL NAVIGATION HEADER
@@ -75,9 +114,9 @@
 
       <nav class="desktop-nav" aria-label="Primary Navigation">
         <a href="#home" class="is-active">Home</a>
+        <a href="#showcase">Showcase</a>
         <a href="#philosophy">Philosophy</a>
         <a href="#creators">Creators</a>
-        <a href="#work">Work</a>
         <a href="#render-lab">Render Lab</a>
         <a href="#arsenal">Arsenal</a>
         <a href="#workflow">Workflow</a>
@@ -86,48 +125,31 @@
       </nav>
 
       <div class="header-actions">
-        <div class="status-pill" title="Status: Accepting Commissions">
-          <span class="status-dot"></span>
-          <span>Available for Commissions</span>
-        </div>
+        <!-- Sound Toggle Suite Button -->
+        <button type="button" class="sound-toggle-btn" aria-label="Toggle Spatial Audio" aria-pressed="false">
+          <div class="sound-bars" aria-hidden="true">
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+          </div>
+          <span class="sound-toggle-label">Sound: OFF</span>
+        </button>
+
         <a href="#contact" class="btn-primary">
           <span>Order Commission</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Drawer Menu -->
-  <div class="mobile-drawer" aria-hidden="true">
-    <div class="mobile-drawer-header">
-      <div class="brand-mark">
-        <img src="/assets/pruthvi-avatar-D7mTU8zK.png" alt="Pruthvi FX Avatar" class="brand-avatar" width="34" height="34" />
-        <span class="brand-title">Pruthvi FX</span>
-      </div>
-    </div>
-    <nav class="mobile-drawer-nav">
-      <a href="#home">Home</a>
-      <a href="#philosophy">Philosophy</a>
-      <a href="#creators">Creators</a>
-      <a href="#work">Work</a>
-      <a href="#render-lab">Render Lab</a>
-      <a href="#arsenal">Arsenal</a>
-      <a href="#workflow">Workflow</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div class="mobile-drawer-footer">
-      <a href="https://discord.gg/CHqTthTqpE" target="_blank" rel="noopener noreferrer" class="btn-primary" style="width: 100%; justify-content: center;">Join Discord Server</a>
-    </div>
-  </div>
-
   <main>
     <!-- ======================================================================
-         2. HERO EXPERIENCE & NOTZEOX TILTED THUMBNAIL WALL
+         2. HERO EXPERIENCE & NOTZEOX CONTINUOUS STREAM
          ====================================================================== -->
     <section id="home" class="hero-section">
       <!-- Tilted Continuous Thumbnail Streams -->
@@ -206,7 +228,7 @@
       <!-- Hero Radial Shadow Overlay -->
       <div class="hero-shade" aria-hidden="true"></div>
 
-      <!-- Hero Focal Content -->
+      <!-- Hero Content -->
       <div class="portfolio-shell hero-content">
         <div class="hero-badge-wrap">
           <span class="section-eyebrow">// MINECRAFT &amp; YOUTUBE THUMBNAIL DESIGNER</span>
@@ -218,11 +240,11 @@
         </h1>
 
         <p class="hero-description">
-          Transforming Minecraft 100 Days, Hardcore Survival &amp; SMP narratives into high-CTR visual spectacles. Custom 3D character poses, dual-tone lighting, and mobile-first composition calibration trusted by top creators.
+          Transforming Minecraft 100 Days, Hardcore Survival &amp; SMP narratives into high-CTR visual spectacles. Custom 3D character poses, volumetric lighting, and mobile-first contrast calibration trusted by top creators.
         </p>
 
         <div class="hero-actions">
-          <a href="#work" class="btn-primary">
+          <a href="#showcase" class="btn-primary">
             <span>Explore Masterworks</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
@@ -250,7 +272,261 @@
     </section>
 
     <!-- ======================================================================
-         3. CREATIVE PHILOSOPHY
+         3. AARAV PILANIA MULTI-MODE SHOWCASE
+         ====================================================================== -->
+    <section id="showcase" class="showcase-section">
+      <div class="portfolio-shell">
+        <div class="section-header">
+          <span class="section-eyebrow">// MULTI-MODE PROJECT INDEX</span>
+          <h2 class="section-title">Engineered for the <span class="text-gradient">Homefeed &amp; Algorithm</span></h2>
+          <p class="section-subtitle">
+            Browse through your preferred interactive experience: 3D WebGL Cylindrical Spiral, Wide Velocity Sponge Carousel, or High-CTR Filterable Grid.
+          </p>
+        </div>
+
+        <!-- Mode Switcher Bar -->
+        <div class="mode-switcher-bar" role="tablist" aria-label="Showcase Display Mode">
+          <button type="button" class="mode-btn is-active" data-mode="spiral" role="tab" aria-selected="true">
+            <span>🌀 3D Spiral</span>
+          </button>
+          <button type="button" class="mode-btn" data-mode="sponge" role="tab" aria-selected="false">
+            <span>🌊 Sponge Carousel</span>
+          </button>
+          <button type="button" class="mode-btn" data-mode="grid" role="tab" aria-selected="false">
+            <span>▦ Grid View</span>
+          </button>
+        </div>
+
+        <!-- MODE 1: 3D WEBGL CYLINDRICAL SPIRAL VIEW -->
+        <div id="view-spiral" class="showcase-view is-active" role="tabpanel">
+          <div class="spiral-viewport">
+            <div id="spiralCanvasContainer" class="spiral-canvas-container"></div>
+            <div class="spiral-hud">
+              <span class="spiral-hint">DRAG / FLICK HELIX OR USE SCROLL WHEEL</span>
+              <span class="spiral-hint">CLICK CARD TO INSPECT 4K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE 2: WIDE VELOCITY SPONGE CAROUSEL VIEW -->
+        <div id="view-sponge" class="showcase-view" role="tabpanel">
+          <div class="sponge-viewport">
+            <!-- Continuous Organic SVG Press Curves -->
+            <svg class="sponge-contour-svg" id="spongeContourSvg" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+              <path id="spongeContourTop" fill="none" stroke="rgba(192, 132, 252, 0.4)" stroke-width="2" d="" />
+              <path id="spongeContourBot" fill="none" stroke="rgba(192, 132, 252, 0.4)" stroke-width="2" d="" />
+            </svg>
+
+            <!-- Sponge Stage & Track -->
+            <div class="sponge-stage">
+              <div class="sponge-track"></div>
+            </div>
+
+            <!-- Tactile Bottom HUD with Compression Gauge -->
+            <div class="sponge-hud">
+              <div class="sponge-hud-left">
+                <span class="sponge-hud-index" id="spongeHudIndex">[ 01 / 18 ]</span>
+                <span class="sponge-hud-name" id="spongeHudName">MEGA BASE BUILD</span>
+              </div>
+
+              <div class="sponge-gauge" aria-label="Velocity compression gauge">
+                <span>SPONGE COMPRESSION:</span>
+                <div class="sponge-gauge-bar">
+                  <div class="sponge-gauge-fill" id="spongeGaugeFill"></div>
+                </div>
+                <span id="spongeGaugeVal">0 PX/S</span>
+              </div>
+
+              <div class="sponge-nav-arrows">
+                <button type="button" class="sponge-nav-btn" id="spongePrev" aria-label="Previous thumbnail">←</button>
+                <button type="button" class="sponge-nav-btn" id="spongeNext" aria-label="Next thumbnail">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE 3: HIGH-CTR FILTERABLE GRID VIEW -->
+        <div id="view-grid" class="showcase-view" role="tabpanel">
+          <!-- Category Filter Bar -->
+          <div class="filter-bar" role="tablist" aria-label="Portfolio Category Filter">
+            <button type="button" class="filter-pill is-active" data-filter="All">All Works (18)</button>
+            <button type="button" class="filter-pill" data-filter="100 Days">100 Days</button>
+            <button type="button" class="filter-pill" data-filter="Hardcore">Hardcore</button>
+            <button type="button" class="filter-pill" data-filter="SMP">SMP &amp; Lore</button>
+            <button type="button" class="filter-pill" data-filter="Storyline">Storyline</button>
+            <button type="button" class="filter-pill" data-filter="Survival">Survival</button>
+          </div>
+
+          <!-- 18 Pre-rendered Grid Cards -->
+          <div class="portfolio-grid">
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Mega Base Build Progression" data-category="Hardcore" data-title="Mega Base Build Progression" data-client="Solo Project" data-full-src="/assets/pruthvi-02-build.webp">
+              <img src="/assets/pruthvi-02-build.webp" alt="Mega Base Build Progression Hardcore Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Hardcore</span>
+                <h3 class="gallery-card-title">Mega Base Build Progression</h3>
+                <p class="gallery-card-client">Solo Project • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Fast Client 100 Days Survival" data-category="100 Days" data-title="Fast Client 100 Days Survival" data-client="FastClient" data-full-src="/assets/pruthvi-01-fastclient.webp">
+              <img src="/assets/pruthvi-01-fastclient.webp" alt="Fast Client 100 Days Survival Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">100 Days</span>
+                <h3 class="gallery-card-title">Fast Client 100 Days Survival</h3>
+                <p class="gallery-card-client">FastClient • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Sharpness XX Infinite Damage SMP" data-category="SMP" data-title="Sharpness XX Infinite Damage SMP" data-client="SMP Series" data-full-src="/assets/pruthvi-14-lalbaal.webp">
+              <img src="/assets/pruthvi-14-lalbaal.webp" alt="Sharpness XX Infinite Damage SMP Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">SMP</span>
+                <h3 class="gallery-card-title">Sharpness XX Infinite Damage SMP</h3>
+                <p class="gallery-card-client">SMP Series • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Fading Memories Rose Garden Storyline" data-category="Storyline" data-title="Fading Memories Rose Garden Storyline" data-client="Cinematic SMP" data-full-src="/assets/pruthvi-15-untitled21.webp">
+              <img src="/assets/pruthvi-15-untitled21.webp" alt="Fading Memories Rose Garden Storyline Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Storyline</span>
+                <h3 class="gallery-card-title">Fading Memories Rose Garden</h3>
+                <p class="gallery-card-client">Cinematic SMP • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Glowing Entity Dungeon Encounter" data-category="Hardcore" data-title="Glowing Entity Dungeon Encounter" data-client="Mystery Series" data-full-src="/assets/pruthvi-13-work6.webp">
+              <img src="/assets/pruthvi-13-work6.webp" alt="Glowing Entity Dungeon Encounter Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Hardcore</span>
+                <h3 class="gallery-card-title">Glowing Entity Dungeon Encounter</h3>
+                <p class="gallery-card-client">Mystery Series • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Kabeer Baba SMP Challenge" data-category="SMP" data-title="Kabeer Baba SMP Challenge" data-client="Kabeer Baba" data-full-src="/assets/pruthvi-03-kabeerbaba.webp">
+              <img src="/assets/pruthvi-03-kabeerbaba.webp" alt="Kabeer Baba SMP Challenge Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">SMP</span>
+                <h3 class="gallery-card-title">Kabeer Baba SMP Challenge</h3>
+                <p class="gallery-card-client">Kabeer Baba • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Monnie SMP Survival World" data-category="SMP" data-title="Monnie SMP Survival World" data-client="Monnie" data-full-src="/assets/pruthvi-04-monnie.webp">
+              <img src="/assets/pruthvi-04-monnie.webp" alt="Monnie SMP Survival World Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">SMP</span>
+                <h3 class="gallery-card-title">Monnie SMP Survival World</h3>
+                <p class="gallery-card-client">Monnie • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Far Lands Mystery Expedition" data-category="Survival" data-title="Far Lands Mystery Expedition" data-client="Mystery Series" data-full-src="/assets/pruthvi-05-untitled413.webp">
+              <img src="/assets/pruthvi-05-untitled413.webp" alt="Far Lands Mystery Expedition Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Survival</span>
+                <h3 class="gallery-card-title">Far Lands Mystery Expedition</h3>
+                <p class="gallery-card-client">Mystery Series • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Insane RMK God Weapon SMP" data-category="SMP" data-title="Insane RMK God Weapon SMP" data-client="Insane RMK" data-full-src="/assets/pruthvi-06-rmk.webp">
+              <img src="/assets/pruthvi-06-rmk.webp" alt="Insane RMK God Weapon SMP Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">SMP</span>
+                <h3 class="gallery-card-title">Insane RMK God Weapon SMP</h3>
+                <p class="gallery-card-client">Insane RMK • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Shadow Realm Boss Fight" data-category="Hardcore" data-title="Shadow Realm Boss Fight" data-client="Shadow Series" data-full-src="/assets/pruthvi-07-shadow1.webp">
+              <img src="/assets/pruthvi-07-shadow1.webp" alt="Shadow Realm Boss Fight Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Hardcore</span>
+                <h3 class="gallery-card-title">Shadow Realm Boss Fight</h3>
+                <p class="gallery-card-client">Shadow Series • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Void Trap Escape Chapter 4" data-category="Hardcore" data-title="Void Trap Escape Chapter 4" data-client="Shadow Series" data-full-src="/assets/pruthvi-08-shadow4.webp">
+              <img src="/assets/pruthvi-08-shadow4.webp" alt="Void Trap Escape Chapter 4 Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Hardcore</span>
+                <h3 class="gallery-card-title">Void Trap Escape Chapter 4</h3>
+                <p class="gallery-card-client">Shadow Series • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Overrated Minecraft Weapons Tested" data-category="Survival" data-title="Overrated Minecraft Weapons Tested" data-client="Solo Project" data-full-src="/assets/pruthvi-09-overrated.webp">
+              <img src="/assets/pruthvi-09-overrated.webp" alt="Overrated Minecraft Weapons Tested Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">Survival</span>
+                <h3 class="gallery-card-title">Overrated Minecraft Weapons</h3>
+                <p class="gallery-card-client">Solo Project • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Kira Anime Crossover 100 Days" data-category="100 Days" data-title="Kira Anime Crossover 100 Days" data-client="Kira" data-full-src="/assets/pruthvi-10-kira.webp">
+              <img src="/assets/pruthvi-10-kira.webp" alt="Kira Anime Crossover 100 Days Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">100 Days</span>
+                <h3 class="gallery-card-title">Kira Anime Crossover 100 Days</h3>
+                <p class="gallery-card-client">Kira • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Kabeer Unlocked Illegal Items" data-category="SMP" data-title="Kabeer Unlocked Illegal Items" data-client="Kabeer Baba" data-full-src="/assets/pruthvi-11-kabeerunlocked.webp">
+              <img src="/assets/pruthvi-11-kabeerunlocked.webp" alt="Kabeer Unlocked Illegal Items Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">SMP</span>
+                <h3 class="gallery-card-title">Kabeer Unlocked Illegal Items</h3>
+                <p class="gallery-card-client">Kabeer Baba • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="100 Days After The Apocalypse" data-category="100 Days" data-title="100 Days After The Apocalypse" data-client="Community" data-full-src="/assets/pruthvi-12-after.webp">
+              <img src="/assets/pruthvi-12-after.webp" alt="100 Days After The Apocalypse Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">100 Days</span>
+                <h3 class="gallery-card-title">100 Days After The Apocalypse</h3>
+                <p class="gallery-card-client">Community • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Practice Work Masterpiece" data-category="100 Days" data-title="Practice Work Masterpiece" data-client="Concept Art" data-full-src="/assets/pruthvi-work71-1792850653132-013e26a3.webp">
+              <img src="/assets/pruthvi-work71-1792850653132-013e26a3.webp" alt="Practice Work Masterpiece Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">100 Days</span>
+                <h3 class="gallery-card-title">Apocalyptic Cityscape Concept</h3>
+                <p class="gallery-card-client">Concept Art • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Gaming Grill Series" data-category="100 Days" data-title="Gaming Grill Series" data-client="Gaming Grill" data-full-src="/assets/pruthvi-gaminggrill-1793347472585-017289d6.webp">
+              <img src="/assets/pruthvi-gaminggrill-1793347472585-017289d6.webp" alt="Gaming Grill Series Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">100 Days</span>
+                <h3 class="gallery-card-title">Gaming Grill SMP Progression</h3>
+                <p class="gallery-card-client">Gaming Grill • Click to Inspect</p>
+              </div>
+            </div>
+
+            <div class="gallery-item" tabindex="0" role="button" aria-label="Teddy Gaming Radiant SMP" data-category="100 Days" data-title="Teddy Gaming Radiant SMP" data-client="Teddy Gaming" data-full-src="/assets/pruthvi-teddyradiantkingakatsuki-1794582312372-26a1745e.webp">
+              <img src="/assets/pruthvi-teddyradiantkingakatsuki-1794582312372-26a1745e.webp" alt="Teddy Gaming Radiant SMP Thumbnail" loading="lazy" />
+              <div class="gallery-overlay">
+                <span class="gallery-card-badge">100 Days</span>
+                <h3 class="gallery-card-title">Teddy Gaming Radiant SMP</h3>
+                <p class="gallery-card-client">Teddy Gaming • Click to Inspect</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. CREATIVE PHILOSOPHY
          ====================================================================== -->
     <section id="philosophy" class="philosophy-section">
       <div class="portfolio-shell">
@@ -291,7 +567,7 @@
     </section>
 
     <!-- ======================================================================
-         4. CREATOR COLLABORATIONS & CASE STUDIES
+         5. CREATOR COLLABORATIONS & CASE STUDIES
          ====================================================================== -->
     <section id="creators" class="creators-section">
       <div class="portfolio-shell">
@@ -398,215 +674,7 @@
     </section>
 
     <!-- ======================================================================
-         5. SELECTED WORKS (PORTFOLIO GALLERY)
-         ====================================================================== -->
-    <section id="work" class="portfolio-section">
-      <div class="portfolio-shell">
-        <div class="section-header">
-          <span class="section-eyebrow">// PORTFOLIO SHOWCASE</span>
-          <h2 class="section-title">Crafted for the <span class="text-gradient">Algorithm &amp; Audience</span></h2>
-          <p class="section-subtitle">
-            Click on any masterwork to inspect full-resolution 4K details, lighting breakdowns, and project specifications.
-          </p>
-        </div>
-
-        <!-- Filter Bar -->
-        <div class="filter-bar" role="tablist" aria-label="Portfolio Category Filter">
-          <button type="button" class="filter-pill is-active" data-filter="All">All Works (18)</button>
-          <button type="button" class="filter-pill" data-filter="100 Days">100 Days</button>
-          <button type="button" class="filter-pill" data-filter="Hardcore">Hardcore</button>
-          <button type="button" class="filter-pill" data-filter="SMP">SMP &amp; Lore</button>
-          <button type="button" class="filter-pill" data-filter="Storyline">Storyline</button>
-          <button type="button" class="filter-pill" data-filter="Survival">Survival</button>
-        </div>
-
-        <!-- 18 High-Resolution Portfolio Items -->
-        <div class="portfolio-grid">
-          <!-- 1. Mega Base Build Progression -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Mega Base Build Progression" data-category="Hardcore" data-title="Mega Base Build Progression" data-client="Solo Project" data-full-src="/assets/pruthvi-02-build.webp">
-            <img src="/assets/pruthvi-02-build.webp" alt="Mega Base Build Progression Hardcore Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Hardcore</span>
-              <h3 class="gallery-card-title">Mega Base Build Progression</h3>
-              <p class="gallery-card-client">Solo Project • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 2. Fast Client 100 Days Survival -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Fast Client 100 Days Survival" data-category="100 Days" data-title="Fast Client 100 Days Survival" data-client="FastClient" data-full-src="/assets/pruthvi-01-fastclient.webp">
-            <img src="/assets/pruthvi-01-fastclient.webp" alt="Fast Client 100 Days Survival Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">100 Days</span>
-              <h3 class="gallery-card-title">Fast Client 100 Days Survival</h3>
-              <p class="gallery-card-client">FastClient • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 3. Sharpness XX Infinite Damage SMP -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Sharpness XX Infinite Damage SMP" data-category="SMP" data-title="Sharpness XX Infinite Damage SMP" data-client="SMP Series" data-full-src="/assets/pruthvi-14-lalbaal.webp">
-            <img src="/assets/pruthvi-14-lalbaal.webp" alt="Sharpness XX Infinite Damage SMP Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">SMP</span>
-              <h3 class="gallery-card-title">Sharpness XX Infinite Damage SMP</h3>
-              <p class="gallery-card-client">SMP Series • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 4. Fading Memories Rose Garden Storyline -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Fading Memories Rose Garden Storyline" data-category="Storyline" data-title="Fading Memories Rose Garden Storyline" data-client="Cinematic SMP" data-full-src="/assets/pruthvi-15-untitled21.webp">
-            <img src="/assets/pruthvi-15-untitled21.webp" alt="Fading Memories Rose Garden Storyline Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Storyline</span>
-              <h3 class="gallery-card-title">Fading Memories Rose Garden</h3>
-              <p class="gallery-card-client">Cinematic SMP • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 5. Glowing Entity Dungeon Encounter -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Glowing Entity Dungeon Encounter" data-category="Hardcore" data-title="Glowing Entity Dungeon Encounter" data-client="Mystery Series" data-full-src="/assets/pruthvi-13-work6.webp">
-            <img src="/assets/pruthvi-13-work6.webp" alt="Glowing Entity Dungeon Encounter Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Hardcore</span>
-              <h3 class="gallery-card-title">Glowing Entity Dungeon Encounter</h3>
-              <p class="gallery-card-client">Mystery Series • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 6. Kabeer Baba SMP Challenge -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Kabeer Baba SMP Challenge" data-category="SMP" data-title="Kabeer Baba SMP Challenge" data-client="Kabeer Baba" data-full-src="/assets/pruthvi-03-kabeerbaba.webp">
-            <img src="/assets/pruthvi-03-kabeerbaba.webp" alt="Kabeer Baba SMP Challenge Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">SMP</span>
-              <h3 class="gallery-card-title">Kabeer Baba SMP Challenge</h3>
-              <p class="gallery-card-client">Kabeer Baba • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 7. Monnie SMP Survival World -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Monnie SMP Survival World" data-category="SMP" data-title="Monnie SMP Survival World" data-client="Monnie" data-full-src="/assets/pruthvi-04-monnie.webp">
-            <img src="/assets/pruthvi-04-monnie.webp" alt="Monnie SMP Survival World Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">SMP</span>
-              <h3 class="gallery-card-title">Monnie SMP Survival World</h3>
-              <p class="gallery-card-client">Monnie • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 8. Far Lands Mystery Expedition -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Far Lands Mystery Expedition" data-category="Survival" data-title="Far Lands Mystery Expedition" data-client="Mystery Series" data-full-src="/assets/pruthvi-05-untitled413.webp">
-            <img src="/assets/pruthvi-05-untitled413.webp" alt="Far Lands Mystery Expedition Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Survival</span>
-              <h3 class="gallery-card-title">Far Lands Mystery Expedition</h3>
-              <p class="gallery-card-client">Mystery Series • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 9. Insane RMK God Weapon SMP -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Insane RMK God Weapon SMP" data-category="SMP" data-title="Insane RMK God Weapon SMP" data-client="Insane RMK" data-full-src="/assets/pruthvi-06-rmk.webp">
-            <img src="/assets/pruthvi-06-rmk.webp" alt="Insane RMK God Weapon SMP Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">SMP</span>
-              <h3 class="gallery-card-title">Insane RMK God Weapon SMP</h3>
-              <p class="gallery-card-client">Insane RMK • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 10. Shadow Realm Boss Fight -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Shadow Realm Boss Fight" data-category="Hardcore" data-title="Shadow Realm Boss Fight" data-client="Shadow Series" data-full-src="/assets/pruthvi-07-shadow1.webp">
-            <img src="/assets/pruthvi-07-shadow1.webp" alt="Shadow Realm Boss Fight Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Hardcore</span>
-              <h3 class="gallery-card-title">Shadow Realm Boss Fight</h3>
-              <p class="gallery-card-client">Shadow Series • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 11. Void Trap Escape Chapter 4 -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Void Trap Escape Chapter 4" data-category="Hardcore" data-title="Void Trap Escape Chapter 4" data-client="Shadow Series" data-full-src="/assets/pruthvi-08-shadow4.webp">
-            <img src="/assets/pruthvi-08-shadow4.webp" alt="Void Trap Escape Chapter 4 Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Hardcore</span>
-              <h3 class="gallery-card-title">Void Trap Escape Chapter 4</h3>
-              <p class="gallery-card-client">Shadow Series • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 12. Overrated Minecraft Weapons Tested -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Overrated Minecraft Weapons Tested" data-category="Survival" data-title="Overrated Minecraft Weapons Tested" data-client="Solo Project" data-full-src="/assets/pruthvi-09-overrated.webp">
-            <img src="/assets/pruthvi-09-overrated.webp" alt="Overrated Minecraft Weapons Tested Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">Survival</span>
-              <h3 class="gallery-card-title">Overrated Minecraft Weapons</h3>
-              <p class="gallery-card-client">Solo Project • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 13. Kira Anime Crossover 100 Days -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Kira Anime Crossover 100 Days" data-category="100 Days" data-title="Kira Anime Crossover 100 Days" data-client="Kira" data-full-src="/assets/pruthvi-10-kira.webp">
-            <img src="/assets/pruthvi-10-kira.webp" alt="Kira Anime Crossover 100 Days Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">100 Days</span>
-              <h3 class="gallery-card-title">Kira Anime Crossover 100 Days</h3>
-              <p class="gallery-card-client">Kira • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 14. Kabeer Unlocked Illegal Items -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Kabeer Unlocked Illegal Items" data-category="SMP" data-title="Kabeer Unlocked Illegal Items" data-client="Kabeer Baba" data-full-src="/assets/pruthvi-11-kabeerunlocked.webp">
-            <img src="/assets/pruthvi-11-kabeerunlocked.webp" alt="Kabeer Unlocked Illegal Items Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">SMP</span>
-              <h3 class="gallery-card-title">Kabeer Unlocked Illegal Items</h3>
-              <p class="gallery-card-client">Kabeer Baba • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 15. 100 Days After The Apocalypse -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="100 Days After The Apocalypse" data-category="100 Days" data-title="100 Days After The Apocalypse" data-client="Community" data-full-src="/assets/pruthvi-12-after.webp">
-            <img src="/assets/pruthvi-12-after.webp" alt="100 Days After The Apocalypse Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">100 Days</span>
-              <h3 class="gallery-card-title">100 Days After The Apocalypse</h3>
-              <p class="gallery-card-client">Community • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 16. Practice Work Masterpiece -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Practice Work Masterpiece" data-category="100 Days" data-title="Practice Work Masterpiece" data-client="Concept Art" data-full-src="/assets/pruthvi-work71-1792850653132-013e26a3.webp">
-            <img src="/assets/pruthvi-work71-1792850653132-013e26a3.webp" alt="Practice Work Masterpiece Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">100 Days</span>
-              <h3 class="gallery-card-title">Apocalyptic Cityscape Concept</h3>
-              <p class="gallery-card-client">Concept Art • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 17. Gaming Grill Series -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Gaming Grill Series" data-category="100 Days" data-title="Gaming Grill Series" data-client="Gaming Grill" data-full-src="/assets/pruthvi-gaminggrill-1793347472585-017289d6.webp">
-            <img src="/assets/pruthvi-gaminggrill-1793347472585-017289d6.webp" alt="Gaming Grill Series Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">100 Days</span>
-              <h3 class="gallery-card-title">Gaming Grill SMP Progression</h3>
-              <p class="gallery-card-client">Gaming Grill • Click to Inspect</p>
-            </div>
-          </div>
-
-          <!-- 18. Teddy Gaming Radian SMP -->
-          <div class="gallery-item" tabindex="0" role="button" aria-label="Teddy Gaming Radiant SMP" data-category="100 Days" data-title="Teddy Gaming Radiant SMP" data-client="Teddy Gaming" data-full-src="/assets/pruthvi-teddyradiantkingakatsuki-1794582312372-26a1745e.webp">
-            <img src="/assets/pruthvi-teddyradiantkingakatsuki-1794582312372-26a1745e.webp" alt="Teddy Gaming Radiant SMP Thumbnail" loading="lazy" />
-            <div class="gallery-overlay">
-              <span class="gallery-card-badge">100 Days</span>
-              <h3 class="gallery-card-title">Teddy Gaming Radiant SMP</h3>
-              <p class="gallery-card-client">Teddy Gaming • Click to Inspect</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         6. BEFORE/AFTER RENDER LAB SLIDER
+         6. INTERACTIVE BEFORE/AFTER RENDER LAB
          ====================================================================== -->
     <section id="render-lab" class="renderlab-section">
       <div class="portfolio-shell">
@@ -645,7 +713,7 @@
             <span class="renderlab-badge renderlab-badge-before">RAW 3D STAGING</span>
             <span class="renderlab-badge renderlab-badge-after">FINAL COMPOSITE</span>
 
-            <!-- Range Scrub Input (Accessible & Touch) -->
+            <!-- Range Scrub Input -->
             <input type="range" min="0" max="100" value="50" class="renderlab-range" aria-label="Before and after comparison slider" />
           </div>
 
@@ -815,7 +883,6 @@
         </div>
 
         <div class="faq-list">
-          <!-- FAQ 1 -->
           <div class="faq-item">
             <button type="button" class="faq-question-btn" aria-expanded="false">
               <span>What is your typical turnaround time per thumbnail?</span>
@@ -830,7 +897,6 @@
             </div>
           </div>
 
-          <!-- FAQ 2 -->
           <div class="faq-item">
             <button type="button" class="faq-question-btn" aria-expanded="false">
               <span>Do you provide the raw layered Photoshop (.PSD) files?</span>
@@ -845,7 +911,6 @@
             </div>
           </div>
 
-          <!-- FAQ 3 -->
           <div class="faq-item">
             <button type="button" class="faq-question-btn" aria-expanded="false">
               <span>What assets do you need from me before starting?</span>
@@ -860,7 +925,6 @@
             </div>
           </div>
 
-          <!-- FAQ 4 -->
           <div class="faq-item">
             <button type="button" class="faq-question-btn" aria-expanded="false">
               <span>How many revisions are included in a commission?</span>
@@ -875,7 +939,6 @@
             </div>
           </div>
 
-          <!-- FAQ 5 -->
           <div class="faq-item">
             <button type="button" class="faq-question-btn" aria-expanded="false">
               <span>How do we handle payment and communication?</span>
@@ -885,14 +948,14 @@
             </button>
             <div class="faq-answer-panel">
               <div class="faq-answer-inner">
-                We primarily communicate via Discord (<code style="color: var(--accent-cyan); font-family: var(--font-mono);">pruthvifx</code>) or through our official Discord Server (<a href="https://discord.gg/CHqTthTqpE" target="_blank" rel="noopener noreferrer" style="color: var(--accent-violet); text-decoration: underline;">discord.gg/CHqTthTqpE</a>). Secure payment methods include PayPal, Crypto, and UPI.
+                We primarily communicate via Discord (<code style="color: var(--accent-lavender); font-family: var(--font-mono);">pruthvifx</code>) or through our official Discord Server (<a href="https://discord.gg/CHqTthTqpE" target="_blank" rel="noopener noreferrer" style="color: var(--accent-lavender); text-decoration: underline;">discord.gg/CHqTthTqpE</a>). Secure payment methods include PayPal, Crypto, and UPI.
               </div>
             </div>
           </div>
         </div>
 
         <div class="faq-fallback">
-          Still have a question? <a href="https://discord.gg/CHqTthTqpE" target="_blank" rel="noopener noreferrer" style="color: var(--accent-violet); text-decoration: underline;">Ask directly on our Discord Server</a>
+          Still have a question? <a href="https://discord.gg/CHqTthTqpE" target="_blank" rel="noopener noreferrer" style="color: var(--accent-lavender); text-decoration: underline;">Ask directly on our Discord Server</a>
         </div>
       </div>
     </section>
@@ -996,6 +1059,7 @@
 
       <div class="footer-copy">
         <span>© 2026 Pruthvi FX Portfolio. All rights reserved.</span>
+        <!-- Motion and 3D Interaction Foundation inspired by Aarav Pilania (ISC License) & Pacôme Pertant -->
       </div>
 
       <div class="footer-links">
@@ -1006,7 +1070,11 @@
     </div>
   </footer>
 
-  <!-- Interactive Motion Engine Script -->
-  <script src="/assets/pruthvi-motion.js" defer></script>
+  <!-- Scripts -->
+  <script src="/assets/vendor/three.min.js"></script>
+  <script src="/assets/pruthvi-spiral-engine.js"></script>
+  <script src="/assets/pruthvi-sponge-engine.js"></script>
+  <script src="/assets/pruthvi-sound-suite.js"></script>
+  <script src="/assets/pruthvi-core-motion.js"></script>
 </body>
 </html>

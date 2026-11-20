@@ -28,6 +28,12 @@ const MIME_TYPES = {
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.ttf': 'font/ttf',
+  '.ogg': 'audio/ogg',
+  '.mp3': 'audio/mpeg',
+  '.mp4': 'video/mp4',
 };
 
 function sendJson(res, statusCode, data) {
