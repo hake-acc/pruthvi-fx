@@ -1,0 +1,20 @@
+{
+  "name": "Pruthvi FX",
+  "short_name": "Pruthvi FX",
+  "icons": [
+    {
+      "src": "/_nuxt/192.BFv47Z3W.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/_nuxt/512.C0ZwmEfV.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "display": "standalone"
+}

@@ -1,21 +1,20 @@
 {
-  "name": "Pacôme Pertant",
-  "short_name": "Pacôme",
+  "name": "Pruthvi FX",
+  "short_name": "Pruthvi FX",
   "icons": [
     {
-      "src": "/web-app-manifest-192x192.png",
-      "sizes": "192x192",
+      "src": "/_nuxt/192.BFv47Z3W.png",
       "type": "image/png",
-      "purpose": "maskable"
+      "sizes": "192x192"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
-      "sizes": "512x512",
+      "src": "/_nuxt/512.C0ZwmEfV.png",
       "type": "image/png",
-      "purpose": "maskable"
+      "sizes": "512x512"
     }
   ],
-  "theme_color": "#FAFAFA",
-  "background_color": "#FAFAFA",
+  "start_url": "/",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "display": "standalone"
 }

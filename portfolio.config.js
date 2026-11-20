@@ -7,21 +7,21 @@
  */
 
 module.exports = {
-  // Set to "exact_pacome" for original 1:1 replica or "custom" for your customized portfolio
-  mode: "exact_pacome",
+  // Set to "exact_custom" for original 1:1 replica or "custom" for your customized portfolio
+  mode: "custom",
 
   personal: {
-    name: "Pacôme Pertant",
+    name: "Pruthvi FX",
     role: "motion & sound designer based in paris",
-    email: "pertantpacome@gmail.com",
+    email: "contact@pruthvi-fx.com",
     tagline: "I move shapes and sound to create emotional content. Always playing with rhythm, sound and visual narrative on a 2D and/or 3D canvas."
   },
 
   socialLinks: [
     { label: "Instagram", url: "https://www.instagram.com" },
-    { label: "X / Twitter", url: "https://www.x.com/pacomepertant" },
-    { label: "Behance", url: "https://www.behance.net/pacomepertant" },
-    { label: "LinkedIn", url: "https://www.linkedin.com/in/pac%C3%B4me-pertant-b4437126b/" }
+    { label: "X / Twitter", url: "https://www.x.com/pruthvifx" },
+    { label: "Behance", url: "https://www.behance.net/pruthvifx" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/pruthvi-fx/" }
   ],
 
   showreel: {
