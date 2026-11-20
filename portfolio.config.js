@@ -11,10 +11,10 @@ module.exports = {
   mode: "custom",
 
   personal: {
-    name: "Pruthvi FX",
-    role: "motion & sound designer based in paris",
+    name: "Pruthvi",
+    role: "thumbnail designer & graphics designer",
     email: "contact@pruthvi-fx.com",
-    tagline: "I move shapes and sound to create emotional content. Always playing with rhythm, sound and visual narrative on a 2D and/or 3D canvas."
+    tagline: "Thumbnail designer and graphics designer crafting high-impact visual artwork and compelling thumbnail designs."
   },
 
   socialLinks: [
