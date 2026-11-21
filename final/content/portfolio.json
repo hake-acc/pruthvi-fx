@@ -1,0 +1,110 @@
+{
+  "experienceStart": "2022-07-30",
+  "email": "notmafiyaxd@gmail.com",
+  "discord": "pruthvifx",
+  "discordUrl": "https://discord.gg/rHugN7euzG",
+  "instagram": "pruthvifx99",
+  "instagramUrl": "https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb",
+  "lifetimeThumbnails": 100,
+  "collaborators": [
+    {
+      "id": "creator-01",
+      "avatar": "/content/assets/e8dca15b87f451319dc55984b8b491cf3a6e96906337da62875f1945e5226f54.webp"
+    },
+    {
+      "id": "creator-02",
+      "avatar": "/content/assets/159f2c51db0c9e09953afe20039d90923abe16daf50fdd0adca028c5eba8e28a.webp"
+    },
+    {
+      "id": "creator-03",
+      "avatar": "/content/assets/610e065434adc47c24aef6402c579774702eee7e1d1f782bd132193215bf61dd.webp"
+    },
+    {
+      "id": "creator-04",
+      "avatar": "/content/assets/4f6ad3f10965802c585640d2764f21cd1e06d47d4f2c9940caf6265b2f17ac4a.webp"
+    },
+    {
+      "id": "creator-05",
+      "avatar": "/content/assets/042fa35bc6f1cd4980fea42b4c801b53924d13f02f3ae9b72314bdbb5022f133.webp"
+    }
+  ],
+  "thumbnails": [
+    {
+      "id": "thumbnail-01",
+      "title": "Thumbnail 1",
+      "src": "/images/pruthvi_thumb_01_build.png"
+    },
+    {
+      "id": "thumbnail-02",
+      "title": "Thumbnail 2",
+      "src": "/images/pruthvi_thumb_02_after.png"
+    },
+    {
+      "id": "thumbnail-03",
+      "title": "Thumbnail 3",
+      "src": "/images/pruthvi_thumb_03_flamefrag.png"
+    },
+    {
+      "id": "thumbnail-04",
+      "title": "Thumbnail 4",
+      "src": "/images/pruthvi_thumb_04_gaming_grill.png"
+    },
+    {
+      "id": "thumbnail-05",
+      "title": "Thumbnail 5",
+      "src": "/images/pruthvi_thumb_05_kabeer.png"
+    },
+    {
+      "id": "thumbnail-06",
+      "title": "Thumbnail 6",
+      "src": "/images/pruthvi_thumb_06_kira.png"
+    },
+    {
+      "id": "thumbnail-07",
+      "title": "Thumbnail 7",
+      "src": "/images/pruthvi_thumb_07_shadow.png"
+    },
+    {
+      "id": "thumbnail-08",
+      "title": "Thumbnail 8",
+      "src": "/images/pruthvi_thumb_08_teddy.png"
+    },
+    {
+      "id": "thumbnail-09",
+      "title": "Thumbnail 9",
+      "src": "/images/pruthvi_thumb_09_work.png"
+    },
+    {
+      "id": "thumbnail-10",
+      "title": "Thumbnail 10",
+      "src": "/images/pruthvi_thumb_10_lal_baal.png"
+    },
+    {
+      "id": "thumbnail-11",
+      "title": "Thumbnail 11",
+      "src": "/images/pruthvi_thumb_11_mickey.png"
+    },
+    {
+      "id": "thumbnail-12",
+      "title": "Thumbnail 12",
+      "src": "/images/pruthvi_thumb_12_kabeer5.png"
+    },
+    {
+      "id": "thumbnail-13",
+      "title": "Thumbnail 13",
+      "src": "/images/pruthvi_thumb_13_work7.png"
+    }
+  ],
+  "spiralThumbnailIds": [
+    "thumbnail-01",
+    "thumbnail-02",
+    "thumbnail-03",
+    "thumbnail-04",
+    "thumbnail-05",
+    "thumbnail-06",
+    "thumbnail-07",
+    "thumbnail-08",
+    "thumbnail-09",
+    "thumbnail-10"
+  ]
+}
