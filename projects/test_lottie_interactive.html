@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lottie Test</title>
+  <style>
+    body { background: #0e0e0e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+    #lottie { width: 500px; height: 500px; border: 1px solid #333; position: relative; }
+    #debug { margin-top: 20px; font-family: monospace; font-size: 14px; max-width: 600px; }
+  </style>
+</head>
+<body>
+  <h1>Preloader Animation Test</h1>
+  <div id="lottie"></div>
+  <div id="debug"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <script>
+    fetch('./loader_test_data_pruthvifx.json')
+      .then(r => r.json())
+      .then(animData => {
+        const debug = document.getElementById('debug');
+        debug.innerHTML = 'Animation loaded. chars: ' + (animData.chars ? animData.chars.length : 'none');
+        
+        window.anim = lottie.loadAnimation({
+          container: document.getElementById('lottie'),
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          animationData: animData
+        });
+
+        window.anim.addEventListener('DOMLoaded', () => {
+          debug.innerHTML += '<br>DOMLoaded fired!';
+          
+          // Let us jump to frame 30 (which is in the middle of Layer 5 "I’m pruthvifx")
+          setTimeout(() => {
+            window.anim.goToAndStop(30, true);
+            const svg = document.querySelector('#lottie svg');
+            const texts = document.querySelectorAll('#lottie text, #lottie tspan');
+            debug.innerHTML += '<br>Frame 30 text elements count: ' + texts.length;
+            texts.forEach(t => {
+              debug.innerHTML += '<br>Text: "' + t.textContent + '" | bbox: ' + JSON.stringify(t.getBBox());
+            });
+            const paths = document.querySelectorAll('#lottie path');
+            debug.innerHTML += '<br>Paths count: ' + paths.length;
+          }, 500);
+        });
+      })
+      .catch(e => {
+        document.getElementById('debug').innerHTML = 'Error: ' + e.message;
+      });
+  </script>
+</body>
+</html>
