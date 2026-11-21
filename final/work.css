@@ -4841,9 +4841,7 @@ body:has(.zeox-work-page.open.is-social-surface)
 
 
 /* Lightbox & Toast Core System */
-.zeox-lightbox {
-  pointer-events: auto !important;
-}
+
 .zeox-lightbox {
   position: fixed;
   z-index: 1000;
@@ -5054,3 +5052,18 @@ body:has(.zeox-work-page.open.is-social-surface)
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+/* Explicit Lightbox Visibility Guard */
+.zeox-lightbox {
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+.zeox-lightbox:not(.open) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+.zeox-lightbox.open {
+  display: grid !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}

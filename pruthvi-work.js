@@ -7,6 +7,7 @@
     ?.getAttribute("content")
     ?.trim();
   const WORK_VIEW = "work";
+  let workNavigationArmed = false;
   const isWorkLocation = () =>
     new URLSearchParams(location.search).get("view") === WORK_VIEW;
   try {
@@ -151,7 +152,7 @@
   let popupInteractionState = null;
   let globalEventsReady = false;
   let workEventsReady = false;
-  let workNavigationArmed = false;
+
   let contentPollTimer = null;
   let contentRequest = null;
   let contentPollingReady = false;
@@ -2442,7 +2443,8 @@
     const target = event.target;
     if (!(target instanceof Element)) return;
 
-    if (target.closest(".zeox-lightbox__close") || target.classList.contains("zeox-lightbox") || target.classList.contains("zeox-lightbox__stage")) {
+    const openLightbox = document.querySelector(".zeox-lightbox.open");
+    if (openLightbox && (target.closest(".zeox-lightbox__close") || target.classList.contains("zeox-lightbox") || target.classList.contains("zeox-lightbox__stage"))) {
       event.preventDefault();
       closeImage();
       return;
