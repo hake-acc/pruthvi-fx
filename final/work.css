@@ -4839,6 +4839,45 @@ body:has(.zeox-work-page.open.is-social-surface)
   transition: opacity 0.15s ease;
 }
 
+/* Boutique Editorial Fonts */
+@font-face {
+  font-family: 'PP-Mori';
+  src: url('/fonts/PPMori-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Brier';
+  src: url('/fonts/Brier-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Menu Button Icon (when closed) */
+.button[data-v-cf355cbc]:not(.opened) {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7rem !important;
+}
+.button[data-v-cf355cbc]:not(.opened)::before {
+  content: '';
+  display: inline-block;
+  width: 13rem;
+  height: 7rem;
+  border-top: 2rem solid currentColor;
+  border-bottom: 2rem solid currentColor;
+  margin-right: 2rem;
+  transition: transform 0.25s ease;
+}
+.button[data-v-cf355cbc]:hover::before {
+  transform: scaleX(1.15);
+}
+.button.opened[data-v-cf355cbc]::before {
+  display: none !important;
+}
+
 /* Elevated Boutique Menu Inner Styling */
 .subwrapper[data-v-b1c462f7] {
   background-color: rgba(12, 10, 18, 0.94) !important;
@@ -4851,24 +4890,18 @@ body:has(.zeox-work-page.open.is-social-surface)
   color: #fafafa !important;
   padding: 36rem 45rem !important;
 }
-.wrapper.opened .container[data-v-b1c462f7]::before {
-  content: '● AVAILABLE FOR COMMISSIONS • 2025/2026';
-  display: block;
-  font-family: var(--font-mono, monospace);
-  font-size: 11rem;
-  letter-spacing: 0.12em;
-  color: #c084fc;
-  text-transform: uppercase;
-  margin-bottom: 24rem;
-  opacity: 0.85;
-}
 .links .link[data-v-a2d3438b] {
+  font-family: 'PP-Mori', -apple-system, BlinkMacSystemFont, sans-serif !important;
   color: #ffffff !important;
-  font-size: 64rem !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.04em !important;
-  line-height: 1.1 !important;
+  font-size: 68rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.035em !important;
+  line-height: 1.05 !important;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease !important;
+}
+.links .link[data-v-a2d3438b] a,
+.links .link[data-v-a2d3438b] span {
+  font-family: 'PP-Mori', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 .links .link[data-v-a2d3438b]:hover {
   transform: translateX(18rem) !important;
@@ -4897,6 +4930,7 @@ body:has(.zeox-work-page.open.is-social-surface)
   z-index: 50 !important;
 }
 .menu-footer a[data-v-33ac9778] {
+  font-family: 'PP-Mori', -apple-system, sans-serif !important;
   font-size: 15rem !important;
   color: #ffffff !important;
   letter-spacing: 0.02em !important;
@@ -4923,6 +4957,58 @@ body:has(.zeox-work-page.open.is-social-surface)
   border-color: #c084fc !important;
   box-shadow: 0 0 16px rgba(192, 132, 252, 0.4) !important;
   transform: scale(1.1) !important;
+}
+
+/* Showreel Cinematic Zoom-In Transition */
+.player-wrapper[data-v-dd55fbff] {
+  transform-origin: center center !important;
+}
+.player-wrapper.fade-enter-active,
+.player-wrapper.fade-leave-active {
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.player-wrapper.fade-enter-from {
+  opacity: 0 !important;
+  transform: scale(0.78) translateY(20px) !important;
+}
+.player-wrapper.fade-enter-to {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
+}
+.player-wrapper.fade-leave-from {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+.player-wrapper.fade-leave-to {
+  opacity: 0 !important;
+  transform: scale(0.88) translateY(16px) !important;
+}
+.player-wrapper[data-v-dd55fbff] .video-container {
+  transform-origin: center center !important;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.player-wrapper.fade-enter-from .video-container {
+  transform: scale(0.85) !important;
+}
+.player-wrapper.fade-enter-to .video-container {
+  transform: scale(1) !important;
+}
+
+/* Royal Purple Mascot Tint for Loader (Eliminates Green) */
+.loader {
+  filter: hue-rotate(145deg) saturate(1.9) brightness(1.1) !important;
+}
+.loader .enter,
+.loader .no-sound,
+.loader .text {
+  filter: none !important;
+}
+.loader .lottie,
+.loader .lottie svg,
+.loader [name="loader"],
+.loader .lottie-animation-container,
+.loader svg:not(.close-button svg) {
+  filter: hue-rotate(145deg) saturate(1.9) brightness(1.1) drop-shadow(0 0 20rem rgba(168, 85, 247, 0.6)) !important;
 }
 
 /* Lightbox Uncut 16:9 Optimization */
@@ -5198,6 +5284,55 @@ body:has(.zeox-work-page.open.is-social-surface)
   pointer-events: none !important;
 }
 
+/* Floating Frosted Pill Capsule for Switcher - prevents collision when scrolling */
+.switch[data-v-c8f918c1] {
+  align-items: center !important;
+  display: flex !important;
+  gap: 20rem !important;
+  left: 50% !important;
+  position: fixed !important;
+  top: calc(var(--grid-margin) + 12rem) !important;
+  transform: translate(-50%) !important;
+  z-index: 90 !important;
+  background: rgba(14, 12, 21, 0.85) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(168, 85, 247, 0.38) !important;
+  border-radius: 9999px !important;
+  padding: 8rem 24rem !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 16px rgba(147, 51, 234, 0.25) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
+}
+.switch[data-v-c8f918c1]:hover {
+  border-color: rgba(192, 132, 252, 0.6) !important;
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.85), 0 0 24px rgba(168, 85, 247, 0.4) !important;
+}
+.switch .button[data-v-c8f918c1] {
+  font-size: 16rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  min-width: 52rem !important;
+}
+.switch .dot[data-v-c8f918c1] {
+  background-color: #c084fc !important;
+  box-shadow: 0 0 8px #c084fc !important;
+  height: 6rem !important;
+  width: 6rem !important;
+}
+
+/* Top gradient scrim to smoothly fade scrolling list items under header */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 85rem;
+  background: linear-gradient(to bottom, #07030e 35%, rgba(7, 3, 14, 0.85) 70%, transparent 100%);
+  pointer-events: none;
+  z-index: 35;
+}
+
 /* High-Contrast Social Footer Links */
 .zeox-work-page .zeox-social-footer-columns a,
 .zeox-work-page .zeox-social-footer-columns a:visited,
@@ -5222,12 +5357,14 @@ body:has(.zeox-work-page.open.is-social-surface)
 
 /* Editorial Card Design & Scroll Reveal for List View */
 .wrapper[data-v-80516469] {
-  padding-top: 130rem !important;
-  padding-bottom: 120rem !important;
+  padding-top: 140rem !important;
+  padding-bottom: 140rem !important;
   gap: 20rem !important;
   min-height: 100vh !important;
+  counter-reset: project-counter !important;
 }
-.wrapper .project[data-v-80516469].pruthvi-card-row {
+.wrapper .project[data-v-80516469] {
+  counter-increment: project-counter !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
@@ -5239,15 +5376,9 @@ body:has(.zeox-work-page.open.is-social-surface)
   background: rgba(14, 12, 20, 0.6) !important;
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   box-shadow: 0 4rem 20rem rgba(0, 0, 0, 0.4) !important;
-  opacity: 0 !important;
-  transform: translate3d(0, 36px, 0) scale(0.97) !important;
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease !important;
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease !important;
 }
-.wrapper .project[data-v-80516469].pruthvi-card-row.card-in-view {
-  opacity: 1 !important;
-  transform: translate3d(0, 0, 0) scale(1) !important;
-}
-.wrapper .project[data-v-80516469].pruthvi-card-row:hover {
+.wrapper .project[data-v-80516469]:hover {
   background: rgba(168, 85, 247, 0.08) !important;
   border-color: rgba(168, 85, 247, 0.45) !important;
   box-shadow: 0 10rem 32rem rgba(0, 0, 0, 0.6), 0 0 20rem rgba(147, 51, 234, 0.25) !important;
@@ -5272,19 +5403,52 @@ body:has(.zeox-work-page.open.is-social-surface)
   box-shadow: 0 8rem 28rem rgba(147, 51, 234, 0.5), 0 0 16rem rgba(192, 132, 252, 0.5) !important;
 }
 .wrapper .project p[data-v-80516469] {
-  font-size: 26rem !important;
-  font-weight: 500 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 4rem !important;
-  text-align: left !important;
   margin: 0 !important;
   padding: 0 !important;
   cursor: crosshair !important;
 }
+.wrapper .project p[data-v-80516469] a {
+  color: #ffffff !important;
+  font-family: 'PP-Mori', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 34rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.1 !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14rem !important;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: crosshair !important;
+}
+.wrapper .project p[data-v-80516469] a::before {
+  content: counter(project-counter, decimal-leading-zero);
+  font-size: 13rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(192, 132, 252, 0.85) !important;
+  font-family: monospace !important;
+  padding: 3rem 8rem !important;
+  border-radius: 6rem !important;
+  background: rgba(168, 85, 247, 0.12) !important;
+  border: 1px solid rgba(168, 85, 247, 0.28) !important;
+  display: inline-block !important;
+  transition: all 0.3s ease !important;
+  flex-shrink: 0 !important;
+}
+.wrapper .project:hover p[data-v-80516469] a {
+  color: #ffffff !important;
+  transform: translateX(6rem) !important;
+  text-shadow: 0 0 24px rgba(192, 132, 252, 0.7), 0 0 48px rgba(147, 51, 234, 0.35) !important;
+}
+.wrapper .project:hover p[data-v-80516469] a::before {
+  color: #ffffff !important;
+  background: rgba(168, 85, 247, 0.35) !important;
+  border-color: #c084fc !important;
+  box-shadow: 0 0 10rem rgba(192, 132, 252, 0.6) !important;
+}
 .card-num-title {
-  font-size: 24rem !important;
+  font-size: 32rem !important;
   font-weight: 600 !important;
   color: #ffffff !important;
   letter-spacing: -0.02em !important;

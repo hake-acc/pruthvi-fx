@@ -2397,13 +2397,7 @@
       const button = wrapper.querySelector("button");
       if (!button) return;
       if (index === 0) button.dataset.zeoxHomeTrigger = "true";
-      const label = normalizeLabel(button);
-      if (label?.includes("list") || label?.includes("work")) {
-        button.dataset.zeoxWorkTrigger = "true";
-        button.querySelectorAll("span").forEach((span) => {
-          if (span.textContent !== "work") span.textContent = "work";
-        });
-      }
+      // Allow switch to cleanly toggle between Nuxt spiral and Nuxt list
     });
 
     document.querySelectorAll(".links .link").forEach((link) => {
@@ -2886,12 +2880,14 @@
 
       if (dist > 30 || velocity > 0.28) {
         playSound("longclick");
-        wrapper.style.transform = "translate3d(0, 0, 0) rotate(-13deg) scale(1.08)";
+        wrapper.style.transform = "translate3d(60px, -60px, 0) scale(1.35) rotate(-5deg)";
+        wrapper.style.opacity = "0.9";
         setTimeout(() => {
           wrapper.style.transform = "";
+          wrapper.style.opacity = "";
           const clickTarget = showreel.querySelector("img") || showreel;
           clickTarget.click();
-        }, 120);
+        }, 180);
       } else {
         wrapper.style.transform = "";
       }
@@ -2961,11 +2957,11 @@
     if (listProjects.length > 0) {
       listProjects.forEach((proj, idx) => {
         proj.classList.add("pruthvi-card-row");
-        const pText = proj.querySelector("p");
+        const aLink = proj.querySelector("p a");
         const meta = THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length];
-        if (pText && meta && !pText.dataset.titled) {
-          pText.dataset.titled = "true";
-          pText.innerHTML = `
+        if (aLink && meta && !aLink.dataset.titled) {
+          aLink.dataset.titled = "true";
+          aLink.innerHTML = `
             <span class="card-num-title">${meta.title}</span>
             <span class="card-creator-tag">${meta.creator}</span>
           `;
@@ -2988,6 +2984,22 @@
           }
         }
       });
+    }
+
+    // Ensure Discord icon in menu footer is always rendered
+    const menuSocials = document.querySelectorAll(".wrapper.opened a, .container[data-v-b1c462f7] a, .menu-footer a");
+    menuSocials.forEach((a) => {
+      if ((a.href?.includes("discord") || a.getAttribute("aria-label")?.toLowerCase().includes("discord")) && !a.dataset.discordFixed) {
+        a.dataset.discordFixed = "true";
+        a.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="${DISCORD_ICON_PATH}"/></svg>`;
+      }
+    });
+
+    // Ensure loader lottie has purple filter
+    const loaderLottie = document.querySelector(".loader .lottie svg, .loader svg");
+    if (loaderLottie && !loaderLottie.dataset.purpleFixed) {
+      loaderLottie.dataset.purpleFixed = "true";
+      loaderLottie.style.filter = "hue-rotate(145deg) saturate(1.9) brightness(1.1) drop-shadow(0 0 20rem rgba(168, 85, 247, 0.6))";
     }
   }
 
