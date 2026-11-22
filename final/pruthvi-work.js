@@ -319,17 +319,22 @@
             style="--zeox-index:${index % 3}"
             data-zeox-image="${escapeHtml(item.src)}"
             data-zeox-thumbnail-id="${escapeHtml(item.id)}"
+            data-zeox-title="${escapeHtml(item.title || `Thumbnail ${index + 1}`)}"
             aria-label="Open thumbnail preview"
           >
             <span class="zeox-work-card-media">
               <img
                 src="${escapeHtml(item.src)}"
-                alt=""
+                alt="${escapeHtml(item.title || `Thumbnail ${index + 1}`)}"
                 crossorigin="anonymous"
                 loading="${index < 3 ? "eager" : "lazy"}"
                 decoding="async"
                 fetchpriority="${index < 3 ? "high" : "auto"}"
               >
+            </span>
+            <span class="zeox-work-card-caption">
+              <span class="zeox-work-card-title">${escapeHtml(item.title || `Thumbnail ${index + 1}`)}</span>
+              <span class="zeox-work-card-badge">0${index + 1}</span>
             </span>
           </button>
         `
@@ -1034,18 +1039,17 @@
                 <div class="zeox-social-footer-columns">
                   <div>
                     <h3>Socials</h3>
-                    <a class="zeox-social-link" href="${escapeHtml(data.instagramUrl || 'https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb')}" target="_blank" rel="noopener noreferrer" style="display:block;color:#fff;text-decoration:none;margin-bottom:8px;">Instagram ↗</a>
+                    <a class="zeox-social-link" href="${escapeHtml(data.instagramUrl || 'https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb')}" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
                     <a
                       class="zeox-social-discord zeox-work-contact-link--discord"
                       href="${escapeHtml(discordUrl)}"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style="display:block;color:#fff;text-decoration:none;margin-bottom:8px;"
                     >Discord ↗</a>
                   </div>
                   <div>
                     <h3>Contact</h3>
-                    <a href="mailto:${escapeHtml(data.email)}" style="color:#fff;text-decoration:underline;">${escapeHtml(data.email)}</a>
+                    <a class="zeox-social-email-link" href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a>
                   </div>
                 </div>
                 <a
@@ -2391,19 +2395,15 @@
   }
 
   function enhanceLegacyTriggers() {
+    // Keep switch buttons as authentic spiral • list so user can use the list view
     document.querySelectorAll(".switch .button").forEach((wrapper, index) => {
       const button = wrapper.querySelector("button");
       if (!button) return;
-      if (index === 0) button.dataset.zeoxHomeTrigger = "true";
-      const label = normalizeLabel(button);
-      if (label?.includes("list") || label?.includes("work")) {
-        button.dataset.zeoxWorkTrigger = "true";
-        button.querySelectorAll("span").forEach((span) => {
-          if (span.textContent !== "work") span.textContent = "work";
-        });
-      }
+      delete button.dataset.zeoxWorkTrigger;
+      delete button.dataset.zeoxHomeTrigger;
     });
 
+    // In navigation drawer, 'works' link opens the dedicated editorial Works page
     document.querySelectorAll(".links .link").forEach((link) => {
       const label = normalizeLabel(link);
       if (label?.includes("work")) {
@@ -2413,6 +2413,12 @@
         link.dataset.zeoxProfileTrigger = "true";
       }
     });
+
+    // Ensure Discord icon in menu drawer is rendered with white glyph on dark badge
+    const discordIconInner = document.querySelector('.menu-social-links .social-link[aria-label="Discord"] .social-link-inner');
+    if (discordIconInner && !discordIconInner.querySelector('svg')) {
+      discordIconInner.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="${DISCORD_ICON_PATH}" fill="currentColor"></path></svg>`;
+    }
 
     document
       .querySelectorAll('a[href^="/projects/"]')
@@ -2478,14 +2484,10 @@
       return;
     }
 
-    if (
-      target.closest("[data-zeox-home-trigger]") &&
-      workPage?.classList.contains("open")
-    ) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+    const switchBtn = target.closest(".switch .button button, .switch .button");
+    if (switchBtn && workPage?.classList.contains("open")) {
       closeWorkView();
-      return;
+      // Let Nuxt handle switching between 'spiral' and 'list' naturally
     }
 
     const workCard = target.closest("[data-zeox-image]");
@@ -2562,7 +2564,7 @@
     }
 
     const legacyImage = target.closest(
-      ".thumbnail[data-v-a2f5aa0a] img, .styleframe img, .showreel-thumbnail img"
+      ".thumbnail[data-v-a2f5aa0a] img, .styleframe img, .showreel-thumbnail img, .list-thumb img, .list-thumb"
     );
     if (legacyImage instanceof HTMLImageElement) {
       event.preventDefault();
