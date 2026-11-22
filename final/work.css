@@ -5092,3 +5092,13 @@ body:has(.zeox-work-page.open.is-social-surface)
   transform: translateY(0) !important;
   transition: opacity 0.4s ease-out, transform 0.4s ease-out !important;
 }
+
+/* Disable redundant floating cursor preview so list view titles are never obscured */
+.cursor-wrapper,
+.cursor-wrapper[data-v-e208648f],
+.cursor-wrapper[data-v-e208648f] .cursor-image {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
