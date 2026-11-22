@@ -75,19 +75,19 @@
       { id: "creator-05", avatar: "/content/assets/042fa35bc6f1cd4980fea42b4c801b53924d13f02f3ae9b72314bdbb5022f133.webp" }
     ],
     thumbnails: [
-      { id: "thumbnail-01", title: "Thumbnail 1", src: "/images/pruthvi_thumb_01_build.png" },
-      { id: "thumbnail-02", title: "Thumbnail 2", src: "/images/pruthvi_thumb_02_after.png" },
-      { id: "thumbnail-03", title: "Thumbnail 3", src: "/images/pruthvi_thumb_03_flamefrag.png" },
-      { id: "thumbnail-04", title: "Thumbnail 4", src: "/images/pruthvi_thumb_04_gaming_grill.png" },
-      { id: "thumbnail-05", title: "Thumbnail 5", src: "/images/pruthvi_thumb_05_kabeer.png" },
-      { id: "thumbnail-06", title: "Thumbnail 6", src: "/images/pruthvi_thumb_06_kira.png" },
-      { id: "thumbnail-07", title: "Thumbnail 7", src: "/images/pruthvi_thumb_07_shadow.png" },
-      { id: "thumbnail-08", title: "Thumbnail 8", src: "/images/pruthvi_thumb_08_teddy.png" },
-      { id: "thumbnail-09", title: "Thumbnail 9", src: "/images/pruthvi_thumb_09_work.png" },
-      { id: "thumbnail-10", title: "Thumbnail 10", src: "/images/pruthvi_thumb_10_lal_baal.png" },
-      { id: "thumbnail-11", title: "Thumbnail 11", src: "/images/pruthvi_thumb_11_mickey.png" },
-      { id: "thumbnail-12", title: "Thumbnail 12", src: "/images/pruthvi_thumb_12_kabeer5.png" },
-      { id: "thumbnail-13", title: "Thumbnail 13", src: "/images/pruthvi_thumb_13_work7.png" }
+      { id: "thumbnail-01", title: "Thumbnail 1", src: "/images/pruthvi_thumb_01_build.webp" },
+      { id: "thumbnail-02", title: "Thumbnail 2", src: "/images/pruthvi_thumb_02_after.webp" },
+      { id: "thumbnail-03", title: "Thumbnail 3", src: "/images/pruthvi_thumb_03_flamefrag.webp" },
+      { id: "thumbnail-04", title: "Thumbnail 4", src: "/images/pruthvi_thumb_04_gaming_grill.webp" },
+      { id: "thumbnail-05", title: "Thumbnail 5", src: "/images/pruthvi_thumb_05_kabeer.webp" },
+      { id: "thumbnail-06", title: "Thumbnail 6", src: "/images/pruthvi_thumb_06_kira.webp" },
+      { id: "thumbnail-07", title: "Thumbnail 7", src: "/images/pruthvi_thumb_07_shadow.webp" },
+      { id: "thumbnail-08", title: "Thumbnail 8", src: "/images/pruthvi_thumb_08_teddy.webp" },
+      { id: "thumbnail-09", title: "Thumbnail 9", src: "/images/pruthvi_thumb_09_work.webp" },
+      { id: "thumbnail-10", title: "Thumbnail 10", src: "/images/pruthvi_thumb_10_lal_baal.webp" },
+      { id: "thumbnail-11", title: "Thumbnail 11", src: "/images/pruthvi_thumb_11_mickey.webp" },
+      { id: "thumbnail-12", title: "Thumbnail 12", src: "/images/pruthvi_thumb_12_kabeer5.webp" },
+      { id: "thumbnail-13", title: "Thumbnail 13", src: "/images/pruthvi_thumb_13_work7.webp" }
     ],
     spiralThumbnailIds: [
       "thumbnail-01", "thumbnail-02", "thumbnail-03", "thumbnail-04", "thumbnail-05",
@@ -984,7 +984,7 @@
               </h2>
               <span class="zeox-work-statement-pulse" aria-hidden="true"></span>
               <span class="zeox-statement-fake-cursor" aria-hidden="true">
-                <img class="zeox-statement-hand" src="/windows-link-cursor.png" alt="">
+                <img class="zeox-statement-hand" src="/windows-link-cursor.webp" alt="">
               </span>
             </div>
           </section>
@@ -2733,6 +2733,50 @@
       workPage.addEventListener("scroll", updateWorkProgress, { passive: true });
     }
   }
+
+
+  // Instant & Responsive Loader Entry System
+  function setupLoaderEntry() {
+    const loader = document.querySelector('.loader');
+    if (!loader) return;
+
+    // Force show enter buttons so they are never hidden or unclickable
+    const enter = loader.querySelector('.enter');
+    const noSound = loader.querySelector('.no-sound');
+    if (enter) {
+      enter.classList.add('show');
+      enter.style.opacity = '1';
+      enter.style.pointerEvents = 'auto';
+    }
+    if (noSound) {
+      noSound.classList.add('show');
+      noSound.style.opacity = '0.75';
+      noSound.style.pointerEvents = 'auto';
+    }
+
+    // Allow clicking anywhere on the screen to enter
+    loader.addEventListener('click', (e) => {
+      const enterBtn = loader.querySelector('.enter, button.enter, button');
+      if (enterBtn && e.target !== enterBtn && !e.target.closest('.no-sound')) {
+        enterBtn.click();
+      }
+    });
+
+    // If opening directly to works (?view=work), enter immediately
+    if (isWorkLocation()) {
+      const enterBtn = loader.querySelector('.enter, button');
+      if (enterBtn) enterBtn.click();
+      loader.style.display = 'none';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupLoaderEntry);
+  } else {
+    setupLoaderEntry();
+  }
+  window.setTimeout(setupLoaderEntry, 400);
+  window.setTimeout(setupLoaderEntry, 1000);
 
   async function startThumbnailPortfolio() {
     if (document.documentElement.dataset.zeoxWorkReady === "true") return;

@@ -32,67 +32,67 @@
     {
       "id": "thumbnail-01",
       "title": "Thumbnail 1",
-      "src": "/images/pruthvi_thumb_01_build.png"
+      "src": "/images/pruthvi_thumb_01_build.webp"
     },
     {
       "id": "thumbnail-02",
       "title": "Thumbnail 2",
-      "src": "/images/pruthvi_thumb_02_after.png"
+      "src": "/images/pruthvi_thumb_02_after.webp"
     },
     {
       "id": "thumbnail-03",
       "title": "Thumbnail 3",
-      "src": "/images/pruthvi_thumb_03_flamefrag.png"
+      "src": "/images/pruthvi_thumb_03_flamefrag.webp"
     },
     {
       "id": "thumbnail-04",
       "title": "Thumbnail 4",
-      "src": "/images/pruthvi_thumb_04_gaming_grill.png"
+      "src": "/images/pruthvi_thumb_04_gaming_grill.webp"
     },
     {
       "id": "thumbnail-05",
       "title": "Thumbnail 5",
-      "src": "/images/pruthvi_thumb_05_kabeer.png"
+      "src": "/images/pruthvi_thumb_05_kabeer.webp"
     },
     {
       "id": "thumbnail-06",
       "title": "Thumbnail 6",
-      "src": "/images/pruthvi_thumb_06_kira.png"
+      "src": "/images/pruthvi_thumb_06_kira.webp"
     },
     {
       "id": "thumbnail-07",
       "title": "Thumbnail 7",
-      "src": "/images/pruthvi_thumb_07_shadow.png"
+      "src": "/images/pruthvi_thumb_07_shadow.webp"
     },
     {
       "id": "thumbnail-08",
       "title": "Thumbnail 8",
-      "src": "/images/pruthvi_thumb_08_teddy.png"
+      "src": "/images/pruthvi_thumb_08_teddy.webp"
     },
     {
       "id": "thumbnail-09",
       "title": "Thumbnail 9",
-      "src": "/images/pruthvi_thumb_09_work.png"
+      "src": "/images/pruthvi_thumb_09_work.webp"
     },
     {
       "id": "thumbnail-10",
       "title": "Thumbnail 10",
-      "src": "/images/pruthvi_thumb_10_lal_baal.png"
+      "src": "/images/pruthvi_thumb_10_lal_baal.webp"
     },
     {
       "id": "thumbnail-11",
       "title": "Thumbnail 11",
-      "src": "/images/pruthvi_thumb_11_mickey.png"
+      "src": "/images/pruthvi_thumb_11_mickey.webp"
     },
     {
       "id": "thumbnail-12",
       "title": "Thumbnail 12",
-      "src": "/images/pruthvi_thumb_12_kabeer5.png"
+      "src": "/images/pruthvi_thumb_12_kabeer5.webp"
     },
     {
       "id": "thumbnail-13",
       "title": "Thumbnail 13",
-      "src": "/images/pruthvi_thumb_13_work7.png"
+      "src": "/images/pruthvi_thumb_13_work7.webp"
     }
   ],
   "spiralThumbnailIds": [

@@ -5067,3 +5067,18 @@ body:has(.zeox-work-page.open.is-social-surface)
   pointer-events: auto !important;
   visibility: visible !important;
 }
+
+/* Instant & Reliable Loader Visibility */
+.loader .enter {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  visibility: visible !important;
+}
+.loader .no-sound {
+  opacity: 0.75 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
