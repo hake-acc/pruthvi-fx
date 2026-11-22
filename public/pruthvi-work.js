@@ -2991,7 +2991,13 @@
     menuSocials.forEach((a) => {
       if ((a.href?.includes("discord") || a.getAttribute("aria-label")?.toLowerCase().includes("discord")) && !a.dataset.discordFixed) {
         a.dataset.discordFixed = "true";
-        a.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="${DISCORD_ICON_PATH}"/></svg>`;
+        const inner = a.querySelector(".social-link-inner");
+        const svgHtml = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-6caa20cf><path fill="currentColor" d="${DISCORD_ICON_PATH}"></path></svg>`;
+        if (inner) {
+          inner.innerHTML = svgHtml;
+        } else {
+          a.innerHTML = `<span class="social-link-inner" data-v-6caa20cf>${svgHtml}</span>`;
+        }
       }
     });
 
