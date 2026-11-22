@@ -68,11 +68,14 @@
     instagramUrl: "https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb",
     lifetimeThumbnails: 100,
     collaborators: [
-      { id: "creator-01", avatar: "/content/assets/e8dca15b87f451319dc55984b8b491cf3a6e96906337da62875f1945e5226f54.webp" },
-      { id: "creator-02", avatar: "/content/assets/159f2c51db0c9e09953afe20039d90923abe16daf50fdd0adca028c5eba8e28a.webp" },
-      { id: "creator-03", avatar: "/content/assets/610e065434adc47c24aef6402c579774702eee7e1d1f782bd132193215bf61dd.webp" },
-      { id: "creator-04", avatar: "/content/assets/4f6ad3f10965802c585640d2764f21cd1e06d47d4f2c9940caf6265b2f17ac4a.webp" },
-      { id: "creator-05", avatar: "/content/assets/042fa35bc6f1cd4980fea42b4c801b53924d13f02f3ae9b72314bdbb5022f133.webp" }
+      { id: "creator-01", name: "INSANE RMK", avatar: "/images/creators/insane_rmk.webp", profileUrl: "https://www.youtube.com/@InsaneRMK" },
+      { id: "creator-02", name: "Mikey Chan", avatar: "/images/creators/mikey_chan.webp", profileUrl: "https://www.youtube.com/@MickeyChaan" },
+      { id: "creator-03", name: "Kabeer", avatar: "/images/creators/kabeer.webp", profileUrl: "https://www.youtube.com/@kabeerOG" },
+      { id: "creator-04", name: "Mr Overrated", avatar: "/images/creators/mr_overrated.webp", profileUrl: "https://www.youtube.com/@Mr_OverratedXD" },
+      { id: "creator-05", name: "Znsu", avatar: "/images/creators/znsu.webp", profileUrl: "https://www.youtube.com/@znsuyt" },
+      { id: "creator-06", name: "Teddy Gaming", avatar: "/images/creators/teddy_gaming.webp", profileUrl: "https://www.youtube.com/@TeddyGaming" },
+      { id: "creator-07", name: "Haider Playz", avatar: "/images/creators/haider_playz.webp", profileUrl: "https://www.youtube.com/@HaiderPlayz786" },
+      { id: "creator-08", name: "Gamingrill", avatar: "/images/creators/gamingrill.webp", profileUrl: "https://www.youtube.com/@itzgamingrill" }
     ],
     thumbnails: [
       { id: "thumbnail-01", title: "Thumbnail 1", src: "/images/pruthvi_thumb_01_build.webp" },
@@ -252,14 +255,15 @@
   function renderCreatorProfiles(collaborators, interactive = false) {
     const profiles =
       Array.isArray(collaborators) && collaborators.length > 0
-        ? collaborators.slice(0, 9)
-        : Array.from({ length: 7 }, () => ({}));
+        ? collaborators.slice(0, 12)
+        : Array.from({ length: 8 }, () => ({}));
 
     return profiles
       .map((creator, index) => {
         const avatar = creator.avatar || "";
         const creatorId =
           creator.id || `creator-${String(index + 1).padStart(2, "0")}`;
+        const creatorName = creator.name || "";
         const profileUrl = interactive ? creator.profileUrl || "" : "";
         const analyticsAttribute = profileUrl
           ? `data-zeox-creator-id="${escapeHtml(creatorId)}"`
@@ -273,13 +277,15 @@
               href="${escapeHtml(profileUrl)}"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Open creator profile"
+              title="${escapeHtml(creatorName)}"
+              aria-label="${escapeHtml(creatorName || 'Open creator profile')}"
             >`
           : `<span
               class="zeox-collaborator-profile"
               style="--zeox-profile-index:${index}"
               data-zeox-collaborator
               ${analyticsAttribute}
+              title="${escapeHtml(creatorName)}"
               aria-hidden="true"
             >`;
         const profileClose = profileUrl ? "</a>" : "</span>";
@@ -291,10 +297,8 @@
                   ? `<img
                       class="zeox-collaborator-image"
                       src="${escapeHtml(avatar)}"
-                      alt=""
-                      crossorigin="anonymous"
-                      loading="lazy"
-                      decoding="async"
+                      alt="${escapeHtml(creatorName)}"
+                      loading="eager"
                     >`
                   : `<span class="zeox-collaborator-placeholder" aria-hidden="true"></span>`
               }
