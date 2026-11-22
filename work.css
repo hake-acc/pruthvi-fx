@@ -103,27 +103,7 @@ html.zeox-work-open canvas.webgl {
   pointer-events: none;
 }
 
-.zeox-work-vignette {
-  position: fixed;
-  z-index: 1;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.54) 0%,
-      rgba(0, 0, 0, 0.1) 10%,
-      transparent 21%,
-      transparent 80%,
-      rgba(0, 0, 0, 0.12) 90%,
-      rgba(0, 0, 0, 0.5) 100%
-    ),
-    radial-gradient(
-      ellipse at center,
-      transparent 60%,
-      rgba(0, 0, 0, 0.18) 100%
-    );
-  pointer-events: none;
-}
+.zeox-work-vignette { display: none !important; }
 
 .zeox-work-progress {
   position: fixed;
@@ -2858,25 +2838,9 @@ html.zeox-work-open canvas.webgl {
   width: 100%;
 }
 
-.zeox-work-page .zeox-work-vignette {
-  z-index: 3;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.54) 0,
-      rgba(0, 0, 0, 0.08) 10%,
-      transparent 21%,
-      transparent 84%,
-      rgba(0, 0, 0, 0.16) 94%,
-      rgba(0, 0, 0, 0.56) 100%
-    );
-  opacity: 0.7;
-  pointer-events: none;
-}
+.zeox-work-page .zeox-work-vignette { display: none !important; }
 
-.zeox-work-page.is-social-entering .zeox-work-vignette {
-  opacity: 0;
-}
+.zeox-work-page.is-social-entering .zeox-work-vignette { display: none !important; }
 
 .zeox-work-page .zeox-work-shell {
   position: relative;
@@ -4426,9 +4390,7 @@ body:has(.zeox-work-page.open.is-social-surface)
     --zeox-page: calc(100vw - 32px);
   }
 
-  .zeox-work-page .zeox-work-vignette {
-    opacity: 0.52;
-  }
+  .zeox-work-page .zeox-work-vignette { display: none !important; }
 
   .zeox-work-page .zeox-work-index {
     --zeox-opening-top: 82px;
