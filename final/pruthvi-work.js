@@ -1034,18 +1034,18 @@
                 <div class="zeox-social-footer-columns">
                   <div>
                     <h3>Socials</h3>
-                    <a class="zeox-social-link" href="${escapeHtml(data.instagramUrl || 'https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb')}" target="_blank" rel="noopener noreferrer" style="display:block;color:#fff;text-decoration:none;margin-bottom:8px;">Instagram ↗</a>
+                    <a class="zeox-social-link" href="${escapeHtml(data.instagramUrl || 'https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb')}" target="_blank" rel="noopener noreferrer" style="display:block;color:#080808;text-decoration:none;margin-bottom:8px;font-weight:600;">Instagram ↗</a>
                     <a
                       class="zeox-social-discord zeox-work-contact-link--discord"
                       href="${escapeHtml(discordUrl)}"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style="display:block;color:#fff;text-decoration:none;margin-bottom:8px;"
+                      style="display:block;color:#080808;text-decoration:none;margin-bottom:8px;font-weight:600;"
                     >Discord ↗</a>
                   </div>
                   <div>
                     <h3>Contact</h3>
-                    <a href="mailto:${escapeHtml(data.email)}" style="color:#fff;text-decoration:underline;">${escapeHtml(data.email)}</a>
+                    <a href="mailto:${escapeHtml(data.email)}" style="color:#080808;text-decoration:underline;font-weight:600;">${escapeHtml(data.email)}</a>
                   </div>
                 </div>
                 <a
@@ -1931,6 +1931,8 @@
     lightbox.setAttribute("aria-hidden", "false");
     lightbox.setAttribute("aria-busy", "true");
     lightbox.classList.add("open");
+    lightbox.style.cursor = "crosshair";
+    if (image) image.style.cursor = "zoom-out";
     document.documentElement.classList.add("no-scroll");
     lockSceneForPopup();
     lightbox.querySelector(".zeox-lightbox__close")?.focus();
@@ -2814,9 +2816,178 @@
         closeWorkView({ push: false, silent: true });
       }
       startContentPolling();
+      setupSwipeableShowreel();
+      setupDesktopCrosshair();
+      setupCardScrollProgression();
+      setInterval(() => {
+        setupSwipeableShowreel();
+        setupCardScrollProgression();
+      }, 800);
     } catch (error) {
       console.error("Unable to initialize the thumbnail portfolio", error);
       window.showToast?.("Unable to load the work archive");
+    }
+  }
+
+  /* ==========================================================================
+     1. Swipeable Showreel Gesture Interaction
+     ========================================================================== */
+  function setupSwipeableShowreel() {
+    const showreel = document.querySelector(".showreel-thumbnail");
+    if (!showreel || showreel.dataset.swipeReady === "true") return;
+    showreel.dataset.swipeReady = "true";
+
+    const wrapper = showreel.querySelector(".thumbnail-wrapper") || showreel;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let startTime = 0;
+
+    wrapper.style.touchAction = "none";
+
+    function onPointerDown(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      currentX = e.clientX;
+      currentY = e.clientY;
+      startTime = Date.now();
+      wrapper.style.transition = "none";
+      try { wrapper.setPointerCapture(e.pointerId); } catch (_) {}
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      currentX = e.clientX;
+      currentY = e.clientY;
+      const dx = currentX - startX;
+      const dy = currentY - startY;
+      const dist = Math.hypot(dx, dy);
+      const angle = -15 + Math.min(22, Math.max(-22, dx * 0.12));
+      const scale = 1 + Math.min(0.12, dist * 0.001);
+      wrapper.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0) rotate(${angle.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      try { wrapper.releasePointerCapture(e.pointerId); } catch (_) {}
+
+      const dx = currentX - startX;
+      const dy = currentY - startY;
+      const dist = Math.hypot(dx, dy);
+      const duration = Math.max(1, Date.now() - startTime);
+      const velocity = dist / duration;
+
+      wrapper.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
+
+      if (dist > 30 || velocity > 0.28) {
+        playSound("longclick");
+        wrapper.style.transform = "translate3d(0, 0, 0) rotate(-13deg) scale(1.08)";
+        setTimeout(() => {
+          wrapper.style.transform = "";
+          const clickTarget = showreel.querySelector("img") || showreel;
+          clickTarget.click();
+        }, 120);
+      } else {
+        wrapper.style.transform = "";
+      }
+    }
+
+    wrapper.addEventListener("pointerdown", onPointerDown);
+    wrapper.addEventListener("pointermove", onPointerMove);
+    wrapper.addEventListener("pointerup", onPointerUp);
+    wrapper.addEventListener("pointercancel", onPointerUp);
+  }
+
+  /* ==========================================================================
+     2. Desktop Crosshair Cursor for Thumbnail Opening
+     ========================================================================== */
+  function setupDesktopCrosshair() {
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isDesktop) return;
+
+    const lightbox = document.querySelector(".zeox-lightbox");
+    if (lightbox) {
+      lightbox.style.cursor = "crosshair";
+      const stage = lightbox.querySelector(".zeox-lightbox__stage");
+      if (stage) stage.style.cursor = "crosshair";
+    }
+
+    let reticle = document.querySelector(".pruthvi-desktop-crosshair");
+    if (!reticle) {
+      reticle = document.createElement("div");
+      reticle.className = "pruthvi-desktop-crosshair";
+      reticle.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#ffffff" stroke-width="1.75"><circle cx="12" cy="12" r="5" stroke="rgba(192,132,252,0.9)" stroke-width="1.5"/><line x1="12" y1="2" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="22"/><line x1="2" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="22" y2="12"/></svg>`;
+      document.body.appendChild(reticle);
+    }
+
+    document.addEventListener("pointermove", (e) => {
+      const activeLightbox = document.querySelector(".zeox-lightbox.open");
+      const hoverThumb = e.target?.closest?.(".list-thumb, .zeox-work-card, .project[data-v-80516469]");
+      if (activeLightbox || hoverThumb) {
+        reticle.style.opacity = "1";
+        reticle.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      } else {
+        reticle.style.opacity = "0";
+      }
+    }, { passive: true });
+  }
+
+  /* ==========================================================================
+     3. Card Scroll Progression & Thumbnail Titles
+     ========================================================================== */
+  const THUMBNAIL_CREATOR_MAP = [
+    { title: "Thumbnail 01", creator: "INSANE RMK", tag: "Minecraft 3D Motion" },
+    { title: "Thumbnail 02", creator: "Haider Playz", tag: "Survival Finale" },
+    { title: "Thumbnail 03", creator: "Znsu", tag: "Flame Frag War" },
+    { title: "Thumbnail 04", creator: "Gamingrill", tag: "Survival Reborn" },
+    { title: "Thumbnail 05", creator: "Kabeer", tag: "100 Days Hardcore" },
+    { title: "Thumbnail 06", creator: "Mr Overrated", tag: "Bedwars Nightmare" },
+    { title: "Thumbnail 07", creator: "Mikey Chan", tag: "Shadow Realm" },
+    { title: "Thumbnail 08", creator: "Teddy Gaming", tag: "The Ultimate Escape" },
+    { title: "Thumbnail 09", creator: "Kabeer", tag: "Void Awakening" },
+    { title: "Thumbnail 10", creator: "Znsu", tag: "Crimson SMP" },
+    { title: "Thumbnail 11", creator: "Mikey Chan", tag: "Speedrun Record" },
+    { title: "Thumbnail 12", creator: "Kabeer", tag: "Ancient City Raid" },
+    { title: "Thumbnail 13", creator: "Mr Overrated", tag: "Mythic Challenge" }
+  ];
+
+  function setupCardScrollProgression() {
+    const listProjects = document.querySelectorAll(".wrapper .project[data-v-80516469]");
+    if (listProjects.length > 0) {
+      listProjects.forEach((proj, idx) => {
+        proj.classList.add("pruthvi-card-row");
+        const pText = proj.querySelector("p");
+        const meta = THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length];
+        if (pText && meta && !pText.dataset.titled) {
+          pText.dataset.titled = "true";
+          pText.innerHTML = `
+            <span class="card-num-title">${meta.title}</span>
+            <span class="card-creator-tag">${meta.creator}</span>
+          `;
+        }
+
+        if (!proj.dataset.observed) {
+          proj.dataset.observed = "true";
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                proj.classList.add("card-in-view");
+              }
+            });
+          }, { threshold: 0.12 });
+          observer.observe(proj);
+          // Trigger immediate check in case it's already in view
+          const rect = proj.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            proj.classList.add("card-in-view");
+          }
+        }
+      });
     }
   }
 
