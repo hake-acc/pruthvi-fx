@@ -75,7 +75,7 @@
       { id: "creator-05", name: "Znsu", avatar: "/images/creators/znsu.webp", profileUrl: "https://www.youtube.com/@znsuyt" },
       { id: "creator-06", name: "Teddy Gaming", avatar: "/images/creators/teddy_gaming.webp", profileUrl: "https://www.youtube.com/@TeddyGaming" },
       { id: "creator-07", name: "Haider Playz", avatar: "/images/creators/haider_playz.webp", profileUrl: "https://www.youtube.com/@HaiderPlayz786" },
-      { id: "creator-08", name: "Gamingrill", avatar: "/images/creators/gamingrill.webp", profileUrl: "https://www.youtube.com/@itzgamingrill" }
+      { id: "creator-08", name: "Gamingrill", avatar: "/images/creators/gamingrill.webp", profileUrl: "https://youtube.com/@gaming_grill" }
     ],
     thumbnails: [
       { id: "thumbnail-01", title: "Thumbnail 1", src: "/images/pruthvi_thumb_01_build.webp" },
