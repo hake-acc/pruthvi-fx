@@ -1,3 +1,78 @@
+
+  /* ==========================================================================
+     Smooth Momentum Scroll System for Works Page
+     ========================================================================== */
+  let smoothScrollInstance = null;
+  function setupSmoothWorksScroll(container) {
+    if (!container || container.dataset.smoothScrollInit === "true") return;
+    container.dataset.smoothScrollInit = "true";
+
+    let currentY = container.scrollTop;
+    let targetY = container.scrollTop;
+    let isTicking = false;
+    let isWheeling = false;
+    let isTouching = false;
+    let wheelTimeout = null;
+
+    function lerp(start, end, factor) {
+      return start + (end - start) * factor;
+    }
+
+    function onRaf() {
+      if (!isTicking) return;
+      const diff = Math.abs(targetY - currentY);
+      if (diff > 0.4) {
+        currentY = lerp(currentY, targetY, 0.088);
+        container.scrollTop = currentY;
+        requestAnimationFrame(onRaf);
+      } else {
+        currentY = targetY;
+        container.scrollTop = currentY;
+        isTicking = false;
+        isWheeling = false;
+      }
+    }
+
+    container.addEventListener("wheel", (e) => {
+      // Allow native trackpad gestures or smooth out mouse wheels
+      if (Math.abs(e.deltaY) < 1) return;
+      e.preventDefault();
+      isWheeling = true;
+      const maxScroll = container.scrollHeight - container.clientHeight;
+      // Multiplier tuned for silk-smooth acceleration & momentum
+      targetY = Math.max(0, Math.min(maxScroll, targetY + e.deltaY * 0.95));
+      if (!isTicking) {
+        isTicking = true;
+        currentY = container.scrollTop;
+        requestAnimationFrame(onRaf);
+      }
+      window.clearTimeout(wheelTimeout);
+      wheelTimeout = window.setTimeout(() => {
+        isWheeling = false;
+      }, 150);
+    }, { passive: false });
+
+    container.addEventListener("touchstart", () => {
+      isTouching = true;
+      targetY = container.scrollTop;
+      currentY = container.scrollTop;
+      isTicking = false;
+    }, { passive: true });
+
+    container.addEventListener("touchend", () => {
+      isTouching = false;
+      targetY = container.scrollTop;
+      currentY = container.scrollTop;
+    }, { passive: true });
+
+    container.addEventListener("scroll", () => {
+      if (!isWheeling && !isTicking) {
+        targetY = container.scrollTop;
+        currentY = container.scrollTop;
+      }
+    }, { passive: true });
+  }
+
 (() => {
   const LOCAL_DATA_SOURCE = "/content/portfolio.json";
   const CONTENT_POLL_MS = 30_000;
@@ -312,14 +387,18 @@
   function renderGalleryItems(thumbnails) {
     return thumbnails
       .map(
-        (item, index) => `
+        (item, index) => {
+          const num = index + 1;
+          const meta = THUMBNAIL_CREATOR_MAP[index % THUMBNAIL_CREATOR_MAP.length];
+          const creator = meta?.creator || "";
+          return `
           <button
             class="zeox-work-card"
             type="button"
             style="--zeox-index:${index % 3}"
             data-zeox-image="${escapeHtml(item.src)}"
             data-zeox-thumbnail-id="${escapeHtml(item.id)}"
-            aria-label="Open thumbnail preview"
+            aria-label="Open Thumbnail ${num} preview"
           >
             <span class="zeox-work-card-media">
               <img
@@ -330,9 +409,15 @@
                 decoding="async"
                 fetchpriority="${index < 3 ? "high" : "auto"}"
               >
+              <span class="zeox-card-badge" aria-hidden="true">${num}</span>
             </span>
+            <div class="zeox-card-meta-bar" aria-hidden="true">
+              <span class="zeox-card-title">Thumbnail ${num}</span>
+              ${creator ? `<span class="zeox-card-creator">${escapeHtml(creator)}</span>` : ""}
+            </div>
           </button>
-        `
+        `;
+        }
       )
       .join("");
   }
@@ -2797,6 +2882,7 @@
       portfolioSignature = JSON.stringify(portfolio);
       scheduleSpiralManifestSync();
       workPage = createWorkPage(portfolio);
+      setupSmoothWorksScroll(workPage);
       workPage.setAttribute("inert", "");
       prepareScrollLetters(workPage);
       setupEndmarkScene();
@@ -2937,19 +3023,19 @@
      3. Card Scroll Progression & Thumbnail Titles
      ========================================================================== */
   const THUMBNAIL_CREATOR_MAP = [
-    { title: "Thumbnail 01", creator: "INSANE RMK", tag: "Minecraft 3D Motion" },
-    { title: "Thumbnail 02", creator: "Haider Playz", tag: "Survival Finale" },
-    { title: "Thumbnail 03", creator: "Znsu", tag: "Flame Frag War" },
-    { title: "Thumbnail 04", creator: "Gamingrill", tag: "Survival Reborn" },
-    { title: "Thumbnail 05", creator: "Kabeer", tag: "100 Days Hardcore" },
-    { title: "Thumbnail 06", creator: "Mr Overrated", tag: "Bedwars Nightmare" },
-    { title: "Thumbnail 07", creator: "Mikey Chan", tag: "Shadow Realm" },
-    { title: "Thumbnail 08", creator: "Teddy Gaming", tag: "The Ultimate Escape" },
-    { title: "Thumbnail 09", creator: "Kabeer", tag: "Void Awakening" },
-    { title: "Thumbnail 10", creator: "Znsu", tag: "Crimson SMP" },
-    { title: "Thumbnail 11", creator: "Mikey Chan", tag: "Speedrun Record" },
-    { title: "Thumbnail 12", creator: "Kabeer", tag: "Ancient City Raid" },
-    { title: "Thumbnail 13", creator: "Mr Overrated", tag: "Mythic Challenge" }
+    { title: "Thumbnail 1", num: "1", creator: "INSANE RMK", tag: "Minecraft 3D Motion" },
+    { title: "Thumbnail 2", num: "2", creator: "Haider Playz", tag: "Survival Finale" },
+    { title: "Thumbnail 3", num: "3", creator: "Znsu", tag: "Flame Frag War" },
+    { title: "Thumbnail 4", num: "4", creator: "Gamingrill", tag: "Survival Reborn" },
+    { title: "Thumbnail 5", num: "5", creator: "Kabeer", tag: "100 Days Hardcore" },
+    { title: "Thumbnail 6", num: "6", creator: "Mr Overrated", tag: "Bedwars Nightmare" },
+    { title: "Thumbnail 7", num: "7", creator: "Mikey Chan", tag: "Shadow Realm" },
+    { title: "Thumbnail 8", num: "8", creator: "Teddy Gaming", tag: "The Ultimate Escape" },
+    { title: "Thumbnail 9", num: "9", creator: "Kabeer", tag: "Void Awakening" },
+    { title: "Thumbnail 10", num: "10", creator: "Znsu", tag: "Crimson SMP" },
+    { title: "Thumbnail 11", num: "11", creator: "Mikey Chan", tag: "Speedrun Record" },
+    { title: "Thumbnail 12", num: "12", creator: "Kabeer", tag: "Ancient City Raid" },
+    { title: "Thumbnail 13", num: "13", creator: "Mr Overrated", tag: "Mythic Challenge" }
   ];
 
   function setupCardScrollProgression() {
