@@ -5068,17 +5068,27 @@ body:has(.zeox-work-page.open.is-social-surface)
   visibility: visible !important;
 }
 
-/* Instant & Reliable Loader Visibility */
-.loader .enter {
+/* Loader Entrance Buttons: Hidden during mascot intro animation, smoothly reveal once .show is applied */
+.loader .enter:not(.show),
+.loader .no-sound:not(.show) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.loader .enter.show {
   opacity: 1 !important;
   pointer-events: auto !important;
   cursor: pointer !important;
   visibility: visible !important;
+  transition: opacity 0.4s ease-out !important;
 }
-.loader .no-sound {
+
+.loader .no-sound.show {
   opacity: 0.75 !important;
   pointer-events: auto !important;
   cursor: pointer !important;
   visibility: visible !important;
   transform: translateY(0) !important;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out !important;
 }

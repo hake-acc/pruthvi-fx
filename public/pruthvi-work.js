@@ -2735,39 +2735,40 @@
   }
 
 
-  // Instant & Responsive Loader Entry System
+  // Responsive Loader Entry System (respects mascot intro animation)
   function setupLoaderEntry() {
     const loader = document.querySelector('.loader');
     if (!loader) return;
 
-    // Force show enter buttons so they are never hidden or unclickable
-    const enter = loader.querySelector('.enter');
-    const noSound = loader.querySelector('.no-sound');
-    if (enter) {
-      enter.classList.add('show');
-      enter.style.opacity = '1';
-      enter.style.pointerEvents = 'auto';
-    }
-    if (noSound) {
-      noSound.classList.add('show');
-      noSound.style.opacity = '0.75';
-      noSound.style.pointerEvents = 'auto';
-    }
-
-    // Allow clicking anywhere on the screen to enter
-    loader.addEventListener('click', (e) => {
-      const enterBtn = loader.querySelector('.enter, button.enter, button');
-      if (enterBtn && e.target !== enterBtn && !e.target.closest('.no-sound')) {
-        enterBtn.click();
-      }
-    });
-
-    // If opening directly to works (?view=work), enter immediately
+    // If opening directly to works (?view=work or #work), skip loader immediately
     if (isWorkLocation()) {
       const enterBtn = loader.querySelector('.enter, button');
       if (enterBtn) enterBtn.click();
       loader.style.display = 'none';
+      return;
     }
+
+    function revealButtons() {
+      const enter = loader.querySelector('.enter');
+      const noSound = loader.querySelector('.no-sound');
+      if (enter && !enter.classList.contains('show')) {
+        enter.classList.add('show');
+      }
+      if (noSound && !noSound.classList.contains('show')) {
+        noSound.classList.add('show');
+      }
+    }
+
+    // Fallback: If mascot complete event hasn't triggered after 4.5s, reveal gracefully
+    window.setTimeout(revealButtons, 4500);
+
+    // Allow clicking anywhere on the screen to enter ONLY AFTER buttons are revealed
+    loader.addEventListener('click', (e) => {
+      const enterBtn = loader.querySelector('.enter.show, button.enter.show');
+      if (enterBtn && e.target !== enterBtn && !e.target.closest('.no-sound')) {
+        enterBtn.click();
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -2775,8 +2776,6 @@
   } else {
     setupLoaderEntry();
   }
-  window.setTimeout(setupLoaderEntry, 400);
-  window.setTimeout(setupLoaderEntry, 1000);
 
   async function startThumbnailPortfolio() {
     if (document.documentElement.dataset.zeoxWorkReady === "true") return;
