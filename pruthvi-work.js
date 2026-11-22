@@ -1,5 +1,212 @@
 
   /* ==========================================================================
+     Showreel Swipeable Card Deck Modal
+     ========================================================================== */
+  let showreelDeckModal = null;
+  let activeDeckIndex = 0;
+
+  function createShowreelDeck() {
+    if (document.querySelector(".pruthvi-showreel-deck")) {
+      return document.querySelector(".pruthvi-showreel-deck");
+    }
+
+    const deck = document.createElement("div");
+    deck.className = "pruthvi-showreel-deck";
+    deck.setAttribute("role", "dialog");
+    deck.setAttribute("aria-modal", "true");
+    deck.setAttribute("aria-label", "Showreel Thumbnail Showcase");
+    deck.innerHTML = `
+      <div class="deck-backdrop"></div>
+      <button class="deck-close" type="button" aria-label="Close Showreel">&times;</button>
+      <div class="deck-counter">
+        <span class="deck-current">1</span> / <span class="deck-total">13</span>
+      </div>
+      <div class="deck-container">
+        <div class="deck-track"></div>
+      </div>
+      <div class="deck-controls">
+        <button class="deck-nav-btn deck-prev" type="button" aria-label="Previous Thumbnail">&#8592;</button>
+        <div class="deck-hint">Swipe or use arrow keys &#8592; &#8594;</div>
+        <button class="deck-nav-btn deck-next" type="button" aria-label="Next Thumbnail">&#8594;</button>
+      </div>
+    `;
+
+    document.body.appendChild(deck);
+
+    // Event listeners
+    const closeBtn = deck.querySelector(".deck-close");
+    const backdrop = deck.querySelector(".deck-backdrop");
+    closeBtn.addEventListener("click", closeShowreelDeck);
+    backdrop.addEventListener("click", closeShowreelDeck);
+
+    const prevBtn = deck.querySelector(".deck-prev");
+    const nextBtn = deck.querySelector(".deck-next");
+    prevBtn.addEventListener("click", () => slideShowreelDeck(-1));
+    nextBtn.addEventListener("click", () => slideShowreelDeck(1));
+
+    setupDeckSwipeGestures(deck);
+
+    document.addEventListener("keydown", (e) => {
+      if (!deck.classList.contains("open")) return;
+      if (e.key === "Escape") closeShowreelDeck();
+      if (e.key === "ArrowLeft") slideShowreelDeck(-1);
+      if (e.key === "ArrowRight") slideShowreelDeck(1);
+    });
+
+    return deck;
+  }
+
+  function setupDeckSwipeGestures(deck) {
+    const track = deck.querySelector(".deck-track");
+    let startX = 0;
+    let currentX = 0;
+    let isSwiping = false;
+
+    track.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      isSwiping = true;
+      startX = e.clientX;
+      currentX = e.clientX;
+      track.style.transition = "none";
+      try { track.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    track.addEventListener("pointermove", (e) => {
+      if (!isSwiping) return;
+      currentX = e.clientX;
+      const dx = currentX - startX;
+      updateDeckCardsVisual(activeDeckIndex, dx);
+    });
+
+    function onPointerEnd(e) {
+      if (!isSwiping) return;
+      isSwiping = false;
+      try { track.releasePointerCapture(e.pointerId); } catch (_) {}
+      const dx = currentX - startX;
+      if (dx < -60) {
+        slideShowreelDeck(1);
+      } else if (dx > 60) {
+        slideShowreelDeck(-1);
+      } else {
+        updateDeckCardsVisual(activeDeckIndex, 0);
+      }
+    }
+
+    track.addEventListener("pointerup", onPointerEnd);
+    track.addEventListener("pointercancel", onPointerEnd);
+  }
+
+  function populateDeckCards(thumbnails) {
+    const deck = showreelDeckModal || createShowreelDeck();
+    const track = deck.querySelector(".deck-track");
+    track.innerHTML = "";
+
+    thumbnails.forEach((item, idx) => {
+      const num = idx + 1;
+      const meta = THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length];
+      const card = document.createElement("div");
+      card.className = "deck-card";
+      card.dataset.index = String(idx);
+      card.innerHTML = `
+        <div class="deck-card-inner">
+          <div class="deck-card-media">
+            <img src="${item.src}" alt="Thumbnail ${num}" loading="${idx < 3 ? 'eager' : 'lazy'}">
+            <span class="deck-card-badge">${num}</span>
+          </div>
+          <div class="deck-card-info">
+            <span class="deck-card-title">Thumbnail ${num}</span>
+            <span class="deck-card-creator">${meta?.creator || ''}</span>
+          </div>
+        </div>
+      `;
+      track.appendChild(card);
+    });
+
+    deck.querySelector(".deck-total").textContent = String(thumbnails.length);
+    updateDeckCardsVisual(0, 0);
+  }
+
+  function updateDeckCardsVisual(centerIdx, dragOffset = 0) {
+    const deck = showreelDeckModal;
+    if (!deck) return;
+    const cards = deck.querySelectorAll(".deck-card");
+    const total = cards.length;
+
+    cards.forEach((card, idx) => {
+      const offset = idx - centerIdx;
+      card.style.transition = dragOffset === 0 ? "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)" : "none";
+
+      if (offset === 0) {
+        const rot = (dragOffset * 0.05).toFixed(1);
+        card.style.transform = `translate3d(calc(-50% + ${dragOffset}px), -50%, 0) scale(1) rotate(${rot}deg)`;
+        card.style.opacity = "1";
+        card.style.zIndex = "10";
+        card.style.pointerEvents = "auto";
+        card.classList.add("is-active");
+      } else if (offset === 1) {
+        card.style.transform = `translate3d(calc(-50% + 220px + ${dragOffset * 0.5}px), -50%, -100px) scale(0.85) rotate(4deg)`;
+        card.style.opacity = "0.7";
+        card.style.zIndex = "8";
+        card.style.pointerEvents = "none";
+        card.classList.remove("is-active");
+      } else if (offset === -1) {
+        card.style.transform = `translate3d(calc(-50% - 220px + ${dragOffset * 0.5}px), -50%, -100px) scale(0.85) rotate(-4deg)`;
+        card.style.opacity = "0.7";
+        card.style.zIndex = "8";
+        card.style.pointerEvents = "none";
+        card.classList.remove("is-active");
+      } else if (offset > 1) {
+        card.style.transform = `translate3d(calc(-50% + 400px), -50%, -200px) scale(0.7) rotate(8deg)`;
+        card.style.opacity = "0";
+        card.style.zIndex = "1";
+        card.style.pointerEvents = "none";
+        card.classList.remove("is-active");
+      } else {
+        card.style.transform = `translate3d(calc(-50% - 400px), -50%, -200px) scale(0.7) rotate(-8deg)`;
+        card.style.opacity = "0";
+        card.style.zIndex = "1";
+        card.style.pointerEvents = "none";
+        card.classList.remove("is-active");
+      }
+    });
+
+    const currentElem = deck.querySelector(".deck-current");
+    if (currentElem) currentElem.textContent = String(centerIdx + 1);
+  }
+
+  function slideShowreelDeck(dir) {
+    const deck = showreelDeckModal;
+    if (!deck) return;
+    const cards = deck.querySelectorAll(".deck-card");
+    const nextIdx = Math.max(0, Math.min(cards.length - 1, activeDeckIndex + dir));
+    if (nextIdx !== activeDeckIndex) {
+      activeDeckIndex = nextIdx;
+      playSound("click");
+      updateDeckCardsVisual(activeDeckIndex, 0);
+    } else {
+      updateDeckCardsVisual(activeDeckIndex, 0);
+    }
+  }
+
+  function openShowreelDeck() {
+    showreelDeckModal = createShowreelDeck();
+    const thumbs = portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails;
+    populateDeckCards(thumbs);
+    activeDeckIndex = 0;
+    updateDeckCardsVisual(0, 0);
+    showreelDeckModal.classList.add("open");
+    playSound("longclick");
+  }
+
+  function closeShowreelDeck() {
+    if (showreelDeckModal) {
+      showreelDeckModal.classList.remove("open");
+      playSound("click");
+    }
+  }
+
+
+  /* ==========================================================================
      Smooth Momentum Scroll System for Works Page
      ========================================================================== */
   let smoothScrollInstance = null;
@@ -504,9 +711,8 @@
   function loadSpiralImage(source) {
     if (spiralImageCache.has(source)) return spiralImageCache.get(source);
     const failure = spiralImageFailures.get(source);
-    if (failure?.retryAt > Date.now()) {
-      return Promise.reject(failure.error);
-    }
+    // Never permanently back off or freeze spiral images
+    // Always allow immediate retry
     const request = new Promise((resolve, reject) => {
       const image = new Image();
       image.crossOrigin = "anonymous";
@@ -858,7 +1064,7 @@
     const generation = ++spiralSyncGeneration;
     const run = async () => {
       const ready = await syncSpiralManifest(generation);
-      if (!ready && generation === spiralSyncGeneration && attempt < 20) {
+      if (!ready && generation === spiralSyncGeneration && attempt < 60) {
         spiralSyncTimer = window.setTimeout(
           () => scheduleSpiralManifestSync(attempt + 1),
           Math.min(5_000, 100 + attempt * 100)
@@ -2642,8 +2848,15 @@
       return;
     }
 
+    const showreelTarget = target.closest(".showreel-thumbnail, .showreel-thumbnail img, .thumbnail-wrapper");
+    if (showreelTarget) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openShowreelDeck();
+      return;
+    }
     const legacyImage = target.closest(
-      ".thumbnail[data-v-a2f5aa0a] img, .styleframe img, .showreel-thumbnail img"
+      ".thumbnail[data-v-a2f5aa0a] img, .styleframe img"
     );
     if (legacyImage instanceof HTMLImageElement) {
       event.preventDefault();
