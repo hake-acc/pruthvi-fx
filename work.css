@@ -1714,7 +1714,7 @@ html.zeox-work-open canvas.webgl {
 
 @media (max-width: 480px) {
   .zeox-work-hero-title {
-    font-size: clamp(48px, 14.6vw, 62px);
+    font-size: clamp(60px, 18vw, 80px) !important;
   }
 
   .zeox-work-hero-stats .zeox-stat-value {
@@ -1880,7 +1880,7 @@ html.zeox-work-open canvas.webgl {
 }
 
 .zeox-work-hero-line:nth-child(2) {
-  padding-left: clamp(28px, 9vw, 145px);
+  padding-left: 0 !important;
 }
 
 .zeox-work-hero-line > span {
@@ -2032,7 +2032,7 @@ html.zeox-work-open canvas.webgl {
   }
 
   .zeox-work-hero-line:nth-child(2) {
-    padding-left: clamp(20px, 7vw, 48px);
+    padding-left: 0 !important;
   }
 
   .zeox-work-intro {
@@ -2052,7 +2052,7 @@ html.zeox-work-open canvas.webgl {
   }
 
   .zeox-work-hero-title {
-    font-size: clamp(48px, 14.6vw, 62px);
+    font-size: clamp(60px, 18vw, 80px) !important;
   }
 
   .zeox-work-hero-stats .zeox-stat-value {
@@ -2937,39 +2937,43 @@ html.zeox-work-open canvas.webgl {
 .zeox-work-page .zeox-work-hero-title {
   position: relative !important;
   inset: auto !important;
-  align-self: flex-end;
+  align-self: center;
   display: block !important;
-  width: min(100%, 1320px) !important;
-  margin: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
   color: #f7f7f5;
   font-family: var(--display-font);
-  font-size: clamp(108px, 15vw, 236px);
+  font-size: clamp(120px, 18vw, 280px) !important;
   font-weight: 400;
   letter-spacing: -0.09em;
-  line-height: 0.76;
+  line-height: 0.78;
   opacity: 1 !important;
-  text-align: left;
+  text-align: center !important;
   text-transform: lowercase !important;
   transform: none !important;
+  transform-origin: center center !important;
 }
 
 .zeox-work-page .zeox-work-hero-line {
   display: block !important;
-  width: fit-content !important;
-  max-width: 100%;
-  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
   padding: 0 !important;
   overflow: visible;
   color: inherit !important;
   -webkit-text-stroke: 0 !important;
   transform: none !important;
+  text-align: center !important;
 }
 
 .zeox-work-page .zeox-work-hero-line:nth-child(2) {
   position: relative;
-  left: clamp(72px, 11vw, 190px);
+  left: 0 !important;
   margin-top: 0.025em !important;
   color: rgba(255, 255, 255, 0.72) !important;
+  text-align: center !important;
 }
 
 .zeox-work-page .zeox-work-hero-line > span {
@@ -4381,12 +4385,12 @@ body:has(.zeox-work-page.open.is-social-surface)
 
   .zeox-work-page .zeox-work-hero-title {
     width: min(100%, 820px) !important;
-    font-size: clamp(92px, 16vw, 150px);
+    font-size: clamp(100px, 18vw, 180px) !important;
     line-height: 0.76;
   }
 
   .zeox-work-page .zeox-work-hero-line:nth-child(2) {
-    left: clamp(60px, 11vw, 110px);
+    left: 0 !important;
     margin-top: 0.02em !important;
   }
 
@@ -4444,14 +4448,14 @@ body:has(.zeox-work-page.open.is-social-surface)
   .zeox-work-page .zeox-work-hero-title {
     min-width: 0;
     width: 100% !important;
-    font-size: clamp(64px, 20vw, 94px);
+    font-size: clamp(72px, 22vw, 110px) !important;
     letter-spacing: -0.085em;
     line-height: 0.76;
-    text-align: left;
+    text-align: center !important;
   }
 
   .zeox-work-page .zeox-work-hero-line:nth-child(2) {
-    left: clamp(44px, 14vw, 72px);
+    left: 0 !important;
     margin-top: 0.015em !important;
   }
 
@@ -5284,7 +5288,7 @@ body:has(.zeox-work-page.open.is-social-surface)
   pointer-events: none !important;
 }
 
-/* Floating Frosted Pill Capsule for Switcher - prevents collision when scrolling */
+/* Switcher - clean minimal toggle, no pill bezel */
 .switch[data-v-c8f918c1] {
   align-items: center !important;
   display: flex !important;
@@ -5293,25 +5297,8 @@ body:has(.zeox-work-page.open.is-social-surface)
   position: fixed !important;
   top: calc(var(--grid-margin) + 12rem) !important;
   transform: translate(-50%) !important;
-  z-index: 90 !important;
-  background: rgba(14, 12, 21, 0.85) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(168, 85, 247, 0.38) !important;
-  border-radius: 9999px !important;
-  padding: 8rem 24rem !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 16px rgba(147, 51, 234, 0.25) !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
-}
-.switch[data-v-c8f918c1]:hover {
-  border-color: rgba(192, 132, 252, 0.6) !important;
-  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.85), 0 0 24px rgba(168, 85, 247, 0.4) !important;
-}
-.switch .button[data-v-c8f918c1] {
-  font-size: 16rem !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
-  min-width: 52rem !important;
+  z-index: 25 !important;
+  transition: opacity 0.3s ease !important;
 }
 .switch .dot[data-v-c8f918c1] {
   background-color: #c084fc !important;
@@ -5320,18 +5307,15 @@ body:has(.zeox-work-page.open.is-social-surface)
   width: 6rem !important;
 }
 
-/* Top gradient scrim to smoothly fade scrolling list items under header */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 85rem;
-  background: linear-gradient(to bottom, #07030e 35%, rgba(7, 3, 14, 0.85) 70%, transparent 100%);
-  pointer-events: none;
-  z-index: 35;
+/* Hide switcher when menu is open so it never overlaps the drawer */
+.wrapper.opened ~ .switch,
+body:has(.wrapper.opened) .switch {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease !important;
 }
+
+/* body::after scrim removed - was covering canvas on mobile */
 
 /* High-Contrast Social Footer Links */
 .zeox-work-page .zeox-social-footer-columns a,
@@ -5460,4 +5444,15 @@ body::after {
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
   opacity: 0.9 !important;
+}
+
+/* Hide ghost "close" text next to close button */
+.button.opened[data-v-cf355cbc] .text,
+.wrapper.opened .button .text[data-v-cf355cbc] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+.close-button .text[data-v-cf355cbc] {
+  display: none !important;
 }

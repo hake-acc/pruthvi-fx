@@ -52,7 +52,7 @@
   filter: drop-shadow(0 0 24px rgba(192, 132, 252, 0.75));
 }
 
-/* Floating Frosted Pill Capsule for Switcher - prevents collision when scrolling */
+/* Switcher - clean minimal toggle, no pill bezel */
 .switch[data-v-c8f918c1] {
   align-items: center !important;
   display: flex !important;
@@ -61,25 +61,8 @@
   position: fixed !important;
   top: calc(var(--grid-margin) + 12rem) !important;
   transform: translate(-50%) !important;
-  z-index: 90 !important;
-  background: rgba(14, 12, 21, 0.85) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(168, 85, 247, 0.38) !important;
-  border-radius: 9999px !important;
-  padding: 8rem 24rem !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 16px rgba(147, 51, 234, 0.25) !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
-}
-.switch[data-v-c8f918c1]:hover {
-  border-color: rgba(192, 132, 252, 0.6) !important;
-  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.85), 0 0 24px rgba(168, 85, 247, 0.4) !important;
-}
-.switch .button[data-v-c8f918c1] {
-  font-size: 16rem !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
-  min-width: 52rem !important;
+  z-index: 25 !important;
+  transition: opacity 0.3s ease !important;
 }
 .switch .dot[data-v-c8f918c1] {
   background-color: #c084fc !important;
@@ -87,19 +70,15 @@
   height: 6rem !important;
   width: 6rem !important;
 }
-
-/* Top gradient scrim to smoothly fade scrolling list items under header */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 85rem;
-  background: linear-gradient(to bottom, #07030e 35%, rgba(7, 3, 14, 0.85) 70%, transparent 100%);
-  pointer-events: none;
-  z-index: 35;
+/* Hide switcher when menu is open */
+.wrapper.opened ~ .switch,
+body:has(.wrapper.opened) .switch {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease !important;
 }
+
+
 
 /* Editorial List View Container - generous top clearance so top items never cut off */
 .wrapper[data-v-80516469] {
