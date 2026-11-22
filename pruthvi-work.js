@@ -988,7 +988,7 @@
               </h2>
               <span class="zeox-work-statement-pulse" aria-hidden="true"></span>
               <span class="zeox-statement-fake-cursor" aria-hidden="true">
-                <img class="zeox-statement-hand" src="/windows-link-cursor.webp" alt="">
+                <img class="zeox-statement-hand" src="/windows-link-cursor.webp" onerror="if(!this.dataset.triedPng){this.dataset.triedPng='1';this.src='/windows-link-cursor.png';}" alt="">
               </span>
             </div>
           </section>
