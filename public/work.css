@@ -5216,11 +5216,12 @@ body:has(.zeox-work-page.open.is-social-surface)
 }
 
 /* Loader Entrance Buttons: Hidden during mascot intro animation, smoothly reveal once .show is applied */
-.loader .enter:not(.show),
-.loader .no-sound:not(.show) {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
+.loader .enter,
+.loader .no-sound {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  visibility: visible !important;
 }
 
 .loader .enter.show {

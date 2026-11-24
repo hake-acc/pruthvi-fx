@@ -2992,7 +2992,7 @@
     }
 
     // Fallback: If mascot complete event hasn't triggered after 4.5s, reveal gracefully
-    window.setTimeout(revealButtons, 4500);
+    window.setTimeout(revealButtons, 600);
 
     // Allow clicking anywhere on the screen to enter ONLY AFTER buttons are revealed
     loader.addEventListener('click', (e) => {
