@@ -22,7 +22,7 @@
       if (!isTicking) return;
       const diff = Math.abs(targetY - currentY);
       if (diff > 0.4) {
-        currentY = lerp(currentY, targetY, 0.088);
+        currentY = lerp(currentY, targetY, 0.065);
         container.scrollTop = currentY;
         requestAnimationFrame(onRaf);
       } else {
@@ -3144,10 +3144,12 @@ let fbConfig = null;
      ========================================================================== */
   
   /* ==========================================================================
-     Showcase Reel: Pure 1-At-A-Time Stacking Cards Scroll Overlay (Zero Slop)
+     Showcase Reel: Infinite Smooth 1-At-A-Time Stacking Cards Overlay
+     Pure Design, Zero Text, Seamless Infinite Loop
      ========================================================================== */
   let showreelStackModal = null;
   let stackMomentumRaf = null;
+  let isLoopingStackScroll = false;
 
   function createShowreelStack() {
     if (document.querySelector(".pruthvi-showreel-stack")) {
@@ -3174,9 +3176,12 @@ let fbConfig = null;
     closeBtn.addEventListener("click", closeShowreelStack);
     backdrop.addEventListener("click", closeShowreelStack);
 
-    // Ultra-smooth 60/120fps Scroll Stacking Dynamics for 1-At-A-Time focus
     const scrollWrapper = modal.querySelector(".stack-scroll-wrapper");
+
+    // Seamless Infinite Loop Scroll Listener
     scrollWrapper.addEventListener("scroll", () => {
+      handleInfiniteStackScroll(scrollWrapper);
+
       if (stackMomentumRaf) cancelAnimationFrame(stackMomentumRaf);
       stackMomentumRaf = requestAnimationFrame(() => {
         updateCardStackingTransforms(scrollWrapper);
@@ -3196,47 +3201,71 @@ let fbConfig = null;
     const list = modal.querySelector(".stack-card-list");
     list.innerHTML = "";
 
-    const items = Array.isArray(thumbnails) && thumbnails.length > 0
+    const rawItems = Array.isArray(thumbnails) && thumbnails.length > 0
       ? thumbnails
       : (portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails || []);
 
-    items.forEach((item, idx) => {
+    // Create 3 identical sets of cards for a seamless infinite loop buffer
+    const loopItems = [...rawItems, ...rawItems, ...rawItems];
+
+    loopItems.forEach((item, idx) => {
       const slot = document.createElement("div");
       slot.className = "stack-card-slot";
       slot.dataset.index = String(idx);
+      slot.dataset.rawIndex = String(idx % rawItems.length);
       slot.innerHTML = `
         <div class="stack-card">
-          <img src="${item.src}" alt="" loading="${idx < 3 ? 'eager' : 'lazy'}" decoding="async">
+          <img src="${item.src}" alt="" loading="${idx < 4 ? 'eager' : 'lazy'}" decoding="async">
         </div>
       `;
       list.appendChild(slot);
     });
   }
 
+  function handleInfiniteStackScroll(wrapper) {
+    if (isLoopingStackScroll) return;
+    const rawItemsCount = (portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails || []).length;
+    if (!rawItemsCount) return;
+
+    const singleSetHeight = rawItemsCount * (wrapper.clientHeight || window.innerHeight);
+    const currentScroll = wrapper.scrollTop;
+
+    // If scrolled past the 2nd set, seamlessly jump back by 1 set height
+    if (currentScroll >= singleSetHeight * 2) {
+      isLoopingStackScroll = true;
+      wrapper.scrollTop = currentScroll - singleSetHeight;
+      requestAnimationFrame(() => { isLoopingStackScroll = false; });
+    } else if (currentScroll < singleSetHeight * 0.5) {
+      // If user scrolls backwards past middle of first set, jump forward by 1 set height
+      isLoopingStackScroll = true;
+      wrapper.scrollTop = currentScroll + singleSetHeight;
+      requestAnimationFrame(() => { isLoopingStackScroll = false; });
+    }
+  }
+
   function updateCardStackingTransforms(scrollWrapper) {
     const slots = scrollWrapper.querySelectorAll(".stack-card-slot");
     const wrapperHeight = scrollWrapper.clientHeight || window.innerHeight;
 
-    slots.forEach((slot, idx) => {
+    slots.forEach((slot) => {
       const card = slot.querySelector(".stack-card");
       if (!card) return;
       const rect = slot.getBoundingClientRect();
       const topOffset = rect.top;
 
       if (topOffset <= 0) {
-        // Card is pinned / stacked at center-top!
-        // As user scrolls further down through this card's 100vh height:
+        // Pinned card at center-top: smoothly tucks under as user scrolls further
         const progress = Math.min(1, Math.abs(topOffset) / wrapperHeight);
         const scale = Math.max(0.86, 1 - progress * 0.12);
         const translateY = progress * 24;
         const blur = progress * 6;
-        const opacity = Math.max(0.3, 1 - progress * 0.65);
+        const opacity = Math.max(0.28, 1 - progress * 0.7);
 
         card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
         card.style.opacity = opacity.toFixed(2);
         card.style.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : "none";
       } else {
-        // Approaching card from bottom: 100% full crisp focus
+        // Approaching card: crisp 100% focus
         card.style.transform = "scale(1) translateY(0)";
         card.style.opacity = "1";
         card.style.filter = "none";
@@ -3251,7 +3280,10 @@ let fbConfig = null;
     showreelStackModal.classList.add("is-open");
     const wrapper = showreelStackModal.querySelector(".stack-scroll-wrapper");
     if (wrapper) {
-      wrapper.scrollTop = 0;
+      // Start in the middle set for bidirectional infinite scroll
+      const rawCount = (thumbs || []).length;
+      const singleSetHeight = rawCount * (wrapper.clientHeight || window.innerHeight);
+      wrapper.scrollTop = singleSetHeight;
       updateCardStackingTransforms(wrapper);
     }
     playSound("longclick");
@@ -3442,10 +3474,24 @@ let fbConfig = null;
   }
 
 
+  
+  /* Inject "scroll me" dialog box onto showreel thumbnail */
+  function ensureShowreelScrollDialog() {
+    const showreel = document.querySelector(".showreel-thumbnail");
+    if (!showreel || showreel.querySelector(".showreel-scroll-dialog")) return;
+
+    const dialog = document.createElement("div");
+    dialog.className = "showreel-scroll-dialog";
+    dialog.setAttribute("aria-hidden", "true");
+    dialog.innerHTML = '<span class="dialog-icon">&darr;</span> scroll me';
+    showreel.appendChild(dialog);
+  }
+
   function setupSwipeableShowreel() {
     const showreel = document.querySelector(".showreel-thumbnail");
     if (!showreel || showreel.dataset.swipeReady === "true") return;
     showreel.dataset.swipeReady = "true";
+    ensureShowreelScrollDialog();
 
     const wrapper = showreel.querySelector(".thumbnail-wrapper") || showreel;
     let isDragging = false;

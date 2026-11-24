@@ -5603,7 +5603,7 @@ body:has(.wrapper.opened) .switch {
   font-family: monospace;
   font-size: 13px;
   font-weight: 600;
-  color: #FFED29;
+  color: #ffffff;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -5627,7 +5627,7 @@ body:has(.wrapper.opened) .switch {
 }
 
 .deck-counter-current {
-  color: #FFED29;
+  color: #ffffff;
   font-weight: 800;
 }
 
@@ -5660,9 +5660,9 @@ body:has(.wrapper.opened) .switch {
 }
 
 .deck-btn:hover {
-  background: rgba(255, 237, 41, 0.18);
-  border-color: #FFED29;
-  color: #FFED29;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #ffffff;
+  color: #ffffff;
   transform: translateY(-50%) scale(1.08);
 }
 
@@ -5868,7 +5868,7 @@ body:has(.wrapper.opened) .switch {
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #ffed29;
+  color: #ffffff;
   display: inline-block;
   margin-bottom: 12px;
 }
@@ -5912,8 +5912,8 @@ body:has(.wrapper.opened) .switch {
 }
 
 .pruthvi-cmp:hover {
-  border-color: rgba(255, 237, 41, 0.35);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(255, 237, 41, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(255, 255, 255, 0.15);
 }
 
 .pruthvi-cmp-img {
@@ -5962,8 +5962,8 @@ body:has(.wrapper.opened) .switch {
 
 .pruthvi-cmp-tag-after {
   right: 16px;
-  color: #ffed29;
-  border-color: rgba(255, 237, 41, 0.3);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Elastic SVG Curve Divider */
@@ -5975,7 +5975,7 @@ body:has(.wrapper.opened) .switch {
   pointer-events: none;
   overflow: visible;
   z-index: 6;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 16px rgba(255, 237, 41, 0.4));
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.4));
 }
 
 .pruthvi-cmp-svg path {
@@ -6007,7 +6007,7 @@ body:has(.wrapper.opened) .switch {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 237, 41, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.6);
   transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: auto;
   cursor: ew-resize;
@@ -6015,12 +6015,12 @@ body:has(.wrapper.opened) .switch {
 
 .pruthvi-cmp:hover .pruthvi-cmp-knob {
   transform: translate(-50%, -50%) scale(1.12);
-  background: #ffed29;
+  background: #ffffff;
 }
 
 .pruthvi-cmp[data-dragging="true"] .pruthvi-cmp-knob {
   transform: translate(-50%, -50%) scale(0.92);
-  background: #ffed29;
+  background: #ffffff;
 }
 
 /* ==========================================================================
@@ -6093,7 +6093,7 @@ body:has(.wrapper.opened) .switch {
   height: clamp(56px, 12vw, 68px);
   border-radius: 50%;
   padding: 3px;
-  background: linear-gradient(135deg, rgba(255, 237, 41, 0.6) 0%, rgba(139, 92, 246, 0.6) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(139, 92, 246, 0.6) 100%);
   box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
 }
 
@@ -6155,8 +6155,8 @@ body:has(.wrapper.opened) .switch {
 
 .pruthvi-rv-row:hover .pruthvi-rv-bubble {
   transform: translateY(-3px);
-  border-color: rgba(255, 237, 41, 0.3);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 237, 41, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.1);
 }
 
 .pruthvi-rv-left .pruthvi-rv-bubble {
@@ -6167,3 +6167,77 @@ body:has(.wrapper.opened) .switch {
   border-bottom-right-radius: 4px;
 }
 
+
+
+
+/* ==========================================================================
+   SHOWREEL "SCROLL ME" INTERACTIVE DIALOG BUBBLE
+   Boutique editorial tooltip with directional arrow & ambient float
+   ========================================================================== */
+
+.showreel-thumbnail {
+  position: relative !important;
+}
+
+.showreel-scroll-dialog {
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(18, 16, 26, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  padding: 6px 14px 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.2);
+  pointer-events: none;
+  z-index: 20;
+  white-space: nowrap;
+  animation: dialogFloat 2.6s ease-in-out infinite;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showreel-scroll-dialog::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(18, 16, 26, 0.92);
+}
+
+.showreel-scroll-dialog .dialog-icon {
+  display: inline-block;
+  font-size: 12px;
+  animation: dialogBounce 1.5s ease-in-out infinite;
+}
+
+.showreel-thumbnail:hover .showreel-scroll-dialog {
+  transform: translateX(-50%) translateY(-5px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.25);
+}
+
+@keyframes dialogFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+@keyframes dialogBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
