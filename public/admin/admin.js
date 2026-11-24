@@ -249,6 +249,11 @@ function renderAllData() {
   renderThumbnails();
   renderCreators();
   renderSettingsForm();
+  if (portfolioData.theme) {
+    currentTheme = { ...DEFAULT_THEME, ...portfolioData.theme };
+    syncInputsFromTheme(currentTheme);
+    applyLiveThemeToPreview(currentTheme);
+  }
 }
 
 function renderThumbnails() {
@@ -644,6 +649,7 @@ document.getElementById("settingsForm").addEventListener("submit", async (e) => 
 
 // 12. Startup sequence
 window.addEventListener("DOMContentLoaded", () => {
+  initVisualBuilder();
   const config = getSavedFirebaseConfig();
   if (config) {
     initFirebase(config);
@@ -651,3 +657,326 @@ window.addEventListener("DOMContentLoaded", () => {
     showFirebaseConfigScreen();
   }
 });
+
+
+// ==========================================================================
+// VISUAL STUDIO BUILDER & REAL-TIME STYLING LOGIC
+// ==========================================================================
+
+const DEFAULT_THEME = {
+  colorAccent: "#a855f7",
+  colorPop: "#c084fc",
+  bgDeep: "#07060b",
+  bgCard: "#12101a",
+  textColor: "#ffffff",
+  textMuted: "#8e8a9f",
+  glowIntensity: 60,
+  heroScale: 100,
+  cardRadius: 20,
+  cardSize: 100,
+  backdropBlur: 24,
+  heroTitle: "selected works",
+  showreelBadge: "scroll me",
+  marqueeText: "showreel • 2025 • showreel • 2025 •"
+};
+
+const THEME_PRESETS = {
+  "obsidian-purple": {
+    colorAccent: "#a855f7",
+    colorPop: "#c084fc",
+    bgDeep: "#07060b",
+    bgCard: "#12101a",
+    textColor: "#ffffff",
+    textMuted: "#8e8a9f",
+    glowIntensity: 70
+  },
+  "cyber-gold": {
+    colorAccent: "#ffed29",
+    colorPop: "#fef08a",
+    bgDeep: "#060608",
+    bgCard: "#141410",
+    textColor: "#ffffff",
+    textMuted: "#a1a1aa",
+    glowIntensity: 55
+  },
+  "emerald-matrix": {
+    colorAccent: "#10b981",
+    colorPop: "#34d399",
+    bgDeep: "#030a06",
+    bgCard: "#0d1a12",
+    textColor: "#ffffff",
+    textMuted: "#9ca3af",
+    glowIntensity: 65
+  },
+  "crimson-fade": {
+    colorAccent: "#f43f5e",
+    colorPop: "#fb7185",
+    bgDeep: "#0c0406",
+    bgCard: "#1a0b0e",
+    textColor: "#ffffff",
+    textMuted: "#a8a29e",
+    glowIntensity: 60
+  },
+  "minimal-monochrome": {
+    colorAccent: "#ffffff",
+    colorPop: "#e4e4e7",
+    bgDeep: "#09090b",
+    bgCard: "#18181b",
+    textColor: "#ffffff",
+    textMuted: "#71717a",
+    glowIntensity: 30
+  }
+};
+
+let currentTheme = { ...DEFAULT_THEME };
+
+let themeChannel = null;
+try {
+  if (typeof BroadcastChannel !== 'undefined') {
+    themeChannel = new BroadcastChannel('studio_theme_sync');
+  }
+} catch (e) {
+  console.warn("BroadcastChannel error:", e);
+}
+
+function broadcastLiveTheme(theme) {
+  if (themeChannel) {
+    try {
+      themeChannel.postMessage({ type: 'STUDIO_THEME_UPDATE', theme });
+    } catch (_) {}
+  }
+  try {
+    localStorage.setItem('studio_live_theme_preview', JSON.stringify({
+      theme,
+      timestamp: Date.now()
+    }));
+  } catch (_) {}
+}
+
+
+function initVisualBuilder() {
+  // Sync UI inputs with currentTheme
+  bindThemeInputs();
+  applyLiveThemeToPreview(currentTheme);
+
+  // Setup Preset Buttons
+  document.querySelectorAll(".preset-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const presetKey = btn.dataset.preset;
+      const preset = THEME_PRESETS[presetKey];
+      if (preset) {
+        currentTheme = { ...currentTheme, ...preset };
+        syncInputsFromTheme(currentTheme);
+        applyLiveThemeToPreview(currentTheme);
+        showToast(`Applied ${btn.innerText.trim()} preset`);
+      }
+    });
+  });
+
+  // Setup Save Button
+  const saveBtn = document.getElementById("saveThemeBtn");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", saveThemeToFirestore);
+  }
+
+  // Setup Reset Button
+  const resetBtn = document.getElementById("resetThemeBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      currentTheme = { ...DEFAULT_THEME };
+      syncInputsFromTheme(currentTheme);
+      applyLiveThemeToPreview(currentTheme);
+      showToast("Reset to default studio theme");
+    });
+  }
+}
+
+function bindThemeInputs() {
+  const bindings = [
+    { color: "vbColorAccent", text: "vbColorAccentText", key: "colorAccent" },
+    { color: "vbColorPop", text: "vbColorPopText", key: "colorPop" },
+    { color: "vbBgDeep", text: "vbBgDeepText", key: "bgDeep" },
+    { color: "vbBgCard", text: "vbBgCardText", key: "bgCard" },
+    { color: "vbTextColor", text: "vbTextColorText", key: "textColor" },
+    { color: "vbMutedColor", text: "vbMutedColorText", key: "textMuted" },
+  ];
+
+  bindings.forEach(({ color, text, key }) => {
+    const cEl = document.getElementById(color);
+    const tEl = document.getElementById(text);
+
+    if (cEl && tEl) {
+      cEl.addEventListener("input", (e) => {
+        tEl.value = e.target.value;
+        currentTheme[key] = e.target.value;
+        applyLiveThemeToPreview(currentTheme);
+      });
+      tEl.addEventListener("input", (e) => {
+        if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+          cEl.value = e.target.value;
+          currentTheme[key] = e.target.value;
+          applyLiveThemeToPreview(currentTheme);
+        }
+      });
+    }
+  });
+
+  // Sliders
+  bindSlider("vbGlowIntensity", "vbGlowVal", "glowIntensity", "%");
+  bindSlider("vbHeroScale", "vbHeroScaleVal", "heroScale", "%");
+  bindSlider("vbCardRadius", "vbRadiusVal", "cardRadius", "px");
+  bindSlider("vbCardSize", "vbCardSizeVal", "cardSize", "%");
+  bindSlider("vbBackdropBlur", "vbBlurVal", "backdropBlur", "px");
+
+  // Text Inputs
+  bindTextInput("vbHeroTitle", "heroTitle");
+  bindTextInput("vbShowreelBadge", "showreelBadge");
+  bindTextInput("vbMarqueeText", "marqueeText");
+}
+
+function bindSlider(sliderId, labelId, key, unit) {
+  const sEl = document.getElementById(sliderId);
+  const lEl = document.getElementById(labelId);
+  if (!sEl) return;
+
+  sEl.addEventListener("input", (e) => {
+    const val = Number(e.target.value);
+    currentTheme[key] = val;
+    if (lEl) lEl.textContent = `${val}${unit}`;
+    applyLiveThemeToPreview(currentTheme);
+  });
+}
+
+function bindTextInput(inputId, key) {
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  el.addEventListener("input", (e) => {
+    currentTheme[key] = e.target.value;
+    applyLiveThemeToPreview(currentTheme);
+  });
+}
+
+function syncInputsFromTheme(theme) {
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  };
+
+  setVal("vbColorAccent", theme.colorAccent);
+  setVal("vbColorAccentText", theme.colorAccent);
+  setVal("vbColorPop", theme.colorPop);
+  setVal("vbColorPopText", theme.colorPop);
+  setVal("vbBgDeep", theme.bgDeep);
+  setVal("vbBgDeepText", theme.bgDeep);
+  setVal("vbBgCard", theme.bgCard);
+  setVal("vbBgCardText", theme.bgCard);
+  setVal("vbTextColor", theme.textColor);
+  setVal("vbTextColorText", theme.textColor);
+  setVal("vbMutedColor", theme.textMuted);
+  setVal("vbMutedColorText", theme.textMuted);
+
+  setVal("vbGlowIntensity", theme.glowIntensity);
+  setVal("vbHeroScale", theme.heroScale);
+  setVal("vbCardRadius", theme.cardRadius);
+  setVal("vbCardSize", theme.cardSize);
+  setVal("vbBackdropBlur", theme.backdropBlur);
+
+  const setLabel = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  };
+  setLabel("vbGlowVal", `${theme.glowIntensity}%`);
+  setLabel("vbHeroScaleVal", `${theme.heroScale}%`);
+  setLabel("vbRadiusVal", `${theme.cardRadius}px`);
+  setLabel("vbCardSizeVal", `${theme.cardSize}%`);
+  setLabel("vbBlurVal", `${theme.backdropBlur}px`);
+
+  setVal("vbHeroTitle", theme.heroTitle);
+  setVal("vbShowreelBadge", theme.showreelBadge);
+  setVal("vbMarqueeText", theme.marqueeText);
+}
+
+function applyLiveThemeToPreview(theme) {
+  broadcastLiveTheme(theme);
+  const stage = document.getElementById("vbPreviewStage");
+  if (!stage) return;
+
+  stage.style.backgroundColor = theme.bgDeep;
+  stage.style.color = theme.textColor;
+
+  const mockHero = document.getElementById("mockHeroTitle");
+  if (mockHero) {
+    mockHero.textContent = theme.heroTitle || "selected works";
+    mockHero.style.color = theme.textColor;
+    mockHero.style.transform = `scale(${theme.heroScale / 100})`;
+  }
+
+  const mockTag = document.getElementById("mockHeroTag");
+  if (mockTag) {
+    mockTag.style.color = theme.colorAccent;
+  }
+
+  const mockDot = document.getElementById("mockDot");
+  if (mockDot) {
+    mockDot.style.backgroundColor = theme.colorPop;
+    mockDot.style.boxShadow = `0 0 10px ${theme.colorPop}`;
+  }
+
+  const mockCard = document.getElementById("mockCard");
+  if (mockCard) {
+    mockCard.style.backgroundColor = theme.bgCard;
+    mockCard.style.borderRadius = `${theme.cardRadius}px`;
+    mockCard.style.transform = `scale(${theme.cardSize / 100})`;
+    mockCard.style.boxShadow = `0 20px 50px rgba(0, 0, 0, 0.8), 0 0 ${(theme.glowIntensity * 0.5).toFixed(0)}px ${theme.colorAccent}`;
+  }
+
+  const mockBadge = document.getElementById("mockCardBadge");
+  if (mockBadge) {
+    mockBadge.textContent = `↓ ${theme.showreelBadge || 'scroll me'}`.toUpperCase();
+    mockBadge.style.color = theme.textColor;
+  }
+
+  const mockAvatar = document.getElementById("mockAvatar");
+  if (mockAvatar) {
+    mockAvatar.style.background = `linear-gradient(135deg, ${theme.colorPop}, ${theme.colorAccent})`;
+  }
+
+  const mockBubble = document.getElementById("mockBubble");
+  if (mockBubble) {
+    mockBubble.style.color = theme.textColor;
+    mockBubble.style.backdropFilter = `blur(${theme.backdropBlur}px)`;
+  }
+}
+
+async function saveThemeToFirestore() {
+  if (!db) {
+    showToast("Firestore not connected", "error");
+    return;
+  }
+
+  const saveBtn = document.getElementById("saveThemeBtn");
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.innerText = "Publishing Theme...";
+  }
+
+  try {
+    // Merge theme object into portfolio document
+    portfolioData.theme = { ...currentTheme };
+    await db.collection("portfolio").doc("live").set({
+      ...portfolioData,
+      theme: currentTheme,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    showToast("Theme published live to website!", "success");
+  } catch (err) {
+    console.error("Error saving theme to Firestore:", err);
+    showToast(`Failed to save theme: ${err.message}`, "error");
+  } finally {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerText = "Save Theme to Live Site";
+    }
+  }
+}

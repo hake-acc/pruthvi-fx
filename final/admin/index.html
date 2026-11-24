@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="stylesheet" href="/admin/admin.css?v=2">
 
   <!-- Firebase App & Firestore & Auth (Compat SDKs for reliable standalone execution) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -115,6 +115,9 @@
       <button class="tab-btn" data-tab="creatorsTab">
         Creators / Collaborators <span id="creatorCountBadge" class="tab-count">0</span>
       </button>
+      <button class="tab-btn" data-tab="visualBuilderTab">
+        🎨 Visual Theme &amp; Builder <span class="tab-count" style="background: rgba(168, 85, 247, 0.3); color: #c084fc;">LIVE</span>
+      </button>
       <button class="tab-btn" data-tab="settingsTab">
         Portfolio Meta &amp; Socials
       </button>
@@ -158,7 +161,211 @@
       </div>
     </section>
 
-    <!-- TAB 3: Settings & Meta -->
+        <!-- TAB 4: Visual Builder & Live Styler -->
+    <section id="visualBuilderTab" class="tab-content">
+      <div class="section-bar">
+        <div>
+          <h2>Visual Studio Theme &amp; Typography Builder</h2>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+            Customize colors, background atmospheres, typography sizes, card scaling, and hero text in real-time. Changes synchronize live to Firestore.
+          </p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button type="button" id="resetThemeBtn" class="btn-secondary" style="width: auto; padding: 10px 18px;">
+            Reset Defaults
+          </button>
+          <button type="button" id="saveThemeBtn" class="btn-primary" style="width: auto; padding: 10px 22px;">
+            Save Theme to Live Site
+          </button>
+        </div>
+      </div>
+
+      <!-- Two Column Layout: Controls on Left, Interactive Preview on Right -->
+      <div class="visual-builder-layout">
+        <div class="vb-controls-panel">
+          <!-- Preset Palettes -->
+          <div class="admin-card vb-card">
+            <h3 class="vb-card-title">Instant Preset Palettes</h3>
+            <div class="preset-palettes-grid">
+              <button type="button" class="preset-btn" data-preset="obsidian-purple">
+                <span class="preset-swatch" style="background: linear-gradient(135deg, #07060b, #a855f7);"></span>
+                <span>Obsidian Purple</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="cyber-gold">
+                <span class="preset-swatch" style="background: linear-gradient(135deg, #050508, #ffed29);"></span>
+                <span>Cyber Gold</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="emerald-matrix">
+                <span class="preset-swatch" style="background: linear-gradient(135deg, #030a06, #10b981);"></span>
+                <span>Emerald Void</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="crimson-fade">
+                <span class="preset-swatch" style="background: linear-gradient(135deg, #0c0406, #f43f5e);"></span>
+                <span>Crimson Neon</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="minimal-monochrome">
+                <span class="preset-swatch" style="background: linear-gradient(135deg, #0a0a0c, #ffffff);"></span>
+                <span>Pure Monochrome</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Color & Atmosphere Customizer -->
+          <div class="admin-card vb-card">
+            <h3 class="vb-card-title">Color Palette &amp; Atmosphere</h3>
+            <div class="vb-grid-2">
+              <div class="form-group">
+                <label class="form-label">Accent Color</label>
+                <div class="color-picker-row">
+                  <input type="color" id="vbColorAccent" class="vb-color-input" value="#a855f7">
+                  <input type="text" id="vbColorAccentText" class="form-input vb-hex-input" value="#a855f7">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Secondary Glow / Pop</label>
+                <div class="color-picker-row">
+                  <input type="color" id="vbColorPop" class="vb-color-input" value="#c084fc">
+                  <input type="text" id="vbColorPopText" class="form-input vb-hex-input" value="#c084fc">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Background Base Tint</label>
+                <div class="color-picker-row">
+                  <input type="color" id="vbBgDeep" class="vb-color-input" value="#07060b">
+                  <input type="text" id="vbBgDeepText" class="form-input vb-hex-input" value="#07060b">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Card Background Tint</label>
+                <div class="color-picker-row">
+                  <input type="color" id="vbBgCard" class="vb-color-input" value="#12101a">
+                  <input type="text" id="vbBgCardText" class="form-input vb-hex-input" value="#12101a">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Primary Text Color</label>
+                <div class="color-picker-row">
+                  <input type="color" id="vbTextColor" class="vb-color-input" value="#ffffff">
+                  <input type="text" id="vbTextColorText" class="form-input vb-hex-input" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Muted / Secondary Text</label>
+                <div class="color-picker-row">
+                  <input type="color" id="vbMutedColor" class="vb-color-input" value="#8e8a9f">
+                  <input type="text" id="vbMutedColorText" class="form-input vb-hex-input" value="#8e8a9f">
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label" style="display: flex; justify-content: space-between;">
+                <span>Ambient Shimmer Glow Intensity</span>
+                <span id="vbGlowVal" style="font-family: var(--font-mono); color: var(--accent-purple);">60%</span>
+              </label>
+              <input type="range" id="vbGlowIntensity" min="0" max="100" value="60" class="vb-slider">
+            </div>
+          </div>
+
+          <!-- Typography & Scaling Engine -->
+          <div class="admin-card vb-card">
+            <h3 class="vb-card-title">Typography Scale &amp; Sizing</h3>
+            <div class="vb-grid-2">
+              <div class="form-group">
+                <label class="form-label" style="display: flex; justify-content: space-between;">
+                  <span>Hero Title Scale</span>
+                  <span id="vbHeroScaleVal" style="font-family: var(--font-mono); color: var(--accent-purple);">100%</span>
+                </label>
+                <input type="range" id="vbHeroScale" min="70" max="140" value="100" class="vb-slider">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="display: flex; justify-content: space-between;">
+                  <span>Card Thumbnail Corner Radius</span>
+                  <span id="vbRadiusVal" style="font-family: var(--font-mono); color: var(--accent-purple);">20px</span>
+                </label>
+                <input type="range" id="vbCardRadius" min="0" max="40" value="20" class="vb-slider">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="display: flex; justify-content: space-between;">
+                  <span>Card Size / Zoom</span>
+                  <span id="vbCardSizeVal" style="font-family: var(--font-mono); color: var(--accent-purple);">100%</span>
+                </label>
+                <input type="range" id="vbCardSize" min="80" max="130" value="100" class="vb-slider">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="display: flex; justify-content: space-between;">
+                  <span>Background Blur Depth</span>
+                  <span id="vbBlurVal" style="font-family: var(--font-mono); color: var(--accent-purple);">24px</span>
+                </label>
+                <input type="range" id="vbBackdropBlur" min="0" max="64" value="24" class="vb-slider">
+              </div>
+            </div>
+          </div>
+
+          <!-- Editorial Custom Text Content -->
+          <div class="admin-card vb-card">
+            <h3 class="vb-card-title">Custom Editorial Copy</h3>
+            <div class="form-group">
+              <label class="form-label" for="vbHeroTitle">Works Hero Big Title</label>
+              <input type="text" id="vbHeroTitle" class="form-input" value="selected works">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vbShowreelBadge">Showreel Floating Dialog Text</label>
+              <input type="text" id="vbShowreelBadge" class="form-input" value="scroll me">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vbMarqueeText">Marquee Banner Stream Text</label>
+              <input type="text" id="vbMarqueeText" class="form-input" value="showreel • 2025 • showreel • 2025 •">
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Visual Interactive Preview Frame -->
+        <div class="vb-preview-panel">
+          <div class="vb-preview-header">
+            <div class="preview-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="preview-title">Real-Time Studio Canvas Preview</span>
+            <span class="preview-badge">LIVE SYNC</span>
+          </div>
+
+          <div class="vb-preview-stage" id="vbPreviewStage">
+            <!-- Simulated Miniature Website Stage -->
+            <div class="mock-nav">
+              <div class="mock-logo">PRUTHVI FX</div>
+              <div class="mock-switch" id="mockSwitch">
+                <span class="mock-switch-btn active">spiral</span>
+                <span class="mock-dot" id="mockDot"></span>
+                <span class="mock-switch-btn" id="mockWorkBtn">work</span>
+              </div>
+            </div>
+
+            <div class="mock-hero">
+              <div class="mock-hero-tag" id="mockHeroTag">BOUTIQUE 3D THUMBNAILS</div>
+              <h1 class="mock-hero-title" id="mockHeroTitle">selected works</h1>
+            </div>
+
+            <!-- Mock Stacking Card -->
+            <div class="mock-card-container">
+              <div class="mock-card" id="mockCard">
+                <img src="/_nuxt/reel-thumbnail.pruthvi_fx.png" alt="Showreel Thumbnail" class="mock-card-img" id="mockCardImg">
+                <div class="mock-card-badge" id="mockCardBadge">↓ SCROLL ME</div>
+              </div>
+            </div>
+
+            <!-- Mock Review Bubble -->
+            <div class="mock-review-wrap">
+              <div class="mock-avatar" id="mockAvatar"></div>
+              <div class="mock-bubble" id="mockBubble">
+                "Pruthvi's 3D motion and custom lighting boosted our video CTR by 3.8x."
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!-- TAB 3: Settings & Meta -->
     <section id="settingsTab" class="tab-content">
       <div class="section-bar">
         <div>
@@ -303,6 +510,6 @@
   </div>
 
   <script src="/admin/firebase-config.js"></script>
-  <script src="/admin/admin.js"></script>
+  <script src="/admin/admin.js?v=2"></script>
 </body>
 </html>

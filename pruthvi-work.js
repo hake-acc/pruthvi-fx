@@ -867,6 +867,93 @@
     void run();
   }
 
+  
+  // =========================================================================
+  // DYNAMIC STUDIO THEME ENGINE (REAL-TIME VISUAL BUILDER INTEGRATION)
+  // =========================================================================
+  function applyDynamicTheme(theme) {
+    if (!theme || typeof theme !== "object") return;
+    if (typeof portfolio === "object" && portfolio) {
+      portfolio.theme = { ...(portfolio.theme || {}), ...theme };
+    }
+    const root = document.documentElement;
+
+    if (theme.colorAccent) {
+      root.style.setProperty("--theme-accent", theme.colorAccent);
+      root.style.setProperty("--color-yellow", theme.colorAccent);
+    }
+    if (theme.colorPop) {
+      root.style.setProperty("--theme-pop", theme.colorPop);
+    }
+    if (theme.bgDeep) {
+      root.style.setProperty("--theme-bg-deep", theme.bgDeep);
+      root.style.setProperty("--color-bg-dark", theme.bgDeep);
+      if (workPage) workPage.style.background = theme.bgDeep;
+    }
+    if (theme.bgCard) {
+      root.style.setProperty("--theme-bg-card", theme.bgCard);
+    }
+    if (theme.textColor) {
+      root.style.setProperty("--theme-text", theme.textColor);
+      root.style.setProperty("--color-white", theme.textColor);
+      if (workPage) workPage.style.color = theme.textColor;
+    }
+    if (theme.textMuted) {
+      root.style.setProperty("--theme-text-muted", theme.textMuted);
+    }
+    if (theme.cardRadius != null) {
+      root.style.setProperty("--theme-card-radius", `${theme.cardRadius}px`);
+    }
+    if (theme.cardSize != null) {
+      root.style.setProperty("--theme-card-scale", `${theme.cardSize / 100}`);
+    }
+    if (theme.heroScale != null) {
+      root.style.setProperty("--theme-hero-scale", `${theme.heroScale / 100}`);
+    }
+    if (theme.glowIntensity != null) {
+      root.style.setProperty("--theme-glow-intensity", `${theme.glowIntensity}%`);
+    }
+    if (theme.backdropBlur != null) {
+      root.style.setProperty("--theme-backdrop-blur", `${theme.backdropBlur}px`);
+    }
+
+    // Update showreel scroll dialog badge text
+    const showreelBadge = theme.showreelBadge || (portfolio && portfolio.theme && portfolio.theme.showreelBadge) || "scroll me";
+    let dialogs = document.querySelectorAll(".showreel-scroll-dialog");
+    if (dialogs.length === 0) {
+      try {
+        if (typeof ensureShowreelScrollDialog === "function") ensureShowreelScrollDialog();
+      } catch (_) {}
+      dialogs = document.querySelectorAll(".showreel-scroll-dialog");
+    }
+    dialogs.forEach((dialog) => {
+      dialog.innerHTML = `<span class="dialog-icon">&darr;</span> ${escapeHtml(showreelBadge)}`;
+    });
+
+    // Update hero title
+    if (theme.heroTitle) {
+      const heroTitle = document.querySelector(".zeox-work-hero-title");
+      if (heroTitle) {
+        heroTitle.setAttribute("aria-label", theme.heroTitle);
+        const words = theme.heroTitle.trim().split(/\s+/);
+        if (words.length > 1) {
+          heroTitle.innerHTML = words
+            .map((w) => `<span class="zeox-work-hero-line"><span>${escapeHtml(w)}</span></span>`)
+            .join("\n");
+        } else {
+          heroTitle.innerHTML = `<span class="zeox-work-hero-line"><span>${escapeHtml(theme.heroTitle)}</span></span>`;
+        }
+      }
+    }
+
+    // Update marquee / track text
+    if (theme.marqueeText) {
+      document.querySelectorAll(".marquee-track span, .running-text, .marquee-text").forEach((el) => {
+        el.textContent = theme.marqueeText;
+      });
+    }
+  }
+
   function patchWorkContent(nextPortfolio) {
     const nextSignature = JSON.stringify(nextPortfolio);
     if (nextSignature === portfolioSignature) {
@@ -886,6 +973,9 @@
     portfolio = nextPortfolio;
     portfolioSignature = nextSignature;
     scheduleSpiralManifestSync();
+    if (nextPortfolio.theme) {
+      applyDynamicTheme(nextPortfolio.theme);
+    }
     if (!workPage) return;
 
     if (emailChanged) {
@@ -3112,6 +3202,32 @@ let fbConfig = null;
       }
       portfolioSignature = JSON.stringify(portfolio);
       scheduleSpiralManifestSync();
+      if (portfolio && portfolio.theme) {
+        applyDynamicTheme(portfolio.theme);
+      }
+      try {
+        if (typeof window !== "undefined" && !window.__studioThemeSyncActive) {
+          window.__studioThemeSyncActive = true;
+          if (typeof BroadcastChannel !== "undefined") {
+            window.__studioBroadcastChannel = new BroadcastChannel("studio_theme_sync");
+            window.__studioBroadcastChannel.onmessage = (event) => {
+              if (event?.data?.type === "STUDIO_THEME_UPDATE" && event.data.theme) {
+                applyDynamicTheme(event.data.theme);
+              }
+            };
+          }
+          window.addEventListener("storage", (e) => {
+            if (e.key === "studio_live_theme_preview" && e.newValue) {
+              try {
+                const parsed = JSON.parse(e.newValue);
+                if (parsed && parsed.theme) applyDynamicTheme(parsed.theme);
+              } catch (_) {}
+            }
+          });
+        }
+      } catch (err) {
+        console.warn("[Studio Live Sync] Channel error:", err);
+      }
       workPage = createWorkPage(portfolio);
       setupSmoothWorksScroll(workPage);
       workPage.setAttribute("inert", "");
@@ -3483,13 +3599,15 @@ let fbConfig = null;
     const showreel = document.querySelector(".showreel-thumbnail");
     if (!showreel) return;
     const wrapper = showreel.querySelector(".thumbnail-wrapper") || showreel;
-    if (wrapper.querySelector(".showreel-scroll-dialog") || showreel.querySelector(".showreel-scroll-dialog")) return;
-
-    const dialog = document.createElement("div");
-    dialog.className = "showreel-scroll-dialog";
-    dialog.setAttribute("aria-hidden", "true");
-    dialog.innerHTML = '<span class="dialog-icon">&darr;</span> scroll me';
-    wrapper.appendChild(dialog);
+    let dialog = wrapper.querySelector(".showreel-scroll-dialog") || showreel.querySelector(".showreel-scroll-dialog");
+    const badgeText = portfolio?.theme?.showreelBadge || "scroll me";
+    if (!dialog) {
+      dialog = document.createElement("div");
+      dialog.className = "showreel-scroll-dialog";
+      dialog.setAttribute("aria-hidden", "true");
+      wrapper.appendChild(dialog);
+    }
+    dialog.innerHTML = `<span class="dialog-icon">&darr;</span> ${escapeHtml(badgeText)}`;
   }
 
   function setupSwipeableShowreel() {

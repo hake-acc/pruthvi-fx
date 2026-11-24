@@ -6254,3 +6254,72 @@ body:has(.wrapper.opened) .switch {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(3px); }
 }
+
+
+
+/* ==========================================================================
+   DYNAMIC STUDIO THEME ENGINE TOKENS & VISUAL BUILDER INTEGRATION
+   ========================================================================== */
+:root {
+  --theme-accent: #a855f7;
+  --theme-pop: #c084fc;
+  --theme-bg-deep: #07060b;
+  --theme-bg-card: #12101a;
+  --theme-text: #ffffff;
+  --theme-text-muted: #8e8a9f;
+  --theme-card-radius: 20px;
+  --theme-card-scale: 1;
+  --theme-hero-scale: 1;
+  --theme-glow-intensity: 60%;
+  --theme-backdrop-blur: 24px;
+}
+
+.zeox-work-page {
+  background: var(--theme-bg-deep, #000000) !important;
+  color: var(--theme-text, #f7f7f5) !important;
+}
+
+.zeox-work-hero-title {
+  transform: scale(var(--theme-hero-scale, 1)) !important;
+  transform-origin: left center !important;
+  color: var(--theme-text, inherit) !important;
+}
+
+.zeox-work-card {
+  border-radius: var(--theme-card-radius, 20px) !important;
+  background: var(--theme-bg-card, #0e0d14) !important;
+  transform: scale(var(--theme-card-scale, 1)) !important;
+  transform-origin: center center !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease !important;
+}
+
+.zeox-work-card-media,
+.zeox-work-card-media img {
+  border-radius: calc(var(--theme-card-radius, 20px) - 4px) !important;
+}
+
+.showreel-modal {
+  background: var(--theme-bg-deep, #050408) !important;
+  backdrop-filter: blur(var(--theme-backdrop-blur, 24px)) !important;
+  -webkit-backdrop-filter: blur(var(--theme-backdrop-blur, 24px)) !important;
+}
+
+.stack-card {
+  border-radius: var(--theme-card-radius, 22px) !important;
+  background: var(--theme-bg-card, #09080e) !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 calc(var(--theme-glow-intensity, 60%) * 0.8) var(--theme-accent, rgba(120, 60, 255, 0.14)) !important;
+  transform: scale(var(--theme-card-scale, 1)) !important;
+}
+
+.showreel-scroll-dialog {
+  background: var(--theme-bg-card, rgba(12, 10, 20, 0.94)) !important;
+  color: var(--theme-text, #ffffff) !important;
+  border-color: var(--theme-accent, rgba(255, 255, 255, 0.22)) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 calc(var(--theme-glow-intensity, 60%) * 0.4) var(--theme-accent, rgba(139, 92, 246, 0.3)) !important;
+  backdrop-filter: blur(var(--theme-backdrop-blur, 18px)) !important;
+  -webkit-backdrop-filter: blur(var(--theme-backdrop-blur, 18px)) !important;
+}
+
+.showreel-scroll-dialog .dialog-icon {
+  color: var(--theme-pop, #c084fc) !important;
+}
