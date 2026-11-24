@@ -2999,9 +2999,10 @@ let fbConfig = null;
      ========================================================================== */
   
   /* ==========================================================================
-     Showcase Reel: Vertical Stacking Cards Scroll Overlay
+     Showcase Reel: Pure Visual Stacking Cards Scroll Overlay (Zero Slop)
      ========================================================================== */
   let showreelStackModal = null;
+  let stackMomentumRaf = null;
 
   function createShowreelStack() {
     if (document.querySelector(".pruthvi-showreel-stack")) {
@@ -3015,18 +3016,9 @@ let fbConfig = null;
     modal.setAttribute("aria-label", "Showcase Reel Stacking Cards");
     modal.innerHTML = `
       <div class="stack-backdrop"></div>
-      <header class="stack-header">
-        <div class="stack-brand">
-          <span class="stack-brand-badge">SHOWCASE REEL</span>
-          <span class="stack-title">Scroll Down to Stack Thumbnails</span>
-        </div>
-        <button class="stack-close-btn" type="button" aria-label="Close Showcase">&times;</button>
-      </header>
+      <button class="stack-close-btn" type="button" aria-label="Close Showcase">&times;</button>
       <div class="stack-scroll-wrapper">
         <div class="stack-card-list"></div>
-      </div>
-      <div class="stack-hint-pill">
-        <span>&darr;</span> SCROLL DOWN TO STACK CARDS
       </div>
     `;
 
@@ -3037,10 +3029,13 @@ let fbConfig = null;
     closeBtn.addEventListener("click", closeShowreelStack);
     backdrop.addEventListener("click", closeShowreelStack);
 
-    // Scroll Stacking 3D Dynamics
+    // Ultra-smooth 60/120fps Scroll Stacking Dynamics
     const scrollWrapper = modal.querySelector(".stack-scroll-wrapper");
     scrollWrapper.addEventListener("scroll", () => {
-      updateCardStackingTransforms(scrollWrapper);
+      if (stackMomentumRaf) cancelAnimationFrame(stackMomentumRaf);
+      stackMomentumRaf = requestAnimationFrame(() => {
+        updateCardStackingTransforms(scrollWrapper);
+      });
     }, { passive: true });
 
     document.addEventListener("keydown", (e) => {
@@ -3061,26 +3056,12 @@ let fbConfig = null;
       : (portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails || []);
 
     items.forEach((item, idx) => {
-      const num = idx + 1;
-      const meta = typeof THUMBNAIL_CREATOR_MAP !== "undefined"
-        ? THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length]
-        : null;
-      const creatorName = item.creator || meta?.creator || "INSANE RMK";
       const slot = document.createElement("div");
       slot.className = "stack-card-slot";
       slot.dataset.index = String(idx);
       slot.innerHTML = `
         <div class="stack-card">
-          <img src="${item.src}" alt="${item.title || `Thumbnail ${num}`}" loading="${idx < 3 ? 'eager' : 'lazy'}">
-          <div class="stack-card-overlay">
-            <div class="stack-card-top-bar">
-              <span class="stack-card-badge">THUMBNAIL #${String(num).padStart(2, '0')}</span>
-              <span class="stack-card-creator">${creatorName}</span>
-            </div>
-            <div class="stack-card-bottom-bar">
-              <span class="stack-card-title">${item.title || `Thumbnail ${num}`}</span>
-            </div>
-          </div>
+          <img src="${item.src}" alt="" loading="${idx < 3 ? 'eager' : 'lazy'}" decoding="async">
         </div>
       `;
       list.appendChild(slot);
@@ -3089,7 +3070,7 @@ let fbConfig = null;
 
   function updateCardStackingTransforms(scrollWrapper) {
     const slots = scrollWrapper.querySelectorAll(".stack-card-slot");
-    const stickyTop = 110;
+    const stickyTop = 80;
 
     slots.forEach((slot, idx) => {
       const card = slot.querySelector(".stack-card");
@@ -3099,16 +3080,18 @@ let fbConfig = null;
 
       if (distFromSticky <= 0) {
         // Card is pinned / stacked at top!
+        // As user scrolls further down, subsequent cards smoothly overlap on top
         const pinnedDepth = Math.abs(distFromSticky);
-        const scale = Math.max(0.85, 1 - (pinnedDepth * 0.00025));
-        const opacity = Math.max(0.4, 1 - (pinnedDepth * 0.0012));
-        const translateY = Math.min(30, pinnedDepth * 0.03);
-        const blur = Math.min(8, pinnedDepth * 0.015);
+        const scale = Math.max(0.86, 1 - (pinnedDepth * 0.00022));
+        const opacity = Math.max(0.35, 1 - (pinnedDepth * 0.001));
+        const translateY = Math.min(26, pinnedDepth * 0.025);
+        const blur = Math.min(6, pinnedDepth * 0.012);
 
         card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
         card.style.opacity = opacity.toFixed(2);
-        card.style.filter = blur > 0.5 ? `blur(${blur.toFixed(1)}px)` : "none";
+        card.style.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : "none";
       } else {
+        // Approaching card: natural crisp 100% scale
         card.style.transform = "scale(1) translateY(0)";
         card.style.opacity = "1";
         card.style.filter = "none";
@@ -3136,7 +3119,7 @@ let fbConfig = null;
     }
   }
 
-  // Expose globally so external callers or inline triggers can always access it
+  // Expose globally
   window.openShowreelDeck = openShowreelDeck;
   window.closeShowreelStack = closeShowreelStack;
 
