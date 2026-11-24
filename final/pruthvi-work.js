@@ -1,8 +1,7 @@
 
   /* ==========================================================================
-     Smooth Momentum Scroll System for Works Page
+     Pacôme Pertant Exponential Damping Momentum Scroll System
      ========================================================================== */
-  let smoothScrollInstance = null;
   function setupSmoothWorksScroll(container) {
     if (!container || container.dataset.smoothScrollInit === "true") return;
     container.dataset.smoothScrollInit = "true";
@@ -11,19 +10,26 @@
     let targetY = container.scrollTop;
     let isTicking = false;
     let isWheeling = false;
-    let isTouching = false;
-    let wheelTimeout = null;
+    let lastTime = performance.now();
 
     function lerp(start, end, factor) {
-      return start + (end - start) * factor;
+      return (1 - factor) * start + factor * end;
     }
 
-    function onRaf() {
+    // Frame-rate independent exponential damping (Pacôme Pertant core method)
+    function damp(current, target, smoothing, dt) {
+      return lerp(current, target, 1 - Math.exp(-smoothing * dt));
+    }
+
+    function onRaf(now) {
       if (!isTicking) return;
+      const dt = Math.min(0.1, (now - lastTime) / 1000);
+      lastTime = now;
+
       const diff = Math.abs(targetY - currentY);
-      if (diff > 0.4) {
-        currentY = lerp(currentY, targetY, 0.065);
-        container.scrollTop = currentY;
+      if (diff > 0.3) {
+        currentY = damp(currentY, targetY, 14, dt);
+        container.scrollTop = Math.round(currentY * 10) / 10;
         requestAnimationFrame(onRaf);
       } else {
         currentY = targetY;
@@ -34,35 +40,23 @@
     }
 
     container.addEventListener("wheel", (e) => {
-      // Allow native trackpad gestures or smooth out mouse wheels
-      if (Math.abs(e.deltaY) < 1) return;
+      if (Math.abs(e.deltaY) < 0.5) return;
       e.preventDefault();
       isWheeling = true;
-      const maxScroll = container.scrollHeight - container.clientHeight;
-      // Multiplier tuned for silk-smooth acceleration & momentum
-      targetY = Math.max(0, Math.min(maxScroll, targetY + e.deltaY * 0.95));
+      const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight);
+      // Pacôme proportional wheel delta
+      targetY = Math.max(0, Math.min(maxScroll, targetY + e.deltaY * 0.85));
       if (!isTicking) {
         isTicking = true;
-        currentY = container.scrollTop;
+        lastTime = performance.now();
         requestAnimationFrame(onRaf);
       }
-      window.clearTimeout(wheelTimeout);
-      wheelTimeout = window.setTimeout(() => {
-        isWheeling = false;
-      }, 150);
     }, { passive: false });
 
     container.addEventListener("touchstart", () => {
-      isTouching = true;
       targetY = container.scrollTop;
       currentY = container.scrollTop;
       isTicking = false;
-    }, { passive: true });
-
-    container.addEventListener("touchend", () => {
-      isTouching = false;
-      targetY = container.scrollTop;
-      currentY = container.scrollTop;
     }, { passive: true });
 
     container.addEventListener("scroll", () => {
@@ -871,6 +865,19 @@
   // =========================================================================
   // DYNAMIC STUDIO THEME ENGINE (REAL-TIME VISUAL BUILDER INTEGRATION)
   // =========================================================================
+  
+  // Single-phrase showreel orbit generator (Pacôme Pertant method: split individual chars with staggered delays)
+  function updateShowreelOrbitText(text) {
+    const container = document.querySelector(".showreel-thumbnail .marquee-container");
+    if (!container) return;
+    const raw = (text && typeof text === "string" ? text : "showreel • 2025 • showreel • 2025 ").trim();
+    const str = raw + " ";
+    container.innerHTML = str.split("").map((char, index) => {
+      const displayChar = char === " " ? "&nbsp;" : escapeHtml(char);
+      return `<span class="marquee-text" style="animation-delay:${(index * 0.12).toFixed(2)}s;" data-v-447240ac>${displayChar}</span>`;
+    }).join("");
+  }
+
   function applyDynamicTheme(theme) {
     if (!theme || typeof theme !== "object") return;
     if (typeof portfolio === "object" && portfolio) {
@@ -948,7 +955,8 @@
 
     // Update marquee / track text
     if (theme.marqueeText) {
-      document.querySelectorAll(".marquee-track span, .running-text, .marquee-text").forEach((el) => {
+      updateShowreelOrbitText(theme.marqueeText);
+      document.querySelectorAll(".marquee-track span, .running-text").forEach((el) => {
         el.textContent = theme.marqueeText;
       });
     }
@@ -1947,24 +1955,20 @@
     if (!workPage || workProgressFrame) return;
     workProgressFrame = requestAnimationFrame(() => {
       workProgressFrame = null;
-      const viewportHeight = Math.max(1, workPage.clientHeight);
-      workPage
-        .querySelectorAll(".zeox-work-card.in-view")
-        .forEach((card) => {
-          const rect = card.getBoundingClientRect();
-          if (rect.bottom < 0 || rect.top > viewportHeight) return;
-          const position =
-            (rect.top + rect.height / 2 - viewportHeight / 2) /
-            viewportHeight;
-          const imageOffset = Math.max(
-            -10,
-            Math.min(10, position * -18)
-          );
-          card.style.setProperty(
-            "--zeox-image-y",
-            `${imageOffset.toFixed(2)}px`
-          );
-        });
+      // High-performance scroll update: zero layout thrashing, composite transforms only
+      const scrollTop = workPage.scrollTop;
+      const viewportHeight = workPage.clientHeight || 900;
+      const cards = workPage.querySelectorAll(".zeox-work-card.in-view");
+      cards.forEach((card) => {
+        const top = card.offsetTop - scrollTop;
+        if (top < -card.offsetHeight || top > viewportHeight) return;
+        const position = (top + card.offsetHeight / 2 - viewportHeight / 2) / viewportHeight;
+        const imageOffset = Math.max(-10, Math.min(10, position * -18));
+        const media = card.querySelector(".zeox-work-card-media");
+        if (media) {
+          media.style.transform = `translate3d(0, ${imageOffset.toFixed(1)}px, 0)`;
+        }
+      });
       updateScrollScenes();
     });
   }

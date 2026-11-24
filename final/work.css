@@ -4847,8 +4847,8 @@ body:has(.zeox-work-page.open.is-social-surface)
 /* Elevated Boutique Menu Inner Styling */
 .subwrapper[data-v-b1c462f7] {
   background-color: rgba(12, 10, 18, 0.94) !important;
-  backdrop-filter: blur(28px) saturate(1.8) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(168, 85, 247, 0.28) !important;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 35px rgba(147, 51, 234, 0.2) !important;
 }
@@ -5528,8 +5528,8 @@ body:has(.wrapper.opened) .switch {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at center, rgba(16, 10, 28, 0.88) 0%, rgba(4, 3, 8, 0.96) 100%);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
   z-index: 1;
 }
@@ -5729,8 +5729,8 @@ body:has(.wrapper.opened) .switch {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 50% 50%, rgba(14, 11, 24, 0.96) 0%, rgba(3, 2, 6, 0.99) 100%);
-  backdrop-filter: blur(48px) saturate(200%);
-  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 1;
 }
 
@@ -5816,13 +5816,13 @@ body:has(.wrapper.opened) .switch {
   overflow: hidden;
   background: #09080e;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(120, 60, 255, 0.14);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65), 0 0 15px rgba(120, 60, 255, 0.1);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
   will-change: transform, opacity, filter;
 }
 
 .stack-card-slot:hover .stack-card {
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.95), 0 0 60px rgba(160, 100, 255, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(160, 100, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.25);
 }
 
