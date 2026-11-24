@@ -3307,6 +3307,8 @@ let fbConfig = null;
   // Expose globally
   window.openShowreelDeck = openShowreelDeck;
   window.closeShowreelStack = closeShowreelStack;
+  window.openWorkView = openWorkView;
+  window.closeWorkView = closeWorkView;
 
 
   /* ==========================================================================
