@@ -2993,7 +2993,7 @@
     }
 
     // Fallback: If mascot complete event hasn't triggered after 4.5s, reveal gracefully
-    window.setTimeout(revealButtons, 600);
+    window.setTimeout(revealButtons, 4500);
 
     // Allow clicking anywhere on the screen to enter ONLY AFTER buttons are revealed
     loader.addEventListener('click', (e) => {
@@ -3696,14 +3696,15 @@ let fbConfig = null;
   };
   window.PruthviFXPortfolio = window.NotZeoxPortfolio;
 
-  if (document.readyState === "complete") {
-    window.setTimeout(startThumbnailPortfolio, 150);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      startThumbnailPortfolio();
+    });
+    window.addEventListener("load", () => {
+      startThumbnailPortfolio();
+    }, { once: true });
   } else {
-    window.addEventListener(
-      "load",
-      () => window.setTimeout(startThumbnailPortfolio, 150),
-      { once: true }
-    );
+    startThumbnailPortfolio();
   }
   setupEvents();
 })();
