@@ -2622,8 +2622,14 @@
     document.querySelectorAll(".switch .button").forEach((wrapper, index) => {
       const button = wrapper.querySelector("button");
       if (!button) return;
-      if (index === 0) button.dataset.zeoxHomeTrigger = "true";
-      // Allow switch to cleanly toggle between Nuxt spiral and Nuxt list
+      if (index === 0) {
+        button.dataset.zeoxHomeTrigger = "true";
+      } else {
+        button.dataset.zeoxWorkTrigger = "true";
+        button.querySelectorAll("span").forEach((span) => {
+          if (span.textContent !== "work") span.textContent = "work";
+        });
+      }
     });
 
     document.querySelectorAll(".links .link").forEach((link) => {
