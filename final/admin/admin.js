@@ -63,6 +63,17 @@ function getSavedFirebaseConfig() {
   }
 }
 
+// Authorized Administrator Whitelist (Lock CMS from unauthorized accounts)
+const AUTHORIZED_ADMIN_EMAILS = [
+  "admin@pruthvi-fx.com",
+  "notmafiyaxd@gmail.com"
+];
+
+function isAuthorizedAdmin(email) {
+  if (!email) return false;
+  return AUTHORIZED_ADMIN_EMAILS.includes(email.toLowerCase());
+}
+
 function initFirebase(config) {
   try {
     if (!firebase.apps.length) {
@@ -74,10 +85,17 @@ function initFirebase(config) {
       storage = firebase.storage();
     } catch (_) {}
 
-    // Listen to Auth State
-    auth.onAuthStateChanged((user) => {
+    // Listen to Auth State (Enforce Whitelist)
+    auth.onAuthStateChanged(async (user) => {
       currentUser = user;
       if (user) {
+        if (!isAuthorizedAdmin(user.email)) {
+          console.warn("Unauthorized login attempt:", user.email);
+          showToast("Access Denied: You are not an authorized administrator.", "error");
+          await auth.signOut();
+          showAuthScreen();
+          return;
+        }
         showDashboard(user);
       } else {
         showAuthScreen();
@@ -149,22 +167,8 @@ document.getElementById("reconfigureFbLink").addEventListener("click", (e) => {
   showFirebaseConfigScreen();
 });
 
-// 4. Email/Password Authentication (Strictly No Google Auth)
-let isRegisterMode = false;
-const toggleRegisterLink = document.getElementById("toggleRegisterLink");
+// 4. Email/Password Authentication (Strict Admin Sign-In Only — Public Registration Disabled)
 const loginSubmitBtn = document.getElementById("loginSubmitBtn");
-
-toggleRegisterLink.addEventListener("click", (e) => {
-  e.preventDefault();
-  isRegisterMode = !isRegisterMode;
-  if (isRegisterMode) {
-    loginSubmitBtn.textContent = "Register Admin Account";
-    toggleRegisterLink.textContent = "Back to Login";
-  } else {
-    loginSubmitBtn.textContent = "Enter Studio Dashboard";
-    toggleRegisterLink.textContent = "Create Admin User";
-  }
-});
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -173,23 +177,23 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   if (!email || !pass) return;
 
+  if (!isAuthorizedAdmin(email)) {
+    showToast("Access Denied: Unauthorized admin email address.", "error");
+    return;
+  }
+
   loginSubmitBtn.disabled = true;
   loginSubmitBtn.textContent = "Authenticating...";
 
   try {
-    if (isRegisterMode) {
-      await auth.createUserWithEmailAndPassword(email, pass);
-      showToast("Admin account created successfully!", "success");
-    } else {
-      await auth.signInWithEmailAndPassword(email, pass);
-      showToast("Welcome back, Pruthvi!", "success");
-    }
+    await auth.signInWithEmailAndPassword(email, pass);
+    showToast("Welcome back, Pruthvi!", "success");
   } catch (err) {
     console.error("Auth error:", err);
-    showToast(err.message, "error");
+    showToast(err.message || "Invalid admin credentials", "error");
   } finally {
     loginSubmitBtn.disabled = false;
-    loginSubmitBtn.textContent = isRegisterMode ? "Register Admin Account" : "Enter Studio Dashboard";
+    loginSubmitBtn.textContent = "Enter Studio Dashboard";
   }
 });
 
