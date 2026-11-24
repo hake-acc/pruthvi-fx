@@ -32,6 +32,23 @@ html.zeox-work-open .home-overlay-wrapper > .showreel-thumbnail {
     transform 0.55s var(--ease-spring);
 }
 
+/* Seamlessly hide showreel thumbnail whenever menu drawer is open (Desktop, Tablet & Mobile) */
+body:has(.wrapper[data-v-b1c462f7].opened) .showreel-thumbnail,
+body:has(.subwrapper[data-v-b1c462f7].opened) .showreel-thumbnail,
+body:has(.close-button[data-v-cf355cbc].opened) .showreel-thumbnail,
+body.menu-is-open .showreel-thumbnail,
+html.menu-is-open .showreel-thumbnail,
+.menu-opened .showreel-thumbnail {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transform: translateY(28px) scale(0.92) !important;
+  transition:
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.25s !important;
+}
+
 html.zeox-work-open canvas.webgl {
   opacity: 0 !important;
   transform: scale(0.985);

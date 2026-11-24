@@ -3816,6 +3816,88 @@ let fbConfig = null;
     }
   }
 
+  function fixDiscordMenuIcon() {
+    const discordLinks = document.querySelectorAll(
+      '.menu-social-links a.social-link[href*="discord"], a.social-link[aria-label*="Discord"], a.social-link[href*="discord.gg"]'
+    );
+    discordLinks.forEach((a) => {
+      const inner = a.querySelector('.social-link-inner');
+      if (inner) {
+        const existingSvg = inner.querySelector('svg');
+        if (!existingSvg || !existingSvg.querySelector('path')) {
+          inner.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-6caa20cf><path fill="currentColor" d="${DISCORD_ICON_PATH}"></path></svg>`;
+        }
+      }
+    });
+  }
+
+  function setupMenuShowreelSync() {
+    const thumb = document.querySelector('.showreel-thumbnail');
+    const closeBtn = document.querySelector('.close-button[data-v-cf355cbc]');
+    const menuBtn = document.querySelector('button.button[data-v-cf355cbc]');
+
+    function updateMenuState() {
+      const isMenuOpened = Boolean(
+        document.querySelector('.wrapper.opened[data-v-b1c462f7]') ||
+        document.querySelector('.subwrapper.opened[data-v-b1c462f7]') ||
+        (closeBtn && closeBtn.classList.contains('opened')) ||
+        (menuBtn && menuBtn.classList.contains('opened'))
+      );
+
+      const showreelEl = thumb || document.querySelector('.showreel-thumbnail');
+
+      if (isMenuOpened) {
+        document.body.classList.add('menu-is-open');
+        document.documentElement.classList.add('menu-is-open');
+        if (showreelEl) {
+          showreelEl.style.setProperty('opacity', '0', 'important');
+          showreelEl.style.setProperty('pointer-events', 'none', 'important');
+          showreelEl.style.setProperty('visibility', 'hidden', 'important');
+          showreelEl.style.setProperty('transform', 'translateY(28px) scale(0.92)', 'important');
+        }
+        fixDiscordMenuIcon();
+      } else {
+        document.body.classList.remove('menu-is-open');
+        document.documentElement.classList.remove('menu-is-open');
+        if (showreelEl && !document.documentElement.classList.contains('zeox-work-open')) {
+          showreelEl.style.removeProperty('opacity');
+          showreelEl.style.removeProperty('pointer-events');
+          showreelEl.style.removeProperty('visibility');
+          showreelEl.style.removeProperty('transform');
+        }
+      }
+    }
+
+    const observer = new MutationObserver(updateMenuState);
+    const targetNodes = [
+      document.querySelector('.wrapper[data-v-b1c462f7]'),
+      document.querySelector('.subwrapper[data-v-b1c462f7]'),
+      closeBtn,
+      menuBtn
+    ].filter(Boolean);
+
+    targetNodes.forEach(node => {
+      observer.observe(node, { attributes: true, attributeFilter: ['class', 'style', 'aria-expanded'] });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-v-cf355cbc]') || e.target.closest('.close-button') || e.target.closest('button.button') || e.target.closest('.switch')) {
+        setTimeout(updateMenuState, 30);
+        setTimeout(updateMenuState, 150);
+        setTimeout(updateMenuState, 450);
+      }
+    });
+
+    const interval = setInterval(() => {
+      updateMenuState();
+      fixDiscordMenuIcon();
+    }, 400);
+    setTimeout(() => clearInterval(interval), 5000);
+
+    updateMenuState();
+    fixDiscordMenuIcon();
+  }
+
   window.NotZeoxPortfolio = {
     openImage,
     closeImage,
@@ -3827,12 +3909,16 @@ let fbConfig = null;
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       startThumbnailPortfolio();
+      setupMenuShowreelSync();
     });
     window.addEventListener("load", () => {
       startThumbnailPortfolio();
+      setupMenuShowreelSync();
     }, { once: true });
   } else {
     startThumbnailPortfolio();
+    setupMenuShowreelSync();
   }
   setupEvents();
+  setupMenuShowreelSync();
 })();
