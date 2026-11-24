@@ -115,7 +115,7 @@
           </div>
           <div class="deck-card-info">
             <span class="deck-card-title">Thumbnail ${num}</span>
-            <span class="deck-card-creator">${meta?.creator || ''}</span>
+            <span class="deck-card-creator">${item.creator || meta?.creator || ''}</span>
           </div>
         </div>
       `;
@@ -3075,6 +3075,70 @@
     setupLoaderEntry();
   }
 
+  
+  /* ==========================================================================
+     FIRESTORE LIVE STREAM INTEGRATION
+     Connects to live Firestore collection("portfolio").doc("live")
+     for instant real-time live updates of Thumbnails, Creators & Meta
+     ========================================================================== */
+  let firestoreListenerUnsub = null;
+
+  function initFirestoreLiveSync() {
+    try {
+      const fbConfigStr = localStorage.getItem("pruthvi_fx_fb_config");
+      if (!fbConfigStr) return;
+      const fbConfig = JSON.parse(fbConfigStr);
+      if (!fbConfig || !fbConfig.apiKey || !fbConfig.projectId) return;
+
+      if (!window.firebase) {
+        // Dynamically inject Firebase compat scripts if not already present
+        const sApp = document.createElement("script");
+        sApp.src = "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js";
+        sApp.onload = () => {
+          const sFs = document.createElement("script");
+          sFs.src = "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js";
+          sFs.onload = () => attachFirestoreListener(fbConfig);
+          document.head.appendChild(sFs);
+        };
+        document.head.appendChild(sApp);
+      } else {
+        attachFirestoreListener(fbConfig);
+      }
+    } catch (e) {
+      console.warn("Firestore live sync unavailable:", e);
+    }
+  }
+
+  function attachFirestoreListener(config) {
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(config);
+      }
+      const db = firebase.firestore();
+      if (firestoreListenerUnsub) {
+        firestoreListenerUnsub();
+      }
+
+      firestoreListenerUnsub = db.collection("portfolio").doc("live").onSnapshot((doc) => {
+        if (doc.exists) {
+          const liveData = doc.data();
+          if (liveData && typeof liveData === "object") {
+            try {
+              const normalized = normalizePortfolioManifest(liveData, "");
+              patchWorkContent(normalized);
+            } catch (err) {
+              console.warn("Live Firestore sync normalization error:", err);
+            }
+          }
+        }
+      }, (err) => {
+        console.warn("Firestore live stream warning:", err);
+      });
+    } catch (err) {
+      console.warn("Unable to attach Firestore live listener:", err);
+    }
+  }
+
   async function startThumbnailPortfolio() {
     if (document.documentElement.dataset.zeoxWorkReady === "true") return;
     document.documentElement.dataset.zeoxWorkReady = "true";
@@ -3109,6 +3173,7 @@
         closeWorkView({ push: false, silent: true });
       }
       startContentPolling();
+      initFirestoreLiveSync();
       setupSwipeableShowreel();
       setupDesktopCrosshair();
       setupCardScrollProgression();
