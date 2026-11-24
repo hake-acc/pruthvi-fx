@@ -3564,11 +3564,16 @@ let fbConfig = null;
     wrapper.addEventListener("pointermove", onPointerMove);
     wrapper.addEventListener("pointerup", onPointerUp);
     wrapper.addEventListener("pointercancel", onPointerUp);
-    wrapper.addEventListener("click", (e) => {
+    const handleShowreelOpen = (e) => {
       e.preventDefault();
       e.stopPropagation();
       openShowreelDeck();
-    });
+    };
+    wrapper.addEventListener("click", handleShowreelOpen, true);
+    const img = showreel.querySelector("img");
+    if (img) {
+      img.addEventListener("click", handleShowreelOpen, true);
+    }
   }
 
   /* ==========================================================================
