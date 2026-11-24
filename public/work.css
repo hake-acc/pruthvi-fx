@@ -6242,3 +6242,69 @@ body:has(.wrapper.opened) .switch {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(3px); }
 }
+
+
+
+/* ==========================================================================
+   SHOWREEL "SCROLL ME" FLOATING DIALOG - PRECISE ANCHORING
+   Anchored directly onto .thumbnail-wrapper with high z-index & visible overflow
+   ========================================================================== */
+
+.showreel-thumbnail {
+  overflow: visible !important;
+  z-index: 999 !important;
+}
+
+.thumbnail-wrapper {
+  overflow: visible !important;
+}
+
+.showreel-scroll-dialog {
+  position: absolute !important;
+  top: -44px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(12, 10, 20, 0.94) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 9999px !important;
+  padding: 6px 14px 6px 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  color: #ffffff !important;
+  font-family: monospace !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 92, 246, 0.3) !important;
+  pointer-events: none !important;
+  z-index: 99999 !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: dialogFloat 2.6s ease-in-out infinite !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
+}
+
+.showreel-scroll-dialog::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+  border-top: 6px solid rgba(12, 10, 20, 0.94) !important;
+}
+
+.thumbnail-wrapper:hover .showreel-scroll-dialog,
+.showreel-thumbnail:hover .showreel-scroll-dialog {
+  transform: translateX(-50%) translateY(-5px) scale(1.06) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 255, 255, 0.3) !important;
+}

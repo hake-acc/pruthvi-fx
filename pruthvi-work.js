@@ -3123,12 +3123,14 @@ let fbConfig = null;
       startContentPolling();
       initFirestoreLiveSync();
       setupSwipeableShowreel();
+        ensureShowreelScrollDialog();
       setupDesktopCrosshair();
       setupCardScrollProgression();
       setupBeforeAfterSliders(workPage);
       setupReviewsReveal(workPage);
       setInterval(() => {
         setupSwipeableShowreel();
+        ensureShowreelScrollDialog();
         setupCardScrollProgression();
       setupBeforeAfterSliders(workPage);
       setupReviewsReveal(workPage);
@@ -3475,16 +3477,19 @@ let fbConfig = null;
 
 
   
+  
   /* Inject "scroll me" dialog box onto showreel thumbnail */
   function ensureShowreelScrollDialog() {
     const showreel = document.querySelector(".showreel-thumbnail");
-    if (!showreel || showreel.querySelector(".showreel-scroll-dialog")) return;
+    if (!showreel) return;
+    const wrapper = showreel.querySelector(".thumbnail-wrapper") || showreel;
+    if (wrapper.querySelector(".showreel-scroll-dialog") || showreel.querySelector(".showreel-scroll-dialog")) return;
 
     const dialog = document.createElement("div");
     dialog.className = "showreel-scroll-dialog";
     dialog.setAttribute("aria-hidden", "true");
     dialog.innerHTML = '<span class="dialog-icon">&darr;</span> scroll me';
-    showreel.appendChild(dialog);
+    wrapper.appendChild(dialog);
   }
 
   function setupSwipeableShowreel() {
