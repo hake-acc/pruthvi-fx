@@ -1060,6 +1060,147 @@
             </div>
           </section>
 
+          <!-- ==========================================================================
+               BOUTIQUE BEFORE / AFTER SECTION
+               ========================================================================== -->
+          <section class="pruthvi-ba-section" id="before-after" aria-label="Before and After transformations">
+            <header class="pruthvi-ba-header">
+              <span class="pruthvi-section-eyebrow">Transformation</span>
+              <h2 class="pruthvi-ba-title">From raw capture to the click.</h2>
+            </header>
+            <div class="pruthvi-ba-grid">
+              <!-- Item 1: Minecraft Hardcore / Insane RMK -->
+              <figure class="pruthvi-ba-item" style="margin: 0;">
+                <div class="pruthvi-cmp" role="slider" tabindex="0" aria-label="Minecraft Hardcore before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                  <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_02_after.webp" alt="Hardcore Thumbnail (Final Composited Click)" loading="lazy" draggable="false">
+                  <div class="pruthvi-cmp-before">
+                    <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_01_build.webp" alt="Raw In-Game Viewport (Before)" loading="lazy" draggable="false">
+                  </div>
+                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-before">Raw In-Game</span>
+                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-after">Final Click</span>
+                  <svg class="pruthvi-cmp-svg" viewBox="0 0 640 360" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 320 0 Q 320 180 320 360"></path>
+                  </svg>
+                  <span class="pruthvi-cmp-grip" style="left: 50%;">
+                    <span class="pruthvi-cmp-knob" aria-hidden="true">
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 1 1 6l4 5M11 1l4 5-4 5"/>
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+              </figure>
+
+              <!-- Item 2: Survival Finale / Haider Playz -->
+              <figure class="pruthvi-ba-item" style="margin: 0;">
+                <div class="pruthvi-cmp" role="slider" tabindex="0" aria-label="Survival Finale before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                  <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_03_flamefrag.webp" alt="Flame Frag War (Final Color Graded)" loading="lazy" draggable="false">
+                  <div class="pruthvi-cmp-before">
+                    <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_04_gaming_grill.webp" alt="Base Asset Render (Before)" loading="lazy" draggable="false">
+                  </div>
+                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-before">Raw Asset</span>
+                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-after">Final Click</span>
+                  <svg class="pruthvi-cmp-svg" viewBox="0 0 640 360" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 320 0 Q 320 180 320 360"></path>
+                  </svg>
+                  <span class="pruthvi-cmp-grip" style="left: 50%;">
+                    <span class="pruthvi-cmp-knob" aria-hidden="true">
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 1 1 6l4 5M11 1l4 5-4 5"/>
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+              </figure>
+            </div>
+          </section>
+
+          <!-- ==========================================================================
+               BOUTIQUE CREATOR REVIEWS SECTION (CHAT DM BUBBLES)
+               ========================================================================== -->
+          <section class="pruthvi-reviews-section" id="reviews" aria-label="Creator Reviews">
+            <header class="pruthvi-reviews-header">
+              <span class="pruthvi-section-eyebrow">Creator Reviews</span>
+              <h2 class="pruthvi-reviews-title">Loved by creators who reach millions.</h2>
+            </header>
+            <div class="pruthvi-rv-list">
+              <!-- Review 1: INSANE RMK -->
+              <div class="pruthvi-rv-row pruthvi-rv-left">
+                <div class="pruthvi-rv-who">
+                  <div class="pruthvi-rv-avatar-wrap">
+                    <img class="pruthvi-rv-avatar" src="/images/creators/insane_rmk.webp" alt="INSANE RMK" loading="lazy">
+                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
+                  </div>
+                  <span class="pruthvi-rv-name">INSANE RMK</span>
+                  <span class="pruthvi-rv-subs">580K+</span>
+                </div>
+                <div class="pruthvi-rv-bubble">
+                  Bro the thumbnail CTR went absolutely crazy on the premiere! Volumetric lighting is insane 🔥
+                </div>
+              </div>
+
+              <!-- Review 2: Mikey Chan -->
+              <div class="pruthvi-rv-row pruthvi-rv-right">
+                <div class="pruthvi-rv-who">
+                  <div class="pruthvi-rv-avatar-wrap">
+                    <img class="pruthvi-rv-avatar" src="/images/creators/mikey_chan.webp" alt="Mikey Chan" loading="lazy">
+                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
+                  </div>
+                  <span class="pruthvi-rv-name">Mikey Chan</span>
+                  <span class="pruthvi-rv-subs">420K+</span>
+                </div>
+                <div class="pruthvi-rv-bubble">
+                  Genuinely best thumbnail designer in the space. Delivered under 4 hours and it popped out of the feed completely.
+                </div>
+              </div>
+
+              <!-- Review 3: Kabeer -->
+              <div class="pruthvi-rv-row pruthvi-rv-left">
+                <div class="pruthvi-rv-who">
+                  <div class="pruthvi-rv-avatar-wrap">
+                    <img class="pruthvi-rv-avatar" src="/images/creators/kabeer.webp" alt="Kabeer" loading="lazy">
+                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
+                  </div>
+                  <span class="pruthvi-rv-name">Kabeer</span>
+                  <span class="pruthvi-rv-subs">310K+</span>
+                </div>
+                <div class="pruthvi-rv-bubble">
+                  W thumbnail brother! 100 Days video hit #1 trending on release day!
+                </div>
+              </div>
+
+              <!-- Review 4: Mr Overrated -->
+              <div class="pruthvi-rv-row pruthvi-rv-right">
+                <div class="pruthvi-rv-who">
+                  <div class="pruthvi-rv-avatar-wrap">
+                    <img class="pruthvi-rv-avatar" src="/images/creators/mr_overrated.webp" alt="Mr Overrated" loading="lazy">
+                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
+                  </div>
+                  <span class="pruthvi-rv-name">Mr Overrated</span>
+                  <span class="pruthvi-rv-subs">290K+</span>
+                </div>
+                <div class="pruthvi-rv-bubble">
+                  Cleanest 3D character pose and depth composition. Everyone in the comments was asking who made the thumbnail!
+                </div>
+              </div>
+
+              <!-- Review 5: Znsu -->
+              <div class="pruthvi-rv-row pruthvi-rv-left">
+                <div class="pruthvi-rv-who">
+                  <div class="pruthvi-rv-avatar-wrap">
+                    <img class="pruthvi-rv-avatar" src="/images/creators/znsu.webp" alt="Znsu" loading="lazy">
+                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
+                  </div>
+                  <span class="pruthvi-rv-name">Znsu</span>
+                  <span class="pruthvi-rv-subs">180K+</span>
+                </div>
+                <div class="pruthvi-rv-bubble">
+                  10/10 visual storytelling. Pruthvi always knows exactly how to hook the viewer instantly.
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section
             class="zeox-work-statement"
             data-zeox-statement
@@ -2984,9 +3125,13 @@ let fbConfig = null;
       setupSwipeableShowreel();
       setupDesktopCrosshair();
       setupCardScrollProgression();
+      setupBeforeAfterSliders(workPage);
+      setupReviewsReveal(workPage);
       setInterval(() => {
         setupSwipeableShowreel();
         setupCardScrollProgression();
+      setupBeforeAfterSliders(workPage);
+      setupReviewsReveal(workPage);
       }, 800);
     } catch (error) {
       console.error("Unable to initialize the thumbnail portfolio", error);
@@ -2999,7 +3144,7 @@ let fbConfig = null;
      ========================================================================== */
   
   /* ==========================================================================
-     Showcase Reel: Pure Visual Stacking Cards Scroll Overlay (Zero Slop)
+     Showcase Reel: Pure 1-At-A-Time Stacking Cards Scroll Overlay (Zero Slop)
      ========================================================================== */
   let showreelStackModal = null;
   let stackMomentumRaf = null;
@@ -3029,7 +3174,7 @@ let fbConfig = null;
     closeBtn.addEventListener("click", closeShowreelStack);
     backdrop.addEventListener("click", closeShowreelStack);
 
-    // Ultra-smooth 60/120fps Scroll Stacking Dynamics
+    // Ultra-smooth 60/120fps Scroll Stacking Dynamics for 1-At-A-Time focus
     const scrollWrapper = modal.querySelector(".stack-scroll-wrapper");
     scrollWrapper.addEventListener("scroll", () => {
       if (stackMomentumRaf) cancelAnimationFrame(stackMomentumRaf);
@@ -3070,28 +3215,28 @@ let fbConfig = null;
 
   function updateCardStackingTransforms(scrollWrapper) {
     const slots = scrollWrapper.querySelectorAll(".stack-card-slot");
-    const stickyTop = 80;
+    const wrapperHeight = scrollWrapper.clientHeight || window.innerHeight;
 
     slots.forEach((slot, idx) => {
       const card = slot.querySelector(".stack-card");
       if (!card) return;
       const rect = slot.getBoundingClientRect();
-      const distFromSticky = rect.top - stickyTop;
+      const topOffset = rect.top;
 
-      if (distFromSticky <= 0) {
-        // Card is pinned / stacked at top!
-        // As user scrolls further down, subsequent cards smoothly overlap on top
-        const pinnedDepth = Math.abs(distFromSticky);
-        const scale = Math.max(0.86, 1 - (pinnedDepth * 0.00022));
-        const opacity = Math.max(0.35, 1 - (pinnedDepth * 0.001));
-        const translateY = Math.min(26, pinnedDepth * 0.025);
-        const blur = Math.min(6, pinnedDepth * 0.012);
+      if (topOffset <= 0) {
+        // Card is pinned / stacked at center-top!
+        // As user scrolls further down through this card's 100vh height:
+        const progress = Math.min(1, Math.abs(topOffset) / wrapperHeight);
+        const scale = Math.max(0.86, 1 - progress * 0.12);
+        const translateY = progress * 24;
+        const blur = progress * 6;
+        const opacity = Math.max(0.3, 1 - progress * 0.65);
 
         card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
         card.style.opacity = opacity.toFixed(2);
         card.style.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : "none";
       } else {
-        // Approaching card: natural crisp 100% scale
+        // Approaching card from bottom: 100% full crisp focus
         card.style.transform = "scale(1) translateY(0)";
         card.style.opacity = "1";
         card.style.filter = "none";
@@ -3122,6 +3267,179 @@ let fbConfig = null;
   // Expose globally
   window.openShowreelDeck = openShowreelDeck;
   window.closeShowreelStack = closeShowreelStack;
+
+
+  /* ==========================================================================
+     BOUTIQUE BEFORE / AFTER COMPARISON SLIDER ENGINE (ELASTIC CURVED PATH)
+     ========================================================================== */
+  function setupBeforeAfterSliders(container = document) {
+    const cmpElements = container.querySelectorAll(".pruthvi-cmp:not([data-cmp-ready])");
+    cmpElements.forEach((cmp) => {
+      cmp.setAttribute("data-cmp-ready", "true");
+      initSingleBeforeAfter(cmp);
+    });
+  }
+
+  function initSingleBeforeAfter(cmp) {
+    const beforeWrap = cmp.querySelector(".pruthvi-cmp-before");
+    const svgPath = cmp.querySelector(".pruthvi-cmp-svg path");
+    const grip = cmp.querySelector(".pruthvi-cmp-grip");
+    const tagBefore = cmp.querySelector(".pruthvi-cmp-tag-before");
+    const tagAfter = cmp.querySelector(".pruthvi-cmp-tag-after");
+
+    let progress = 0.5; // 0 to 1
+    let targetProgress = 0.5;
+    let velocity = 0;
+    let curveOffset = 0;
+    let targetCurve = 0;
+    let isDragging = false;
+    let lastPointerX = 0;
+    let lastTime = performance.now();
+    let animFrame = null;
+
+    function render(p, curve) {
+      const w = cmp.clientWidth || 640;
+      const h = cmp.clientHeight || 360;
+      const x = p * w;
+      const cx = x + curve; // quadratic curve control point offset
+
+      // SVG quadratic curve: M x 0 Q cx (h/2) x h
+      const pathD = `M ${x.toFixed(1)} 0 Q ${cx.toFixed(1)} ${(h / 2).toFixed(1)} ${x.toFixed(1)} ${h}`;
+      if (svgPath) svgPath.setAttribute("d", pathD);
+
+      // CSS clip-path path polygon matching the curve
+      const clipD = `path("M 0 0 L ${x.toFixed(1)} 0 Q ${cx.toFixed(1)} ${(h / 2).toFixed(1)} ${x.toFixed(1)} ${h} L 0 ${h} Z")`;
+      if (beforeWrap) beforeWrap.style.clipPath = clipD;
+
+      if (grip) grip.style.left = `${x.toFixed(1)}px`;
+
+      // Tag fading near edges
+      if (tagBefore) tagBefore.style.opacity = Math.max(0, Math.min(1, (p - 0.12) * 4));
+      if (tagAfter) tagAfter.style.opacity = Math.max(0, Math.min(1, (0.88 - p) * 4));
+    }
+
+    // Spring physics update loop
+    function updateSpring(now) {
+      const dt = Math.min(0.04, Math.max(0.001, (now - lastTime) / 1000));
+      lastTime = now;
+
+      if (!isDragging) {
+        // Damped harmonic oscillator: k = 480, c = 38
+        const displacement = targetProgress - progress;
+        const springForce = displacement * 480;
+        const dampingForce = -velocity * 38;
+        velocity += (springForce + dampingForce) * dt;
+        progress += velocity * dt;
+
+        // Curve springs back to 0 (straight line)
+        curveOffset += (0 - curveOffset) * Math.min(1, 18 * dt);
+
+        if (Math.abs(displacement) < 0.0005 && Math.abs(velocity) < 0.0005 && Math.abs(curveOffset) < 0.1) {
+          progress = targetProgress;
+          curveOffset = 0;
+          render(progress, curveOffset);
+          animFrame = null;
+          return;
+        }
+      } else {
+        // Follow target directly during active dragging with elastic drag lag
+        progress += (targetProgress - progress) * Math.min(1, 26 * dt);
+        curveOffset += (targetCurve - curveOffset) * Math.min(1, 22 * dt);
+      }
+
+      render(progress, curveOffset);
+      animFrame = requestAnimationFrame(updateSpring);
+    }
+
+    function ensureLoop() {
+      if (!animFrame) {
+        lastTime = performance.now();
+        animFrame = requestAnimationFrame(updateSpring);
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const rect = cmp.getBoundingClientRect();
+      const currentX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+      targetProgress = Math.max(0.02, Math.min(0.98, currentX / rect.width));
+
+      // Elastic bending curve based on pointer speed / delta
+      const dx = e.clientX - lastPointerX;
+      lastPointerX = e.clientX;
+      targetCurve = Math.max(-18, Math.min(18, dx * 1.5));
+      ensureLoop();
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      cmp.removeAttribute("data-dragging");
+      try { cmp.releasePointerCapture(e.pointerId); } catch (_) {}
+      targetCurve = 0;
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+      ensureLoop();
+    }
+
+    cmp.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      isDragging = true;
+      cmp.setAttribute("data-dragging", "true");
+      lastPointerX = e.clientX;
+      try { cmp.setPointerCapture(e.pointerId); } catch (_) {}
+
+      const rect = cmp.getBoundingClientRect();
+      const currentX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+      targetProgress = Math.max(0.02, Math.min(0.98, currentX / rect.width));
+
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("pointercancel", onPointerUp);
+      ensureLoop();
+    });
+
+    // Automated introductory sweep on scroll view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !cmp.dataset.swept) {
+          cmp.dataset.swept = "true";
+          // Gentle auto-sweep: 0.5 -> 0.22 -> 0.78 -> 0.5
+          setTimeout(() => { targetProgress = 0.22; targetCurve = -8; ensureLoop(); }, 400);
+          setTimeout(() => { targetProgress = 0.78; targetCurve = 8; ensureLoop(); }, 1200);
+          setTimeout(() => { targetProgress = 0.50; targetCurve = 0; ensureLoop(); }, 2000);
+        }
+      });
+    }, { threshold: 0.5 });
+    observer.observe(cmp);
+
+    // Initial render
+    render(progress, 0);
+  }
+
+
+  /* ==========================================================================
+     BOUTIQUE CREATOR REVIEWS ENTRANCE REVEAL OBSERVER
+     ========================================================================== */
+  function setupReviewsReveal(container = document) {
+    const rows = container.querySelectorAll(".pruthvi-rv-row:not([data-rv-ready])");
+    if (!rows.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-in-view");
+        }
+      });
+    }, { threshold: 0.25, rootMargin: "0px 0px -40px 0px" });
+
+    rows.forEach((row, i) => {
+      row.setAttribute("data-rv-ready", "true");
+      row.style.transitionDelay = `${(i % 3) * 0.12}s`;
+      observer.observe(row);
+    });
+  }
 
 
   function setupSwipeableShowreel() {

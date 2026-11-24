@@ -5702,8 +5702,8 @@ body:has(.wrapper.opened) .switch {
 
 
 /* ==========================================================================
-   PRUTHVI FX - PURE VISUAL SHOWCASE REEL (SMOOTH STACKING CARDS)
-   Pure Design, No Text, No Yellow Panels, Silky-Smooth Momentum Stacking
+   PRUTHVI FX - PURE 1-AT-A-TIME STACKING CARDS SCROLL ENGINE
+   Zero Text, Zero Slop, 1 Card In Focus at a Time with Smooth Stacking Pinning
    ========================================================================== */
 
 .pruthvi-showreel-stack {
@@ -5725,17 +5725,16 @@ body:has(.wrapper.opened) .switch {
   pointer-events: auto;
 }
 
-/* Cinematic Dark Ambient Backdrop - No yellow, pure deep obsidian glow */
 .stack-backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 40%, rgba(14, 12, 22, 0.94) 0%, rgba(4, 3, 7, 0.98) 100%);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  background: radial-gradient(circle at 50% 50%, rgba(14, 11, 24, 0.96) 0%, rgba(3, 2, 6, 0.99) 100%);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
   z-index: 1;
 }
 
-/* Minimalist Clean Close Trigger - Floating Frosted Glass Button */
+/* Minimalist Clean Floating Close Trigger */
 .stack-close-btn {
   position: fixed;
   top: clamp(24px, 4vh, 48px);
@@ -5759,13 +5758,13 @@ body:has(.wrapper.opened) .switch {
 }
 
 .stack-close-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
   color: #ffffff;
   transform: scale(1.1) rotate(90deg);
 }
 
-/* Scroll Container for Stacking Effect */
+/* 1-AT-A-TIME VIEWPORT SCROLL WRAPPER (Smooth Momentum Stacking) */
 .stack-scroll-wrapper {
   position: absolute;
   inset: 0;
@@ -5774,60 +5773,57 @@ body:has(.wrapper.opened) .switch {
   z-index: 2;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  perspective: 1400px;
+  perspective: 1600px;
   padding: 0;
 }
 
-/* Subtle Minimalist Scrollbar */
 .stack-scroll-wrapper::-webkit-scrollbar {
-  width: 5px;
-}
-.stack-scroll-wrapper::-webkit-scrollbar-track {
-  background: transparent;
+  width: 4px;
 }
 .stack-scroll-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
 }
-.stack-scroll-wrapper::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
-}
 
-/* Pure Card Stacking List */
+/* Card List: Each card has exactly 100vh of scroll room so user experiences 1 card at a time */
 .stack-card-list {
   position: relative;
-  width: min(88vw, 920px);
-  margin: clamp(60px, 8vh, 90px) auto 25vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  padding-bottom: 30vh;
 }
 
-/* Sticky Card Slots: pure smooth stacking mechanics */
+/* Sticky Slot: Pinned precisely in the center of the screen */
 .stack-card-slot {
   position: sticky;
-  top: clamp(60px, 9vh, 90px);
+  top: calc(50vh - min(26vw, 270px));
+  height: 100vh;
   width: 100%;
-  margin-bottom: clamp(50px, 8vh, 80px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   will-change: transform, opacity, filter;
-  transform-origin: center top;
+  transform-origin: center center;
 }
 
-/* Pure Thumbnail Artwork Card - Zero Text, Zero Slop */
+/* Pure Artwork Card (Zero Text, Zero Panels) */
 .stack-card {
   position: relative;
-  width: 100%;
+  width: min(84vw, 920px);
   aspect-ratio: 16 / 9;
   border-radius: 22px;
   overflow: hidden;
   background: #09080e;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(120, 60, 255, 0.12);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease, filter 0.45s ease;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(120, 60, 255, 0.14);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+  will-change: transform, opacity, filter;
 }
 
 .stack-card-slot:hover .stack-card {
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.95), 0 0 50px rgba(180, 140, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.95), 0 0 60px rgba(160, 100, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .stack-card img {
@@ -5839,16 +5835,335 @@ body:has(.wrapper.opened) .switch {
 }
 
 @media (max-width: 768px) {
-  .stack-card-list {
-    width: 92vw;
-    margin-top: 50px;
-  }
-  .stack-card-slot {
-    top: 50px;
-    margin-bottom: 40px;
-  }
   .stack-card {
+    width: 92vw;
     border-radius: 16px;
   }
+  .stack-card-slot {
+    top: calc(50vh - min(28vw, 210px));
+  }
+}
+
+
+/* ==========================================================================
+   PRUTHVI FX - BOUTIQUE BEFORE / AFTER COMPARISON SECTION
+   Elastic Curved SVG Path + Spring Physics Drag
+   ========================================================================== */
+
+.pruthvi-ba-section {
+  position: relative;
+  width: 100%;
+  max-width: 1320px;
+  margin: clamp(80px, 12vh, 140px) auto 0;
+  padding: 0 clamp(20px, 4vw, 48px);
+  z-index: 2;
+}
+
+.pruthvi-ba-header {
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.pruthvi-section-eyebrow {
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffed29;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.pruthvi-ba-title {
+  font-family: inherit;
+  font-size: clamp(28px, 4.2vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.pruthvi-ba-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr));
+  gap: clamp(24px, 4vw, 40px);
+}
+
+.pruthvi-ba-item {
+  position: relative;
+  width: 100%;
+}
+
+.pruthvi-cmp {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #09080e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(139, 92, 246, 0.12);
+  touch-action: pan-y;
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pruthvi-cmp:hover {
+  border-color: rgba(255, 237, 41, 0.35);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(255, 237, 41, 0.15);
+}
+
+.pruthvi-cmp-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  display: block;
+}
+
+.pruthvi-cmp-before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: clip-path;
+}
+
+/* Floating Frosted Glass Tags */
+.pruthvi-cmp-tag {
+  position: absolute;
+  top: 16px;
+  background: rgba(10, 8, 16, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.2s ease;
+}
+
+.pruthvi-cmp-tag-before {
+  left: 16px;
+}
+
+.pruthvi-cmp-tag-after {
+  right: 16px;
+  color: #ffed29;
+  border-color: rgba(255, 237, 41, 0.3);
+}
+
+/* Elastic SVG Curve Divider */
+.pruthvi-cmp-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 6;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 16px rgba(255, 237, 41, 0.4));
+}
+
+.pruthvi-cmp-svg path {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.5px;
+}
+
+/* Draggable Grip & Spring Knob */
+.pruthvi-cmp-grip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  pointer-events: none;
+  z-index: 7;
+}
+
+.pruthvi-cmp-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 237, 41, 0.6);
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+  cursor: ew-resize;
+}
+
+.pruthvi-cmp:hover .pruthvi-cmp-knob {
+  transform: translate(-50%, -50%) scale(1.12);
+  background: #ffed29;
+}
+
+.pruthvi-cmp[data-dragging="true"] .pruthvi-cmp-knob {
+  transform: translate(-50%, -50%) scale(0.92);
+  background: #ffed29;
+}
+
+/* ==========================================================================
+   PRUTHVI FX - BOUTIQUE CREATOR REVIEWS SECTION (CHAT DM SPEECH BUBBLES)
+   Alternating conversational flow from top creators who reach millions
+   ========================================================================== */
+
+.pruthvi-reviews-section {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  margin: clamp(90px, 14vh, 160px) auto 0;
+  padding: 0 clamp(20px, 4vw, 48px);
+  z-index: 2;
+}
+
+.pruthvi-reviews-header {
+  text-align: center;
+  margin-bottom: clamp(48px, 7vw, 72px);
+}
+
+.pruthvi-reviews-title {
+  font-family: inherit;
+  font-size: clamp(28px, 4.2vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.pruthvi-rv-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 5vw, 48px);
+}
+
+.pruthvi-rv-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 24px);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pruthvi-rv-row.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pruthvi-rv-row.pruthvi-rv-right {
+  flex-direction: row-reverse;
+}
+
+/* Creator Profile Wrap */
+.pruthvi-rv-who {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  width: clamp(72px, 16vw, 96px);
+  text-align: center;
+}
+
+.pruthvi-rv-avatar-wrap {
+  position: relative;
+  width: clamp(56px, 12vw, 68px);
+  height: clamp(56px, 12vw, 68px);
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, rgba(255, 237, 41, 0.6) 0%, rgba(139, 92, 246, 0.6) 100%);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+}
+
+.pruthvi-rv-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: #110f1c;
+}
+
+.pruthvi-rv-online-pip {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2.5px solid #07060b;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.pruthvi-rv-name {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.pruthvi-rv-subs {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-muted, #8e8a9f);
+  letter-spacing: 0.05em;
+}
+
+/* Conversational Chat DM Speech Bubble */
+.pruthvi-rv-bubble {
+  position: relative;
+  max-width: min(72%, 580px);
+  padding: clamp(16px, 2.4vw, 22px) clamp(20px, 3vw, 28px);
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  font-family: inherit;
+  font-size: clamp(16px, 2.2vw, 20px);
+  font-weight: 600;
+  color: #f5f5f7;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.pruthvi-rv-row:hover .pruthvi-rv-bubble {
+  transform: translateY(-3px);
+  border-color: rgba(255, 237, 41, 0.3);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 237, 41, 0.1);
+}
+
+.pruthvi-rv-left .pruthvi-rv-bubble {
+  border-bottom-left-radius: 4px;
+}
+
+.pruthvi-rv-right .pruthvi-rv-bubble {
+  border-bottom-right-radius: 4px;
 }
 
