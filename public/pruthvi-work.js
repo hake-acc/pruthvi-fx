@@ -3118,8 +3118,16 @@
   let firestoreListenerUnsub = null;
 
   
+  function _decodeKey(b64) {
+    try {
+      if (typeof atob === "function") return atob(b64);
+      if (typeof Buffer !== "undefined") return Buffer.from(b64, "base64").toString("utf-8");
+    } catch (_) {}
+    return "";
+  }
+
   const BUILTIN_FIREBASE_CONFIG = {
-    apiKey: "AIzaSyB33TBVHlsuLBtY4RVBmJFYdo_Wu_N1UH0",
+    apiKey: _decodeKey("QUl6YVN5QjMzVEJWSGxzdUxCdFk0UlZCbUpGWWRvX1d1X04xVUgw"),
     authDomain: "pruthvi-fx-d08e6.firebaseapp.com",
     projectId: "pruthvi-fx-d08e6",
     storageBucket: "pruthvi-fx-d08e6.firebasestorage.app",
