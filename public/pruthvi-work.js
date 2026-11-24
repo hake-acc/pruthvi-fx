@@ -3083,12 +3083,26 @@
      ========================================================================== */
   let firestoreListenerUnsub = null;
 
+  
+  const BUILTIN_FIREBASE_CONFIG = {
+    apiKey: "AIzaSyB33TBVHlsuLBtY4RVBmJFYdo_Wu_N1UH0",
+    authDomain: "pruthvi-fx-d08e6.firebaseapp.com",
+    projectId: "pruthvi-fx-d08e6",
+    storageBucket: "pruthvi-fx-d08e6.firebasestorage.app",
+    messagingSenderId: "288144115588",
+    appId: "1:288144115588:web:1fa16a374cc6d39fdfffd1"
+  };
+
   function initFirestoreLiveSync() {
     try {
-      const fbConfigStr = localStorage.getItem("pruthvi_fx_fb_config");
-      if (!fbConfigStr) return;
-      const fbConfig = JSON.parse(fbConfigStr);
-      if (!fbConfig || !fbConfig.apiKey || !fbConfig.projectId) return;
+let fbConfig = null;
+      try {
+        const fbConfigStr = localStorage.getItem("pruthvi_fx_fb_config");
+        if (fbConfigStr) fbConfig = JSON.parse(fbConfigStr);
+      } catch (_) {}
+      if (!fbConfig || !fbConfig.apiKey) {
+        fbConfig = window.PRUTHVI_FIREBASE_CONFIG || BUILTIN_FIREBASE_CONFIG;
+      }
 
       if (!window.firebase) {
         // Dynamically inject Firebase compat scripts if not already present

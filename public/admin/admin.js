@@ -51,6 +51,9 @@ function escapeHtml(str) {
 
 // 1. Initialize Firebase
 function getSavedFirebaseConfig() {
+  if (window.PRUTHVI_FIREBASE_CONFIG) {
+    return window.PRUTHVI_FIREBASE_CONFIG;
+  }
   const saved = localStorage.getItem(STORAGE_KEYS.FB_CONFIG);
   if (!saved) return null;
   try {
