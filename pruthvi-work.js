@@ -1,206 +1,131 @@
 
   /* ==========================================================================
-     Showreel Swipeable Card Deck Modal
-     ========================================================================== */
-  let showreelDeckModal = null;
-  let activeDeckIndex = 0;
+   Showreel Vertical Stacking Cards Scroll Overlay
+   ========================================================================== */
+  let showreelStackModal = null;
 
-  function createShowreelDeck() {
-    if (document.querySelector(".pruthvi-showreel-deck")) {
-      return document.querySelector(".pruthvi-showreel-deck");
+  function createShowreelStack() {
+    if (document.querySelector(".pruthvi-showreel-stack")) {
+      return document.querySelector(".pruthvi-showreel-stack");
     }
 
-    const deck = document.createElement("div");
-    deck.className = "pruthvi-showreel-deck";
-    deck.setAttribute("role", "dialog");
-    deck.setAttribute("aria-modal", "true");
-    deck.setAttribute("aria-label", "Showreel Thumbnail Showcase");
-    deck.innerHTML = `
-      <div class="deck-backdrop"></div>
-      <button class="deck-close" type="button" aria-label="Close Showreel">&times;</button>
-      <div class="deck-counter">
-        <span class="deck-current">1</span> / <span class="deck-total">13</span>
+    const modal = document.createElement("div");
+    modal.className = "pruthvi-showreel-stack";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-label", "Showcase Reel Stacking Cards");
+    modal.innerHTML = `
+      <div class="stack-backdrop"></div>
+      <header class="stack-header">
+        <div class="stack-brand">
+          <span class="stack-brand-badge">SHOWCASE REEL</span>
+          <span class="stack-title">Scroll Down to Stack Thumbnails</span>
+        </div>
+        <button class="stack-close-btn" type="button" aria-label="Close Showcase">&times;</button>
+      </header>
+      <div class="stack-scroll-wrapper">
+        <div class="stack-card-list"></div>
       </div>
-      <div class="deck-container">
-        <div class="deck-track"></div>
-      </div>
-      <div class="deck-controls">
-        <button class="deck-nav-btn deck-prev" type="button" aria-label="Previous Thumbnail">&#8592;</button>
-        <div class="deck-hint">Swipe or use arrow keys &#8592; &#8594;</div>
-        <button class="deck-nav-btn deck-next" type="button" aria-label="Next Thumbnail">&#8594;</button>
+      <div class="stack-hint-pill">
+        <span>↓</span> SCROLL DOWN TO STACK CARDS
       </div>
     `;
 
-    document.body.appendChild(deck);
+    document.body.appendChild(modal);
 
-    // Event listeners
-    const closeBtn = deck.querySelector(".deck-close");
-    const backdrop = deck.querySelector(".deck-backdrop");
-    closeBtn.addEventListener("click", closeShowreelDeck);
-    backdrop.addEventListener("click", closeShowreelDeck);
+    const closeBtn = modal.querySelector(".stack-close-btn");
+    const backdrop = modal.querySelector(".stack-backdrop");
+    closeBtn.addEventListener("click", closeShowreelStack);
+    backdrop.addEventListener("click", closeShowreelStack);
 
-    const prevBtn = deck.querySelector(".deck-prev");
-    const nextBtn = deck.querySelector(".deck-next");
-    prevBtn.addEventListener("click", () => slideShowreelDeck(-1));
-    nextBtn.addEventListener("click", () => slideShowreelDeck(1));
-
-    setupDeckSwipeGestures(deck);
+    // Scroll Stacking 3D Dynamics
+    const scrollWrapper = modal.querySelector(".stack-scroll-wrapper");
+    scrollWrapper.addEventListener("scroll", () => {
+      updateCardStackingTransforms(scrollWrapper);
+    }, { passive: true });
 
     document.addEventListener("keydown", (e) => {
-      if (!deck.classList.contains("open")) return;
-      if (e.key === "Escape") closeShowreelDeck();
-      if (e.key === "ArrowLeft") slideShowreelDeck(-1);
-      if (e.key === "ArrowRight") slideShowreelDeck(1);
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") closeShowreelStack();
     });
 
-    return deck;
+    return modal;
   }
 
-  function setupDeckSwipeGestures(deck) {
-    const track = deck.querySelector(".deck-track");
-    let startX = 0;
-    let currentX = 0;
-    let isSwiping = false;
-
-    track.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0 && e.pointerType === "mouse") return;
-      isSwiping = true;
-      startX = e.clientX;
-      currentX = e.clientX;
-      track.style.transition = "none";
-      try { track.setPointerCapture(e.pointerId); } catch (_) {}
-    });
-
-    track.addEventListener("pointermove", (e) => {
-      if (!isSwiping) return;
-      currentX = e.clientX;
-      const dx = currentX - startX;
-      updateDeckCardsVisual(activeDeckIndex, dx);
-    });
-
-    function onPointerEnd(e) {
-      if (!isSwiping) return;
-      isSwiping = false;
-      try { track.releasePointerCapture(e.pointerId); } catch (_) {}
-      const dx = currentX - startX;
-      if (dx < -60) {
-        slideShowreelDeck(1);
-      } else if (dx > 60) {
-        slideShowreelDeck(-1);
-      } else {
-        updateDeckCardsVisual(activeDeckIndex, 0);
-      }
-    }
-
-    track.addEventListener("pointerup", onPointerEnd);
-    track.addEventListener("pointercancel", onPointerEnd);
-  }
-
-  function populateDeckCards(thumbnails) {
-    const deck = showreelDeckModal || createShowreelDeck();
-    const track = deck.querySelector(".deck-track");
-    track.innerHTML = "";
+  function populateStackCards(thumbnails) {
+    const modal = showreelStackModal || createShowreelStack();
+    const list = modal.querySelector(".stack-card-list");
+    list.innerHTML = "";
 
     thumbnails.forEach((item, idx) => {
       const num = idx + 1;
       const meta = THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length];
-      const card = document.createElement("div");
-      card.className = "deck-card";
-      card.dataset.index = String(idx);
-      card.innerHTML = `
-        <div class="deck-card-inner">
-          <div class="deck-card-media">
-            <img src="${item.src}" alt="Thumbnail ${num}" loading="${idx < 3 ? 'eager' : 'lazy'}">
-            <span class="deck-card-badge">${num}</span>
-          </div>
-          <div class="deck-card-info">
-            <span class="deck-card-title">Thumbnail ${num}</span>
-            <span class="deck-card-creator">${item.creator || meta?.creator || ''}</span>
+      const creatorName = item.creator || meta?.creator || "INSANE RMK";
+      const slot = document.createElement("div");
+      slot.className = "stack-card-slot";
+      slot.dataset.index = String(idx);
+      slot.innerHTML = `
+        <div class="stack-card">
+          <img src="${item.src}" alt="${item.title || `Thumbnail ${num}`}" loading="${idx < 3 ? 'eager' : 'lazy'}">
+          <div class="stack-card-overlay">
+            <div class="stack-card-top-bar">
+              <span class="stack-card-badge">THUMBNAIL #${String(num).padStart(2, '0')}</span>
+              <span class="stack-card-creator">${creatorName}</span>
+            </div>
+            <div class="stack-card-bottom-bar">
+              <span class="stack-card-title">${item.title || `Thumbnail ${num}`}</span>
+            </div>
           </div>
         </div>
       `;
-      track.appendChild(card);
+      list.appendChild(slot);
     });
-
-    deck.querySelector(".deck-total").textContent = String(thumbnails.length);
-    updateDeckCardsVisual(0, 0);
   }
 
-  function updateDeckCardsVisual(centerIdx, dragOffset = 0) {
-    const deck = showreelDeckModal;
-    if (!deck) return;
-    const cards = deck.querySelectorAll(".deck-card");
-    const total = cards.length;
+  function updateCardStackingTransforms(scrollWrapper) {
+    const slots = scrollWrapper.querySelectorAll(".stack-card-slot");
+    const wrapperRect = scrollWrapper.getBoundingClientRect();
+    const stickyTop = 110;
 
-    cards.forEach((card, idx) => {
-      const offset = idx - centerIdx;
-      card.style.transition = dragOffset === 0 ? "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)" : "none";
+    slots.forEach((slot, idx) => {
+      const card = slot.querySelector(".stack-card");
+      const rect = slot.getBoundingClientRect();
+      const distFromSticky = rect.top - stickyTop;
 
-      if (offset === 0) {
-        const rot = (dragOffset * 0.05).toFixed(1);
-        card.style.transform = `translate3d(calc(-50% + ${dragOffset}px), -50%, 0) scale(1) rotate(${rot}deg)`;
-        card.style.opacity = "1";
-        card.style.zIndex = "10";
-        card.style.pointerEvents = "auto";
-        card.classList.add("is-active");
-      } else if (offset === 1) {
-        card.style.transform = `translate3d(calc(-50% + 220px + ${dragOffset * 0.5}px), -50%, -100px) scale(0.85) rotate(4deg)`;
-        card.style.opacity = "0.7";
-        card.style.zIndex = "8";
-        card.style.pointerEvents = "none";
-        card.classList.remove("is-active");
-      } else if (offset === -1) {
-        card.style.transform = `translate3d(calc(-50% - 220px + ${dragOffset * 0.5}px), -50%, -100px) scale(0.85) rotate(-4deg)`;
-        card.style.opacity = "0.7";
-        card.style.zIndex = "8";
-        card.style.pointerEvents = "none";
-        card.classList.remove("is-active");
-      } else if (offset > 1) {
-        card.style.transform = `translate3d(calc(-50% + 400px), -50%, -200px) scale(0.7) rotate(8deg)`;
-        card.style.opacity = "0";
-        card.style.zIndex = "1";
-        card.style.pointerEvents = "none";
-        card.classList.remove("is-active");
+      if (distFromSticky <= 0) {
+        // Card is pinned / stacked at top!
+        // As user scrolls further down, subsequent cards stack on top of this one
+        const pinnedDepth = Math.abs(distFromSticky);
+        const scale = Math.max(0.85, 1 - (pinnedDepth * 0.00025));
+        const opacity = Math.max(0.4, 1 - (pinnedDepth * 0.0012));
+        const translateY = Math.min(30, pinnedDepth * 0.03);
+        const blur = Math.min(8, pinnedDepth * 0.015);
+
+        card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+        card.style.opacity = opacity.toFixed(2);
+        card.style.filter = blur > 0.5 ? `blur(${blur.toFixed(1)}px)` : "none";
       } else {
-        card.style.transform = `translate3d(calc(-50% - 400px), -50%, -200px) scale(0.7) rotate(-8deg)`;
-        card.style.opacity = "0";
-        card.style.zIndex = "1";
-        card.style.pointerEvents = "none";
-        card.classList.remove("is-active");
+        // Card approaching from below
+        card.style.transform = "scale(1) translateY(0)";
+        card.style.opacity = "1";
+        card.style.filter = "none";
       }
     });
-
-    const currentElem = deck.querySelector(".deck-current");
-    if (currentElem) currentElem.textContent = String(centerIdx + 1);
-  }
-
-  function slideShowreelDeck(dir) {
-    const deck = showreelDeckModal;
-    if (!deck) return;
-    const cards = deck.querySelectorAll(".deck-card");
-    const nextIdx = Math.max(0, Math.min(cards.length - 1, activeDeckIndex + dir));
-    if (nextIdx !== activeDeckIndex) {
-      activeDeckIndex = nextIdx;
-      playSound("click");
-      updateDeckCardsVisual(activeDeckIndex, 0);
-    } else {
-      updateDeckCardsVisual(activeDeckIndex, 0);
-    }
   }
 
   function openShowreelDeck() {
-    showreelDeckModal = createShowreelDeck();
+    showreelStackModal = createShowreelStack();
     const thumbs = portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails;
-    populateDeckCards(thumbs);
-    activeDeckIndex = 0;
-    updateDeckCardsVisual(0, 0);
-    showreelDeckModal.classList.add("open");
+    populateStackCards(thumbs);
+    showreelStackModal.classList.add("is-open");
+    const wrapper = showreelStackModal.querySelector(".stack-scroll-wrapper");
+    if (wrapper) wrapper.scrollTop = 0;
     playSound("longclick");
   }
 
   function closeShowreelDeck() {
-    if (showreelDeckModal) {
-      showreelDeckModal.classList.remove("open");
+    if (showreelStackModal) {
+      showreelStackModal.classList.remove("is-open");
       playSound("click");
     }
   }
