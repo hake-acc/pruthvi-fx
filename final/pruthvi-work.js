@@ -3238,15 +3238,10 @@ let fbConfig = null;
     const singleSetHeight = rawItemsCount * (wrapper.clientHeight || window.innerHeight);
     const currentScroll = wrapper.scrollTop;
 
-    // If scrolled past the 2nd set, seamlessly jump back by 1 set height
+    // When user scrolls down past the 2nd full set of cards, seamlessly jump back to set 1 without animation
     if (currentScroll >= singleSetHeight * 2) {
       isLoopingStackScroll = true;
       wrapper.scrollTop = currentScroll - singleSetHeight;
-      requestAnimationFrame(() => { isLoopingStackScroll = false; });
-    } else if (currentScroll < singleSetHeight * 0.5) {
-      // If user scrolls backwards past middle of first set, jump forward by 1 set height
-      isLoopingStackScroll = true;
-      wrapper.scrollTop = currentScroll + singleSetHeight;
       requestAnimationFrame(() => { isLoopingStackScroll = false; });
     }
   }
@@ -3288,10 +3283,7 @@ let fbConfig = null;
     showreelStackModal.classList.add("is-open");
     const wrapper = showreelStackModal.querySelector(".stack-scroll-wrapper");
     if (wrapper) {
-      // Start in the middle set for bidirectional infinite scroll
-      const rawCount = (thumbs || []).length;
-      const singleSetHeight = rawCount * (wrapper.clientHeight || window.innerHeight);
-      wrapper.scrollTop = singleSetHeight;
+      wrapper.scrollTop = 0;
       updateCardStackingTransforms(wrapper);
     }
     playSound("longclick");

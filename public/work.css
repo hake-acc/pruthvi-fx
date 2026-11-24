@@ -5771,7 +5771,7 @@ body:has(.wrapper.opened) .switch {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 2;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   perspective: 1600px;
   padding: 0;
@@ -6175,9 +6175,7 @@ body:has(.wrapper.opened) .switch {
    Boutique editorial tooltip with directional arrow & ambient float
    ========================================================================== */
 
-.showreel-thumbnail {
-  position: relative !important;
-}
+/* .showreel-thumbnail position handled by fixed bottom-left container */
 
 
 /* ==========================================================================
@@ -6186,6 +6184,9 @@ body:has(.wrapper.opened) .switch {
    ========================================================================== */
 
 .showreel-thumbnail {
+  position: fixed !important;
+  bottom: var(--grid-margin, 30rem) !important;
+  left: var(--grid-margin, 30rem) !important;
   overflow: visible !important;
   z-index: 999 !important;
 }
