@@ -1,137 +1,5 @@
 
   /* ==========================================================================
-   Showreel Vertical Stacking Cards Scroll Overlay
-   ========================================================================== */
-  let showreelStackModal = null;
-
-  function createShowreelStack() {
-    if (document.querySelector(".pruthvi-showreel-stack")) {
-      return document.querySelector(".pruthvi-showreel-stack");
-    }
-
-    const modal = document.createElement("div");
-    modal.className = "pruthvi-showreel-stack";
-    modal.setAttribute("role", "dialog");
-    modal.setAttribute("aria-modal", "true");
-    modal.setAttribute("aria-label", "Showcase Reel Stacking Cards");
-    modal.innerHTML = `
-      <div class="stack-backdrop"></div>
-      <header class="stack-header">
-        <div class="stack-brand">
-          <span class="stack-brand-badge">SHOWCASE REEL</span>
-          <span class="stack-title">Scroll Down to Stack Thumbnails</span>
-        </div>
-        <button class="stack-close-btn" type="button" aria-label="Close Showcase">&times;</button>
-      </header>
-      <div class="stack-scroll-wrapper">
-        <div class="stack-card-list"></div>
-      </div>
-      <div class="stack-hint-pill">
-        <span>↓</span> SCROLL DOWN TO STACK CARDS
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    const closeBtn = modal.querySelector(".stack-close-btn");
-    const backdrop = modal.querySelector(".stack-backdrop");
-    closeBtn.addEventListener("click", closeShowreelStack);
-    backdrop.addEventListener("click", closeShowreelStack);
-
-    // Scroll Stacking 3D Dynamics
-    const scrollWrapper = modal.querySelector(".stack-scroll-wrapper");
-    scrollWrapper.addEventListener("scroll", () => {
-      updateCardStackingTransforms(scrollWrapper);
-    }, { passive: true });
-
-    document.addEventListener("keydown", (e) => {
-      if (!modal.classList.contains("is-open")) return;
-      if (e.key === "Escape") closeShowreelStack();
-    });
-
-    return modal;
-  }
-
-  function populateStackCards(thumbnails) {
-    const modal = showreelStackModal || createShowreelStack();
-    const list = modal.querySelector(".stack-card-list");
-    list.innerHTML = "";
-
-    thumbnails.forEach((item, idx) => {
-      const num = idx + 1;
-      const meta = THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length];
-      const creatorName = item.creator || meta?.creator || "INSANE RMK";
-      const slot = document.createElement("div");
-      slot.className = "stack-card-slot";
-      slot.dataset.index = String(idx);
-      slot.innerHTML = `
-        <div class="stack-card">
-          <img src="${item.src}" alt="${item.title || `Thumbnail ${num}`}" loading="${idx < 3 ? 'eager' : 'lazy'}">
-          <div class="stack-card-overlay">
-            <div class="stack-card-top-bar">
-              <span class="stack-card-badge">THUMBNAIL #${String(num).padStart(2, '0')}</span>
-              <span class="stack-card-creator">${creatorName}</span>
-            </div>
-            <div class="stack-card-bottom-bar">
-              <span class="stack-card-title">${item.title || `Thumbnail ${num}`}</span>
-            </div>
-          </div>
-        </div>
-      `;
-      list.appendChild(slot);
-    });
-  }
-
-  function updateCardStackingTransforms(scrollWrapper) {
-    const slots = scrollWrapper.querySelectorAll(".stack-card-slot");
-    const wrapperRect = scrollWrapper.getBoundingClientRect();
-    const stickyTop = 110;
-
-    slots.forEach((slot, idx) => {
-      const card = slot.querySelector(".stack-card");
-      const rect = slot.getBoundingClientRect();
-      const distFromSticky = rect.top - stickyTop;
-
-      if (distFromSticky <= 0) {
-        // Card is pinned / stacked at top!
-        // As user scrolls further down, subsequent cards stack on top of this one
-        const pinnedDepth = Math.abs(distFromSticky);
-        const scale = Math.max(0.85, 1 - (pinnedDepth * 0.00025));
-        const opacity = Math.max(0.4, 1 - (pinnedDepth * 0.0012));
-        const translateY = Math.min(30, pinnedDepth * 0.03);
-        const blur = Math.min(8, pinnedDepth * 0.015);
-
-        card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
-        card.style.opacity = opacity.toFixed(2);
-        card.style.filter = blur > 0.5 ? `blur(${blur.toFixed(1)}px)` : "none";
-      } else {
-        // Card approaching from below
-        card.style.transform = "scale(1) translateY(0)";
-        card.style.opacity = "1";
-        card.style.filter = "none";
-      }
-    });
-  }
-
-  function openShowreelDeck() {
-    showreelStackModal = createShowreelStack();
-    const thumbs = portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails;
-    populateStackCards(thumbs);
-    showreelStackModal.classList.add("is-open");
-    const wrapper = showreelStackModal.querySelector(".stack-scroll-wrapper");
-    if (wrapper) wrapper.scrollTop = 0;
-    playSound("longclick");
-  }
-
-  function closeShowreelDeck() {
-    if (showreelStackModal) {
-      showreelStackModal.classList.remove("is-open");
-      playSound("click");
-    }
-  }
-
-
-  /* ==========================================================================
      Smooth Momentum Scroll System for Works Page
      ========================================================================== */
   let smoothScrollInstance = null;
@@ -3129,6 +2997,150 @@ let fbConfig = null;
   /* ==========================================================================
      1. Swipeable Showreel Gesture Interaction
      ========================================================================== */
+  
+  /* ==========================================================================
+     Showcase Reel: Vertical Stacking Cards Scroll Overlay
+     ========================================================================== */
+  let showreelStackModal = null;
+
+  function createShowreelStack() {
+    if (document.querySelector(".pruthvi-showreel-stack")) {
+      return document.querySelector(".pruthvi-showreel-stack");
+    }
+
+    const modal = document.createElement("div");
+    modal.className = "pruthvi-showreel-stack";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-label", "Showcase Reel Stacking Cards");
+    modal.innerHTML = `
+      <div class="stack-backdrop"></div>
+      <header class="stack-header">
+        <div class="stack-brand">
+          <span class="stack-brand-badge">SHOWCASE REEL</span>
+          <span class="stack-title">Scroll Down to Stack Thumbnails</span>
+        </div>
+        <button class="stack-close-btn" type="button" aria-label="Close Showcase">&times;</button>
+      </header>
+      <div class="stack-scroll-wrapper">
+        <div class="stack-card-list"></div>
+      </div>
+      <div class="stack-hint-pill">
+        <span>&darr;</span> SCROLL DOWN TO STACK CARDS
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const closeBtn = modal.querySelector(".stack-close-btn");
+    const backdrop = modal.querySelector(".stack-backdrop");
+    closeBtn.addEventListener("click", closeShowreelStack);
+    backdrop.addEventListener("click", closeShowreelStack);
+
+    // Scroll Stacking 3D Dynamics
+    const scrollWrapper = modal.querySelector(".stack-scroll-wrapper");
+    scrollWrapper.addEventListener("scroll", () => {
+      updateCardStackingTransforms(scrollWrapper);
+    }, { passive: true });
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("is-open")) return;
+      if (e.key === "Escape") closeShowreelStack();
+    });
+
+    return modal;
+  }
+
+  function populateStackCards(thumbnails) {
+    const modal = showreelStackModal || createShowreelStack();
+    const list = modal.querySelector(".stack-card-list");
+    list.innerHTML = "";
+
+    const items = Array.isArray(thumbnails) && thumbnails.length > 0
+      ? thumbnails
+      : (portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails || []);
+
+    items.forEach((item, idx) => {
+      const num = idx + 1;
+      const meta = typeof THUMBNAIL_CREATOR_MAP !== "undefined"
+        ? THUMBNAIL_CREATOR_MAP[idx % THUMBNAIL_CREATOR_MAP.length]
+        : null;
+      const creatorName = item.creator || meta?.creator || "INSANE RMK";
+      const slot = document.createElement("div");
+      slot.className = "stack-card-slot";
+      slot.dataset.index = String(idx);
+      slot.innerHTML = `
+        <div class="stack-card">
+          <img src="${item.src}" alt="${item.title || `Thumbnail ${num}`}" loading="${idx < 3 ? 'eager' : 'lazy'}">
+          <div class="stack-card-overlay">
+            <div class="stack-card-top-bar">
+              <span class="stack-card-badge">THUMBNAIL #${String(num).padStart(2, '0')}</span>
+              <span class="stack-card-creator">${creatorName}</span>
+            </div>
+            <div class="stack-card-bottom-bar">
+              <span class="stack-card-title">${item.title || `Thumbnail ${num}`}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      list.appendChild(slot);
+    });
+  }
+
+  function updateCardStackingTransforms(scrollWrapper) {
+    const slots = scrollWrapper.querySelectorAll(".stack-card-slot");
+    const stickyTop = 110;
+
+    slots.forEach((slot, idx) => {
+      const card = slot.querySelector(".stack-card");
+      if (!card) return;
+      const rect = slot.getBoundingClientRect();
+      const distFromSticky = rect.top - stickyTop;
+
+      if (distFromSticky <= 0) {
+        // Card is pinned / stacked at top!
+        const pinnedDepth = Math.abs(distFromSticky);
+        const scale = Math.max(0.85, 1 - (pinnedDepth * 0.00025));
+        const opacity = Math.max(0.4, 1 - (pinnedDepth * 0.0012));
+        const translateY = Math.min(30, pinnedDepth * 0.03);
+        const blur = Math.min(8, pinnedDepth * 0.015);
+
+        card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+        card.style.opacity = opacity.toFixed(2);
+        card.style.filter = blur > 0.5 ? `blur(${blur.toFixed(1)}px)` : "none";
+      } else {
+        card.style.transform = "scale(1) translateY(0)";
+        card.style.opacity = "1";
+        card.style.filter = "none";
+      }
+    });
+  }
+
+  function openShowreelDeck() {
+    showreelStackModal = createShowreelStack();
+    const thumbs = portfolio?.thumbnails || DEFAULT_PORTFOLIO.thumbnails;
+    populateStackCards(thumbs);
+    showreelStackModal.classList.add("is-open");
+    const wrapper = showreelStackModal.querySelector(".stack-scroll-wrapper");
+    if (wrapper) {
+      wrapper.scrollTop = 0;
+      updateCardStackingTransforms(wrapper);
+    }
+    playSound("longclick");
+  }
+
+  function closeShowreelStack() {
+    if (showreelStackModal) {
+      showreelStackModal.classList.remove("is-open");
+      playSound("click");
+    }
+  }
+
+  // Expose globally so external callers or inline triggers can always access it
+  window.openShowreelDeck = openShowreelDeck;
+  window.closeShowreelStack = closeShowreelStack;
+
+
   function setupSwipeableShowreel() {
     const showreel = document.querySelector(".showreel-thumbnail");
     if (!showreel || showreel.dataset.swipeReady === "true") return;
@@ -3200,6 +3212,11 @@ let fbConfig = null;
     wrapper.addEventListener("pointermove", onPointerMove);
     wrapper.addEventListener("pointerup", onPointerUp);
     wrapper.addEventListener("pointercancel", onPointerUp);
+    wrapper.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openShowreelDeck();
+    });
   }
 
   /* ==========================================================================
