@@ -5949,6 +5949,9 @@ body:has(.wrapper.opened) .switch {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   will-change: clip-path;
 }
 
@@ -5998,7 +6001,7 @@ body:has(.wrapper.opened) .switch {
 .pruthvi-cmp-svg path {
   fill: none;
   stroke: #ffffff;
-  stroke-width: 2.5px;
+  stroke-width: 2px;
 }
 
 /* Draggable Grip & Spring Knob */

@@ -23,13 +23,13 @@
 
     function onRaf(now) {
       if (!isTicking) return;
-      const dt = Math.min(0.1, (now - lastTime) / 1000);
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
       const diff = Math.abs(targetY - currentY);
-      if (diff > 0.3) {
-        currentY = damp(currentY, targetY, 14, dt);
-        container.scrollTop = Math.round(currentY * 10) / 10;
+      if (diff > 0.2) {
+        currentY = damp(currentY, targetY, 28, dt);
+        container.scrollTop = currentY;
         requestAnimationFrame(onRaf);
       } else {
         currentY = targetY;
@@ -3431,6 +3431,13 @@ let fbConfig = null;
   /* ==========================================================================
      BOUTIQUE BEFORE / AFTER COMPARISON SLIDER ENGINE (ELASTIC CURVED PATH)
      ========================================================================== */
+  /* ==========================================================================
+     BOUTIQUE BEFORE & AFTER SLIDER (Dyyro-Grade Single-Line Spring Motion)
+     - 100% Geometric Synchronization between SVG divider line & CSS clipPath
+     - Subpixel viewBox alignment eliminates the "two lines" bug permanently
+     - Frame-rate independent spring physics with natural inertia & elastic bend
+     - Passive pointer listeners & cached dimensions for butter-smooth 120fps
+     ========================================================================== */
   function setupBeforeAfterSliders(container = document) {
     const cmpElements = container.querySelectorAll(".pruthvi-cmp:not([data-cmp-ready])");
     cmpElements.forEach((cmp) => {
@@ -3441,101 +3448,154 @@ let fbConfig = null;
 
   function initSingleBeforeAfter(cmp) {
     const beforeWrap = cmp.querySelector(".pruthvi-cmp-before");
-    const svgPath = cmp.querySelector(".pruthvi-cmp-svg path");
+    const svgEl = cmp.querySelector(".pruthvi-cmp-svg");
+    const svgPath = svgEl?.querySelector("path");
     const grip = cmp.querySelector(".pruthvi-cmp-grip");
     const tagBefore = cmp.querySelector(".pruthvi-cmp-tag-before");
     const tagAfter = cmp.querySelector(".pruthvi-cmp-tag-after");
 
-    let progress = 0.5; // 0 to 1
-    let targetProgress = 0.5;
-    let velocity = 0;
-    let curveOffset = 0;
-    let targetCurve = 0;
+    let width = 640;
+    let height = 360;
+    let progress = 0.5; // Visual progress (0 to 1)
+    let targetProgress = 0.5; // Target progress
+    let springX = 0.5; // Physics oscillator position
+    let springV = 0; // Physics velocity
+    let curve = 0; // Curve offset
     let isDragging = false;
-    let lastPointerX = 0;
-    let lastTime = performance.now();
+    let dragData = null;
     let animFrame = null;
+    let lastTime = performance.now();
 
-    function render(p, curve) {
-      const w = cmp.clientWidth || 640;
-      const h = cmp.clientHeight || 360;
-      const x = p * w;
-      const cx = x + curve; // quadratic curve control point offset
-
-      // SVG quadratic curve: M x 0 Q cx (h/2) x h
-      const pathD = `M ${x.toFixed(1)} 0 Q ${cx.toFixed(1)} ${(h / 2).toFixed(1)} ${x.toFixed(1)} ${h}`;
-      if (svgPath) svgPath.setAttribute("d", pathD);
-
-      // CSS clip-path path polygon matching the curve
-      const clipD = `path("M 0 0 L ${x.toFixed(1)} 0 Q ${cx.toFixed(1)} ${(h / 2).toFixed(1)} ${x.toFixed(1)} ${h} L 0 ${h} Z")`;
-      if (beforeWrap) beforeWrap.style.clipPath = clipD;
-
-      if (grip) grip.style.left = `${x.toFixed(1)}px`;
-
-      // Tag fading near edges
-      if (tagBefore) tagBefore.style.opacity = Math.max(0, Math.min(1, (p - 0.12) * 4));
-      if (tagAfter) tagAfter.style.opacity = Math.max(0, Math.min(1, (0.88 - p) * 4));
+    // Cache dimensions via ResizeObserver (Zero layout thrashing during animation)
+    function updateDimensions(w, h) {
+      if (w > 0 && h > 0) {
+        width = w;
+        height = h;
+        if (svgEl) {
+          svgEl.setAttribute("width", width);
+          svgEl.setAttribute("height", height);
+          svgEl.setAttribute("viewBox", `0 0 ${width} ${height}`);
+          svgEl.removeAttribute("preserveAspectRatio");
+        }
+        render(progress, curve);
+      }
     }
 
-    // Spring physics update loop
-    function updateSpring(now) {
-      const dt = Math.min(0.04, Math.max(0.001, (now - lastTime) / 1000));
+    const initialRect = cmp.getBoundingClientRect();
+    if (initialRect.width > 0) {
+      updateDimensions(initialRect.width, initialRect.height || (initialRect.width * 9 / 16));
+    }
+
+    const resizeObs = new ResizeObserver(([entry]) => {
+      if (entry && entry.contentRect.width > 0) {
+        updateDimensions(entry.contentRect.width, entry.contentRect.height || (entry.contentRect.width * 9 / 16));
+      }
+    });
+    resizeObs.observe(cmp);
+
+    function clamp(val, min, max) {
+      return Math.min(max, Math.max(min, val));
+    }
+
+    // Perfectly synchronized render: SVG stroke and clip-path use EXACT same coordinates
+    function render(p, bend) {
+      const O = p * width;
+      const k = O - bend;
+      const midX = O + bend;
+      const halfH = height / 2;
+
+      // Single SVG path (glowing hairline divider)
+      const pathD = `M ${k.toFixed(2)} 0 Q ${midX.toFixed(2)} ${halfH.toFixed(2)} ${k.toFixed(2)} ${height}`;
+      if (svgPath) svgPath.setAttribute("d", pathD);
+
+      // CSS clip-path path polygon: EXACT match of SVG line coordinate boundary
+      const clipD = `path("M 0 0 L ${k.toFixed(2)} 0 Q ${midX.toFixed(2)} ${halfH.toFixed(2)} ${k.toFixed(2)} ${height} L 0 ${height} Z")`;
+      if (beforeWrap) beforeWrap.style.clipPath = clipD;
+
+      // Handle grip
+      if (grip) grip.style.left = `${O.toFixed(2)}px`;
+
+      // Editorial badge tags fade out smoothly near borders
+      if (tagBefore) tagBefore.style.opacity = clamp((p - 0.14) * 4, 0, 1);
+      if (tagAfter) tagAfter.style.opacity = clamp((0.86 - p) * 4, 0, 1);
+    }
+
+    // High-performance Spring Oscillator Loop (Dyyro physics: k=620, damping=44)
+    function tickSpring(now) {
+      const dt = Math.min(0.033, Math.max(0.001, (now - lastTime) / 1000));
       lastTime = now;
 
       if (!isDragging) {
-        // Damped harmonic oscillator: k = 480, c = 38
-        const displacement = targetProgress - progress;
-        const springForce = displacement * 480;
-        const dampingForce = -velocity * 38;
-        velocity += (springForce + dampingForce) * dt;
-        progress += velocity * dt;
+        // Natural release spring
+        const springForce = (targetProgress - springX) * 620;
+        const dampingForce = -springV * 44;
+        springV += (springForce + dampingForce) * dt;
+        springX += springV * dt;
 
-        // Curve springs back to 0 (straight line)
-        curveOffset += (0 - curveOffset) * Math.min(1, 18 * dt);
+        progress = springX;
+        curve = clamp((targetProgress - springX) * width * 0.45, -16, 16);
 
-        if (Math.abs(displacement) < 0.0005 && Math.abs(velocity) < 0.0005 && Math.abs(curveOffset) < 0.1) {
+        if (Math.abs(targetProgress - springX) < 0.0005 && Math.abs(springV) < 0.001 && Math.abs(curve) < 0.1) {
           progress = targetProgress;
-          curveOffset = 0;
-          render(progress, curveOffset);
+          springX = targetProgress;
+          springV = 0;
+          curve = 0;
+          render(progress, 0);
           animFrame = null;
           return;
         }
       } else {
-        // Follow target directly during active dragging with elastic drag lag
-        progress += (targetProgress - progress) * Math.min(1, 26 * dt);
-        curveOffset += (targetCurve - curveOffset) * Math.min(1, 22 * dt);
+        // Direct tracking with inertia lag
+        const springForce = (targetProgress - springX) * 780;
+        const dampingForce = -springV * 52;
+        springV += (springForce + dampingForce) * dt;
+        springX += springV * dt;
+
+        progress = targetProgress;
+        curve = clamp((targetProgress - springX) * width * 0.5, -18, 18);
       }
 
-      render(progress, curveOffset);
-      animFrame = requestAnimationFrame(updateSpring);
+      render(progress, curve);
+      animFrame = requestAnimationFrame(tickSpring);
     }
 
     function ensureLoop() {
       if (!animFrame) {
         lastTime = performance.now();
-        animFrame = requestAnimationFrame(updateSpring);
+        animFrame = requestAnimationFrame(tickSpring);
       }
     }
 
-    function onPointerMove(e) {
-      if (!isDragging) return;
-      const rect = cmp.getBoundingClientRect();
-      const currentX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
-      targetProgress = Math.max(0.02, Math.min(0.98, currentX / rect.width));
+    function getProgressFromClientX(clientX) {
+      const cached = dragData?.rect || cmp.getBoundingClientRect();
+      return clamp((clientX - cached.left) / cached.width, 0.02, 0.98);
+    }
 
-      // Elastic bending curve based on pointer speed / delta
-      const dx = e.clientX - lastPointerX;
-      lastPointerX = e.clientX;
-      targetCurve = Math.max(-18, Math.min(18, dx * 1.5));
+    function onPointerMove(e) {
+      if (!isDragging || !dragData) return;
+      const now = performance.now();
+      const newP = getProgressFromClientX(e.clientX);
+      const dt = Math.max(1, now - dragData.t);
+      dragData.velocity = (newP - dragData.lastP) / dt;
+      dragData.t = now;
+      dragData.lastP = newP;
+      targetProgress = newP;
       ensureLoop();
     }
 
     function onPointerUp(e) {
       if (!isDragging) return;
       isDragging = false;
+      cmp.removeAttribute("data-held");
       cmp.removeAttribute("data-dragging");
       try { cmp.releasePointerCapture(e.pointerId); } catch (_) {}
-      targetCurve = 0;
+
+      // Add fling momentum if dragged with velocity
+      if (dragData && Math.abs(dragData.velocity) > 0.002) {
+        targetProgress = clamp(targetProgress + dragData.velocity * 120, 0.05, 0.95);
+      }
+      dragData = null;
+
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointercancel", onPointerUp);
@@ -3543,44 +3603,62 @@ let fbConfig = null;
     }
 
     cmp.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0) return;
+      if (e.button !== 0 && e.pointerType === "mouse") return;
       isDragging = true;
+      cmp.setAttribute("data-held", "true");
       cmp.setAttribute("data-dragging", "true");
-      lastPointerX = e.clientX;
       try { cmp.setPointerCapture(e.pointerId); } catch (_) {}
 
-      const rect = cmp.getBoundingClientRect();
-      const currentX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
-      targetProgress = Math.max(0.02, Math.min(0.98, currentX / rect.width));
+      const currentRect = cmp.getBoundingClientRect();
+      const initialP = clamp((e.clientX - currentRect.left) / currentRect.width, 0.02, 0.98);
+      dragData = {
+        rect: currentRect,
+        lastP: initialP,
+        velocity: 0,
+        t: performance.now()
+      };
+      targetProgress = initialP;
 
-      window.addEventListener("pointermove", onPointerMove);
-      window.addEventListener("pointerup", onPointerUp);
-      window.addEventListener("pointercancel", onPointerUp);
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("pointerup", onPointerUp, { passive: true });
+      window.addEventListener("pointercancel", onPointerUp, { passive: true });
       ensureLoop();
+    }, { passive: true });
+
+    // Keyboard accessibility for Arrow keys
+    cmp.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        targetProgress = clamp(targetProgress - 0.08, 0.05, 0.95);
+        ensureLoop();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        targetProgress = clamp(targetProgress + 0.08, 0.05, 0.95);
+        ensureLoop();
+      }
     });
 
-    // Automated introductory sweep on scroll view
+    // Elegant entrance sweep when scrolled into view (Dyyro triple-peek)
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && !cmp.dataset.swept) {
           cmp.dataset.swept = "true";
-          // Gentle auto-sweep: 0.5 -> 0.22 -> 0.78 -> 0.5
-          setTimeout(() => { targetProgress = 0.22; targetCurve = -8; ensureLoop(); }, 400);
-          setTimeout(() => { targetProgress = 0.78; targetCurve = 8; ensureLoop(); }, 1200);
-          setTimeout(() => { targetProgress = 0.50; targetCurve = 0; ensureLoop(); }, 2000);
+          [[350, 0.18], [1150, 0.82], [1950, 0.50]].forEach(([delay, pos]) => {
+            setTimeout(() => {
+              if (!isDragging) {
+                targetProgress = pos;
+                ensureLoop();
+              }
+            }, delay);
+          });
         }
       });
     }, { threshold: 0.5 });
     observer.observe(cmp);
 
-    // Initial render
     render(progress, 0);
   }
 
-
-  /* ==========================================================================
-     BOUTIQUE CREATOR REVIEWS ENTRANCE REVEAL OBSERVER
-     ========================================================================== */
   function setupReviewsReveal(container = document) {
     const rows = container.querySelectorAll(".pruthvi-rv-row:not([data-rv-ready])");
     if (!rows.length) return;
@@ -3727,6 +3805,8 @@ let fbConfig = null;
      2. Desktop Crosshair Cursor for Thumbnail Opening
      ========================================================================== */
   function setupDesktopCrosshair() {
+    if (window._desktopCrosshairInitialized) return;
+    window._desktopCrosshairInitialized = true;
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!isDesktop) return;
 
