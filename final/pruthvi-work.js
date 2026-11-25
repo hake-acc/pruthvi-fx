@@ -925,16 +925,13 @@
     }
 
     // Update showreel scroll dialog badge text
-    const showreelBadge = theme.showreelBadge || (portfolio && portfolio.theme && portfolio.theme.showreelBadge) || "scroll me";
-    let dialogs = document.querySelectorAll(".showreel-scroll-dialog");
-    if (dialogs.length === 0) {
-      try {
-        if (typeof ensureShowreelScrollDialog === "function") ensureShowreelScrollDialog();
-      } catch (_) {}
-      dialogs = document.querySelectorAll(".showreel-scroll-dialog");
-    }
-    dialogs.forEach((dialog) => {
-      dialog.innerHTML = `<span class="dialog-icon">&darr;</span> ${escapeHtml(showreelBadge)}`;
+    const showreelBadge = (theme.showreelBadge || (portfolio && portfolio.theme && portfolio.theme.showreelBadge) || "scroll me").trim();
+    try {
+      if (typeof ensureShowreelScrollDialog === "function") ensureShowreelScrollDialog();
+    } catch (_) {}
+    const textEls = document.querySelectorAll(".showreel-scroll-dialog .tag text");
+    textEls.forEach((txt) => {
+      txt.textContent = showreelBadge;
     });
 
     // Update hero title
@@ -3606,20 +3603,40 @@ let fbConfig = null;
 
   
   
-  /* Inject "scroll me" dialog box onto showreel thumbnail */
+  /* Inject boutique Pacôme mascot-style "scroll me" dialog box onto showreel thumbnail */
   function ensureShowreelScrollDialog() {
     const showreel = document.querySelector(".showreel-thumbnail");
     if (!showreel) return;
-    const wrapper = showreel.querySelector(".thumbnail-wrapper") || showreel;
-    let dialog = wrapper.querySelector(".showreel-scroll-dialog") || showreel.querySelector(".showreel-scroll-dialog");
-    const badgeText = portfolio?.theme?.showreelBadge || "scroll me";
+    let dialog = showreel.querySelector(".showreel-scroll-dialog");
+    const badgeText = (portfolio?.theme?.showreelBadge || "scroll me").trim();
     if (!dialog) {
       dialog = document.createElement("div");
-      dialog.className = "showreel-scroll-dialog";
+      dialog.className = "showreel-scroll-dialog logo-tag-wrapper";
       dialog.setAttribute("aria-hidden", "true");
-      wrapper.appendChild(dialog);
+      showreel.appendChild(dialog);
+    } else if (dialog.parentElement !== showreel) {
+      showreel.appendChild(dialog);
     }
-    dialog.innerHTML = `<span class="dialog-icon">&darr;</span> ${escapeHtml(badgeText)}`;
+    if (dialog.dataset.renderedText !== badgeText) {
+      dialog.dataset.renderedText = badgeText;
+      dialog.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 70.9" class="star" aria-hidden="true">
+          <defs>
+            <linearGradient id="scroll-star-grad" x1="7.2" x2="66.4" y1="65.1" y2="5.9" gradientUnits="userSpaceOnUse">
+              <stop offset=".1" stop-color="#fdff6c"></stop>
+              <stop offset="1" stop-color="#c084fc"></stop>
+            </linearGradient>
+          </defs>
+          <path fill="url(#scroll-star-grad)" d="m73 31.4-23.9-.2c-.8 0-1.2-1-.5-1.5L71.3 13c.4-.3.4-.8.2-1.2L69 8.5a.9.9 0 0 0-1.2-.1L45.3 24.8a.9.9 0 0 1-1.3-1l7.4-22.6a.9.9 0 0 0-.8-1.1L45.7 0c-.4 0-.7.2-.8.6l-8 24a.9.9 0 0 1-1.6.3L23.7 8.2a.9.9 0 0 0-1.2-.3l-5 3.6c-.4.3-.5.8-.2 1.2l11.6 17c.4.5 0 1.3-.8 1.3l-25.4-.2c-.4 0-.7.2-.9.6l-1.8 5c-.1.6.3 1.2.9 1.2l24 .2c.8 0 1.2 1 .5 1.6L1.6 56.8c-.4.2-.5.8-.2 1.2l2.3 3.5c.2.4.8.5 1.2.2l23.7-17.4a.9.9 0 0 1 1.4 1l-8.6 23.3a.9.9 0 0 0 .5 1.2l5 2.1c.4.2.8 0 1-.4l9.5-23.6a.9.9 0 0 1 1.6 0l9.3 23.7c.2.4.7.5 1 .3l5.1-2a.9.9 0 0 0 .5-1.2l-8.7-23.4a.9.9 0 0 1 1.4-1L71 58.3c.4.3 1 .1 1.2-.3l2.2-3.6c.3-.4.2-.9-.2-1.2L50.7 35.8c-.7-.6-.3-1.6.5-1.6l23.9-.2c.5 0 .9-.5.8-1l-.4-5.3c0-.4-.4-.8-.9-.9Z"></path>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185.2 59.6" class="tag" aria-hidden="true">
+          <g>
+            <path fill="#f8f8f8" d="M158 59.6H0l16.7-46.4A20 20 0 0 1 35.6 0H165A20 20 0 0 1 184 26.9l-7 19.4a20 20 0 0 1-19 13.3Z"></path>
+            <text x="52%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="'Clash Display', 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.03em" fill="#0c0a14">${escapeHtml(badgeText)}</text>
+          </g>
+        </svg>
+      `;
+    }
   }
 
   function setupSwipeableShowreel() {

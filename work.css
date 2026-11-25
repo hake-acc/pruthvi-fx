@@ -6196,8 +6196,9 @@ body:has(.wrapper.opened) .switch {
 
 
 /* ==========================================================================
-   SHOWREEL "SCROLL ME" FLOATING DIALOG - PRECISE ANCHORING
-   Anchored directly onto .thumbnail-wrapper with high z-index & visible overflow
+   SHOWREEL "SCROLL ME" BOUTIQUE MASCOT-STYLE DIALOG TAG
+   Exact Pacôme Pertant mascot tag architecture: slanted parallelogram (#f8f8f8),
+   gradient star (#fdff6c -> #c084fc), bold editorial typography, and linear spring physics.
    ========================================================================== */
 
 .showreel-thumbnail {
@@ -6210,66 +6211,84 @@ body:has(.wrapper.opened) .switch {
 
 .thumbnail-wrapper {
   overflow: visible !important;
+  position: relative !important;
 }
 
 .showreel-scroll-dialog {
   position: absolute !important;
-  top: -44px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  background: rgba(12, 10, 20, 0.94) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  border-radius: 9999px !important;
-  padding: 6px 14px 6px 12px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  color: #ffffff !important;
-  font-family: monospace !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.12em !important;
-  text-transform: uppercase !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 92, 246, 0.3) !important;
+  top: -38px !important;
+  left: 48px !important;
+  transform: scale(0.95) rotate(-5deg) !important;
+  transform-origin: left bottom !important;
+  height: fit-content !important;
+  width: fit-content !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   pointer-events: none !important;
   z-index: 99999 !important;
-  white-space: nowrap !important;
   opacity: 1 !important;
   visibility: visible !important;
-  animation: dialogFloat 2.6s ease-in-out infinite !important;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
+  transition: opacity 0.25s ease-out, transform 0.5s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) !important;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.65)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4)) !important;
+  animation: mascotTagFloat 3.2s ease-in-out infinite !important;
 }
 
 .showreel-scroll-dialog::after {
-  content: "" !important;
+  display: none !important;
+  content: none !important;
+}
+
+.showreel-scroll-dialog .tag {
+  display: block !important;
+  height: auto !important;
+  width: 112px !important;
+}
+
+.showreel-scroll-dialog .star {
+  display: block !important;
+  height: auto !important;
   position: absolute !important;
-  bottom: -6px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 0 !important;
-  height: 0 !important;
-  border-left: 6px solid transparent !important;
-  border-right: 6px solid transparent !important;
-  border-top: 6px solid rgba(12, 10, 20, 0.94) !important;
+  right: -13px !important;
+  top: -13px !important;
+  width: 32px !important;
+  z-index: 2 !important;
+  animation: starTwinkle 3.2s ease-in-out infinite !important;
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(18deg);
+  }
+}
+
+@keyframes mascotTagFloat {
+  0%, 100% {
+    transform: scale(0.95) rotate(-5deg) translateY(0);
+  }
+  50% {
+    transform: scale(0.98) rotate(-3deg) translateY(-5px);
+  }
 }
 
 .thumbnail-wrapper:hover .showreel-scroll-dialog,
 .showreel-thumbnail:hover .showreel-scroll-dialog {
-  transform: translateX(-50%) translateY(-5px) scale(1.06) !important;
-  border-color: rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 255, 255, 0.3) !important;
+  opacity: 1 !important;
+  transform: scale(1.08) rotate(-7deg) translateY(-10px) !important;
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 16px rgba(192, 132, 252, 0.45)) !important;
+  animation-play-state: paused !important;
 }
 
-@keyframes dialogFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
-}
-
-@keyframes dialogBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(3px); }
+.thumbnail-wrapper:active .showreel-scroll-dialog,
+.showreel-thumbnail:active .showreel-scroll-dialog {
+  transform: scale(0.98) rotate(-5deg) translateY(-8px) !important;
 }
 
 
@@ -6328,15 +6347,7 @@ body:has(.wrapper.opened) .switch {
   transform: scale(var(--theme-card-scale, 1)) !important;
 }
 
-.showreel-scroll-dialog {
-  background: var(--theme-bg-card, rgba(12, 10, 20, 0.94)) !important;
-  color: var(--theme-text, #ffffff) !important;
-  border-color: var(--theme-accent, rgba(255, 255, 255, 0.22)) !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 calc(var(--theme-glow-intensity, 60%) * 0.4) var(--theme-accent, rgba(139, 92, 246, 0.3)) !important;
-  backdrop-filter: blur(var(--theme-backdrop-blur, 18px)) !important;
-  -webkit-backdrop-filter: blur(var(--theme-backdrop-blur, 18px)) !important;
-}
-
-.showreel-scroll-dialog .dialog-icon {
-  color: var(--theme-pop, #c084fc) !important;
+/* Showreel tag uses pristine off-white badge & star */
+.showreel-scroll-dialog .tag text {
+  fill: #0c0a14 !important;
 }
