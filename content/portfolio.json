@@ -6,56 +6,134 @@
   "instagram": "pruthvifx99",
   "instagramUrl": "https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb",
   "lifetimeThumbnails": 100,
+  "creatorsSection": {
+    "titleLine1": "Creators",
+    "titleLine2": "in the Frame.",
+    "experienceLabel": "days of experience"
+  },
   "collaborators": [
     {
       "id": "creator-01",
       "name": "INSANE RMK",
+      "subs": "580K+",
       "avatar": "/images/creators/insane_rmk.webp",
       "profileUrl": "https://www.youtube.com/@InsaneRMK"
     },
     {
       "id": "creator-02",
       "name": "Mikey Chan",
+      "subs": "420K+",
       "avatar": "/images/creators/mikey_chan.webp",
       "profileUrl": "https://www.youtube.com/@MickeyChaan"
     },
     {
       "id": "creator-03",
       "name": "Kabeer",
+      "subs": "310K+",
       "avatar": "/images/creators/kabeer.webp",
       "profileUrl": "https://www.youtube.com/@kabeerOG"
     },
     {
       "id": "creator-04",
       "name": "Mr Overrated",
+      "subs": "290K+",
       "avatar": "/images/creators/mr_overrated.webp",
       "profileUrl": "https://www.youtube.com/@Mr_OverratedXD"
     },
     {
       "id": "creator-05",
       "name": "Znsu",
+      "subs": "180K+",
       "avatar": "/images/creators/znsu.webp",
       "profileUrl": "https://www.youtube.com/@znsuyt"
     },
     {
       "id": "creator-06",
       "name": "Teddy Gaming",
+      "subs": "150K+",
       "avatar": "/images/creators/teddy_gaming.webp",
       "profileUrl": "https://www.youtube.com/@TeddyGaming"
     },
     {
       "id": "creator-07",
       "name": "Haider Playz",
+      "subs": "350K+",
       "avatar": "/images/creators/haider_playz.webp",
       "profileUrl": "https://www.youtube.com/@HaiderPlayz786"
     },
     {
       "id": "creator-08",
       "name": "Gamingrill",
+      "subs": "210K+",
       "avatar": "/images/creators/gamingrill.webp",
       "profileUrl": "https://youtube.com/@gaming_grill"
     }
   ],
+  "beforeAfter": {
+    "eyebrow": "Transformation",
+    "title": "From raw capture to the click.",
+    "items": [
+      {
+        "id": "ba-01",
+        "title": "Minecraft Hardcore",
+        "subtitle": "Insane RMK",
+        "before": "/images/pruthvi_thumb_01_build.webp",
+        "after": "/images/pruthvi_thumb_02_after.webp",
+        "beforeTag": "Raw In-Game",
+        "afterTag": "Final Click"
+      },
+      {
+        "id": "ba-02",
+        "title": "Survival Finale",
+        "subtitle": "Haider Playz",
+        "before": "/images/pruthvi_thumb_04_gaming_grill.webp",
+        "after": "/images/pruthvi_thumb_03_flamefrag.webp",
+        "beforeTag": "Raw Asset",
+        "afterTag": "Final Click"
+      }
+    ]
+  },
+  "reviews": {
+    "eyebrow": "Creator Reviews",
+    "title": "Loved by creators who reach millions.",
+    "items": [
+      {
+        "id": "rv-01",
+        "name": "INSANE RMK",
+        "subs": "580K+",
+        "avatar": "/images/creators/insane_rmk.webp",
+        "bubble": "Bro the thumbnail CTR went absolutely crazy on the premiere! Volumetric lighting is insane 🔥"
+      },
+      {
+        "id": "rv-02",
+        "name": "Mikey Chan",
+        "subs": "420K+",
+        "avatar": "/images/creators/mikey_chan.webp",
+        "bubble": "Genuinely best thumbnail designer in the space. Delivered under 4 hours and it popped out of the feed completely."
+      },
+      {
+        "id": "rv-03",
+        "name": "Kabeer",
+        "subs": "310K+",
+        "avatar": "/images/creators/kabeer.webp",
+        "bubble": "W thumbnail brother! 100 Days video hit #1 trending on release day!"
+      },
+      {
+        "id": "rv-04",
+        "name": "Mr Overrated",
+        "subs": "290K+",
+        "avatar": "/images/creators/mr_overrated.webp",
+        "bubble": "Cleanest 3D character pose and depth composition. Everyone in the comments was asking who made the thumbnail!"
+      },
+      {
+        "id": "rv-05",
+        "name": "Znsu",
+        "subs": "180K+",
+        "avatar": "/images/creators/znsu.webp",
+        "bubble": "10/10 visual storytelling. Pruthvi always knows exactly how to hook the viewer instantly."
+      }
+    ]
+  },
   "thumbnails": [
     {
       "id": "thumbnail-01",

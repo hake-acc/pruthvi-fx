@@ -114,6 +114,12 @@
       <button class="tab-btn" data-tab="creatorsTab">
         Creators / Collaborators <span id="creatorCountBadge" class="tab-count">0</span>
       </button>
+      <button class="tab-btn" data-tab="beforeAfterTab">
+        Before &amp; After <span id="baCountBadge" class="tab-count">0</span>
+      </button>
+      <button class="tab-btn" data-tab="reviewsTab">
+        Creator Reviews <span id="reviewCountBadge" class="tab-count">0</span>
+      </button>
       <button class="tab-btn" data-tab="visualBuilderTab">
         🎨 Visual Theme &amp; Builder <span class="tab-count" style="background: rgba(168, 85, 247, 0.3); color: #c084fc;">LIVE</span>
       </button>
@@ -155,7 +161,109 @@
         </button>
       </div>
 
+      <!-- Creators Section Header Customizer -->
+      <div class="cms-section-settings-card">
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; font-family: var(--font-mono); color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 0.05em;">
+          Creators Section Display Titles
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 14px; align-items: flex-end;">
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="creatorsTitleLine1">Title Line 1</label>
+            <input type="text" id="creatorsTitleLine1" class="form-input" placeholder="Creators" value="Creators">
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="creatorsTitleLine2">Title Line 2</label>
+            <input type="text" id="creatorsTitleLine2" class="form-input" placeholder="in the Frame." value="in the Frame.">
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="creatorsExpLabel">Counter Subtitle</label>
+            <input type="text" id="creatorsExpLabel" class="form-input" placeholder="days of experience" value="days of experience">
+          </div>
+          <button type="button" id="saveCreatorsHeaderBtn" class="btn-secondary" style="height: 42px; padding: 0 16px; white-space: nowrap;">
+            Save Header
+          </button>
+        </div>
+      </div>
+
       <div id="creatorsGrid" class="cards-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 3: Before & After -->
+    <section id="beforeAfterTab" class="tab-content">
+      <div class="section-bar">
+        <div>
+          <h2>Before &amp; After Comparison</h2>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+            Manage side-by-side interactive transformation sliders with live spring physics.
+          </p>
+        </div>
+        <button id="addBeforeAfterBtn" class="btn-primary" style="width: auto; padding: 10px 20px;">
+          + Add Comparison
+        </button>
+      </div>
+
+      <!-- Before/After Section Header Customizer -->
+      <div class="cms-section-settings-card">
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; font-family: var(--font-mono); color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 0.05em;">
+          Before &amp; After Section Header
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 14px; align-items: flex-end;">
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="baEyebrowInput">Eyebrow</label>
+            <input type="text" id="baEyebrowInput" class="form-input" placeholder="Transformation" value="Transformation">
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="baTitleInput">Big Heading</label>
+            <input type="text" id="baTitleInput" class="form-input" placeholder="From raw capture to the click." value="From raw capture to the click.">
+          </div>
+          <button type="button" id="saveBaHeaderBtn" class="btn-secondary" style="height: 42px; padding: 0 16px; white-space: nowrap;">
+            Save Header
+          </button>
+        </div>
+      </div>
+
+      <div id="beforeAfterGrid" class="cards-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 4: Creator Reviews -->
+    <section id="reviewsTab" class="tab-content">
+      <div class="section-bar">
+        <div>
+          <h2>Creator Reviews &amp; Testimonials</h2>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+            Manage social proof chat bubbles and creator testimonials displayed on the portfolio.
+          </p>
+        </div>
+        <button id="addReviewBtn" class="btn-primary" style="width: auto; padding: 10px 20px;">
+          + Add Review
+        </button>
+      </div>
+
+      <!-- Reviews Section Header Customizer -->
+      <div class="cms-section-settings-card">
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; font-family: var(--font-mono); color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 0.05em;">
+          Reviews Section Header
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 14px; align-items: flex-end;">
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="reviewEyebrowInput">Eyebrow</label>
+            <input type="text" id="reviewEyebrowInput" class="form-input" placeholder="Creator Reviews" value="Creator Reviews">
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="reviewTitleInput">Big Heading</label>
+            <input type="text" id="reviewTitleInput" class="form-input" placeholder="Loved by creators who reach millions." value="Loved by creators who reach millions.">
+          </div>
+          <button type="button" id="saveReviewHeaderBtn" class="btn-secondary" style="height: 42px; padding: 0 16px; white-space: nowrap;">
+            Save Header
+          </button>
+        </div>
+      </div>
+
+      <div id="reviewsGrid" class="cards-grid">
         <!-- Rendered dynamically -->
       </div>
     </section>
@@ -489,6 +597,11 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label" for="creatorSubs">Subscriber Count / Badge (e.g. 580K+)</label>
+          <input type="text" id="creatorSubs" class="form-input" placeholder="e.g. 580K+">
+        </div>
+
+        <div class="form-group">
           <label class="form-label">Avatar Image</label>
           <div class="image-dropzone" id="creatorDropzone">
             <p style="font-size: 13px; color: var(--text-muted);">
@@ -503,6 +616,120 @@
         <div style="display: flex; gap: 12px; margin-top: 28px;">
           <button type="button" class="btn-secondary" data-modal="creatorModal" style="flex: 1;">Cancel</button>
           <button type="submit" id="saveCreatorBtn" class="btn-primary" style="flex: 2;">Save Creator</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Before & After Comparison -->
+  <div id="beforeAfterModal" class="admin-modal-backdrop">
+    <div class="admin-modal" style="max-width: 640px;">
+      <div class="modal-header">
+        <h3 id="beforeAfterModalTitle">Add Comparison</h3>
+        <button type="button" class="modal-close" data-modal="beforeAfterModal">&times;</button>
+      </div>
+
+      <form id="beforeAfterForm">
+        <input type="hidden" id="baEditId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="baItemTitle">Comparison Title</label>
+            <input type="text" id="baItemTitle" class="form-input" placeholder="e.g. Minecraft Hardcore" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="baItemSubtitle">Creator / Subtitle (Optional)</label>
+            <input type="text" id="baItemSubtitle" class="form-input" placeholder="e.g. Insane RMK">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="baBeforeTag">Before Tag Label</label>
+            <input type="text" id="baBeforeTag" class="form-input" value="Raw In-Game" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="baAfterTag">After Tag Label</label>
+            <input type="text" id="baAfterTag" class="form-input" value="Final Click" required>
+          </div>
+        </div>
+
+        <!-- Before Image -->
+        <div class="form-group">
+          <label class="form-label">Before Image (Raw In-Game / Asset)</label>
+          <div class="image-dropzone" id="baBeforeDropzone">
+            <p style="font-size: 13px; color: var(--text-muted);">
+              Drag &amp; drop BEFORE image here, or <span style="color: var(--accent-yellow);">browse</span>
+            </p>
+            <input type="file" id="baBeforeFileInput" accept="image/*" style="display: none;">
+            <img id="baBeforePreviewImg" class="dropzone-preview" alt="Before Preview">
+          </div>
+          <input type="text" id="baBeforeSrcInput" class="form-input" placeholder="Or enter before image URL / path (/images/...)">
+        </div>
+
+        <!-- After Image -->
+        <div class="form-group">
+          <label class="form-label">After Image (Final Composited Click)</label>
+          <div class="image-dropzone" id="baAfterDropzone">
+            <p style="font-size: 13px; color: var(--text-muted);">
+              Drag &amp; drop AFTER image here, or <span style="color: var(--accent-yellow);">browse</span>
+            </p>
+            <input type="file" id="baAfterFileInput" accept="image/*" style="display: none;">
+            <img id="baAfterPreviewImg" class="dropzone-preview" alt="After Preview">
+          </div>
+          <input type="text" id="baAfterSrcInput" class="form-input" placeholder="Or enter after image URL / path (/images/...)">
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 28px;">
+          <button type="button" class="btn-secondary" data-modal="beforeAfterModal" style="flex: 1;">Cancel</button>
+          <button type="submit" id="saveBaBtn" class="btn-primary" style="flex: 2;">Save Comparison</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Creator Review -->
+  <div id="reviewModal" class="admin-modal-backdrop">
+    <div class="admin-modal">
+      <div class="modal-header">
+        <h3 id="reviewModalTitle">Add Creator Review</h3>
+        <button type="button" class="modal-close" data-modal="reviewModal">&times;</button>
+      </div>
+
+      <form id="reviewForm">
+        <input type="hidden" id="reviewEditId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="reviewName">Creator Name</label>
+            <input type="text" id="reviewName" class="form-input" placeholder="e.g. INSANE RMK" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reviewSubs">Subscriber / Metric Tag</label>
+            <input type="text" id="reviewSubs" class="form-input" placeholder="e.g. 580K+ or 1.2M Views" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Creator Avatar</label>
+          <div class="image-dropzone" id="reviewDropzone">
+            <p style="font-size: 13px; color: var(--text-muted);">
+              Drag &amp; drop avatar here, or <span style="color: var(--accent-yellow);">browse</span>
+            </p>
+            <input type="file" id="reviewFileInput" accept="image/*" style="display: none;">
+            <img id="reviewPreviewImg" class="dropzone-preview" alt="Avatar preview" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 10px auto 0;">
+          </div>
+          <input type="text" id="reviewAvatarInput" class="form-input" placeholder="Or enter avatar URL (/images/creators/...)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reviewBubble">Review Message / Feedback</label>
+          <textarea id="reviewBubble" class="form-textarea" style="height: 110px;" placeholder="e.g. Bro the thumbnail CTR went absolutely crazy on the premiere! Volumetric lighting is insane 🔥" required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 28px;">
+          <button type="button" class="btn-secondary" data-modal="reviewModal" style="flex: 1;">Cancel</button>
+          <button type="submit" id="saveReviewBtn" class="btn-primary" style="flex: 2;">Save Review</button>
         </div>
       </form>
     </div>

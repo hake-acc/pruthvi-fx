@@ -136,16 +136,86 @@
     instagram: "pruthvifx99",
     instagramUrl: "https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb",
     lifetimeThumbnails: 100,
+    creatorsSection: {
+      titleLine1: "Creators",
+      titleLine2: "in the Frame.",
+      experienceLabel: "days of experience"
+    },
     collaborators: [
-      { id: "creator-01", name: "INSANE RMK", avatar: "/images/creators/insane_rmk.webp", profileUrl: "https://www.youtube.com/@InsaneRMK" },
-      { id: "creator-02", name: "Mikey Chan", avatar: "/images/creators/mikey_chan.webp", profileUrl: "https://www.youtube.com/@MickeyChaan" },
-      { id: "creator-03", name: "Kabeer", avatar: "/images/creators/kabeer.webp", profileUrl: "https://www.youtube.com/@kabeerOG" },
-      { id: "creator-04", name: "Mr Overrated", avatar: "/images/creators/mr_overrated.webp", profileUrl: "https://www.youtube.com/@Mr_OverratedXD" },
-      { id: "creator-05", name: "Znsu", avatar: "/images/creators/znsu.webp", profileUrl: "https://www.youtube.com/@znsuyt" },
-      { id: "creator-06", name: "Teddy Gaming", avatar: "/images/creators/teddy_gaming.webp", profileUrl: "https://www.youtube.com/@TeddyGaming" },
-      { id: "creator-07", name: "Haider Playz", avatar: "/images/creators/haider_playz.webp", profileUrl: "https://www.youtube.com/@HaiderPlayz786" },
-      { id: "creator-08", name: "Gamingrill", avatar: "/images/creators/gamingrill.webp", profileUrl: "https://youtube.com/@gaming_grill" }
+      { id: "creator-01", name: "INSANE RMK", subs: "580K+", avatar: "/images/creators/insane_rmk.webp", profileUrl: "https://www.youtube.com/@InsaneRMK" },
+      { id: "creator-02", name: "Mikey Chan", subs: "420K+", avatar: "/images/creators/mikey_chan.webp", profileUrl: "https://www.youtube.com/@MickeyChaan" },
+      { id: "creator-03", name: "Kabeer", subs: "310K+", avatar: "/images/creators/kabeer.webp", profileUrl: "https://www.youtube.com/@kabeerOG" },
+      { id: "creator-04", name: "Mr Overrated", subs: "290K+", avatar: "/images/creators/mr_overrated.webp", profileUrl: "https://www.youtube.com/@Mr_OverratedXD" },
+      { id: "creator-05", name: "Znsu", subs: "180K+", avatar: "/images/creators/znsu.webp", profileUrl: "https://www.youtube.com/@znsuyt" },
+      { id: "creator-06", name: "Teddy Gaming", subs: "150K+", avatar: "/images/creators/teddy_gaming.webp", profileUrl: "https://www.youtube.com/@TeddyGaming" },
+      { id: "creator-07", name: "Haider Playz", subs: "350K+", avatar: "/images/creators/haider_playz.webp", profileUrl: "https://www.youtube.com/@HaiderPlayz786" },
+      { id: "creator-08", name: "Gamingrill", subs: "210K+", avatar: "/images/creators/gamingrill.webp", profileUrl: "https://youtube.com/@gaming_grill" }
     ],
+    beforeAfter: {
+      eyebrow: "Transformation",
+      title: "From raw capture to the click.",
+      items: [
+        {
+          id: "ba-01",
+          title: "Minecraft Hardcore",
+          subtitle: "Insane RMK",
+          before: "/images/pruthvi_thumb_01_build.webp",
+          after: "/images/pruthvi_thumb_02_after.webp",
+          beforeTag: "Raw In-Game",
+          afterTag: "Final Click"
+        },
+        {
+          id: "ba-02",
+          title: "Survival Finale",
+          subtitle: "Haider Playz",
+          before: "/images/pruthvi_thumb_04_gaming_grill.webp",
+          after: "/images/pruthvi_thumb_03_flamefrag.webp",
+          beforeTag: "Raw Asset",
+          afterTag: "Final Click"
+        }
+      ]
+    },
+    reviews: {
+      eyebrow: "Creator Reviews",
+      title: "Loved by creators who reach millions.",
+      items: [
+        {
+          id: "rv-01",
+          name: "INSANE RMK",
+          subs: "580K+",
+          avatar: "/images/creators/insane_rmk.webp",
+          bubble: "Bro the thumbnail CTR went absolutely crazy on the premiere! Volumetric lighting is insane 🔥"
+        },
+        {
+          id: "rv-02",
+          name: "Mikey Chan",
+          subs: "420K+",
+          avatar: "/images/creators/mikey_chan.webp",
+          bubble: "Genuinely best thumbnail designer in the space. Delivered under 4 hours and it popped out of the feed completely."
+        },
+        {
+          id: "rv-03",
+          name: "Kabeer",
+          subs: "310K+",
+          avatar: "/images/creators/kabeer.webp",
+          bubble: "W thumbnail brother! 100 Days video hit #1 trending on release day!"
+        },
+        {
+          id: "rv-04",
+          name: "Mr Overrated",
+          subs: "290K+",
+          avatar: "/images/creators/mr_overrated.webp",
+          bubble: "Cleanest 3D character pose and depth composition. Everyone in the comments was asking who made the thumbnail!"
+        },
+        {
+          id: "rv-05",
+          name: "Znsu",
+          subs: "180K+",
+          avatar: "/images/creators/znsu.webp",
+          bubble: "10/10 visual storytelling. Pruthvi always knows exactly how to hook the viewer instantly."
+        }
+      ]
+    },
     thumbnails: [
       { id: "thumbnail-01", title: "Thumbnail 1", src: "/images/pruthvi_thumb_01_build.webp" },
       { id: "thumbnail-02", title: "Thumbnail 2", src: "/images/pruthvi_thumb_02_after.webp" },
@@ -416,6 +486,99 @@
       .join("");
   }
 
+  function renderBeforeAfterSection(beforeAfterData) {
+    const ba = beforeAfterData || DEFAULT_PORTFOLIO.beforeAfter || {};
+    const eyebrow = ba.eyebrow || "Transformation";
+    const title = ba.title || "From raw capture to the click.";
+    const items = Array.isArray(ba.items) && ba.items.length > 0 ? ba.items : (DEFAULT_PORTFOLIO.beforeAfter?.items || []);
+
+    const cardsHtml = items.map((item, idx) => {
+      const itemTitle = item.title || `Transformation ${idx + 1}`;
+      const beforeSrc = item.before || "";
+      const afterSrc = item.after || "";
+      const beforeTag = item.beforeTag || "Raw In-Game";
+      const afterTag = item.afterTag || "Final Click";
+
+      return `
+        <figure class="pruthvi-ba-item" style="margin: 0;">
+          <div class="pruthvi-cmp" role="slider" tabindex="0" aria-label="${escapeHtml(itemTitle)} before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+            <img class="pruthvi-cmp-img" src="${escapeHtml(afterSrc)}" alt="${escapeHtml(itemTitle)} (Final Composited Click)" loading="lazy" draggable="false">
+            <div class="pruthvi-cmp-before">
+              <img class="pruthvi-cmp-img" src="${escapeHtml(beforeSrc)}" alt="${escapeHtml(itemTitle)} (Raw In-Game / Before)" loading="lazy" draggable="false">
+            </div>
+            <span class="pruthvi-cmp-tag pruthvi-cmp-tag-before">${escapeHtml(beforeTag)}</span>
+            <span class="pruthvi-cmp-tag pruthvi-cmp-tag-after">${escapeHtml(afterTag)}</span>
+            <svg class="pruthvi-cmp-svg" viewBox="0 0 640 360" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M 320 0 Q 320 180 320 360"></path>
+            </svg>
+            <span class="pruthvi-cmp-grip" style="left: 50%;">
+              <span class="pruthvi-cmp-knob" aria-hidden="true">
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 1 1 6l4 5M11 1l4 5-4 5"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+        </figure>
+      `;
+    }).join("");
+
+    return `
+      <section class="pruthvi-ba-section" id="before-after" aria-label="Before and After transformations">
+        <header class="pruthvi-ba-header">
+          <span class="pruthvi-section-eyebrow">${escapeHtml(eyebrow)}</span>
+          <h2 class="pruthvi-ba-title">${escapeHtml(title)}</h2>
+        </header>
+        <div class="pruthvi-ba-grid">
+          ${cardsHtml}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderReviewsSection(reviewsData) {
+    const rv = reviewsData || DEFAULT_PORTFOLIO.reviews || {};
+    const eyebrow = rv.eyebrow || "Creator Reviews";
+    const title = rv.title || "Loved by creators who reach millions.";
+    const items = Array.isArray(rv.items) && rv.items.length > 0 ? rv.items : (DEFAULT_PORTFOLIO.reviews?.items || []);
+
+    const rowsHtml = items.map((item, idx) => {
+      const sideClass = idx % 2 === 0 ? "pruthvi-rv-left" : "pruthvi-rv-right";
+      const name = item.name || "Creator";
+      const subs = item.subs || "";
+      const avatar = item.avatar || "/favicon.svg";
+      const bubble = item.bubble || "";
+
+      return `
+        <div class="pruthvi-rv-row ${sideClass}">
+          <div class="pruthvi-rv-who">
+            <div class="pruthvi-rv-avatar-wrap">
+              <img class="pruthvi-rv-avatar" src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}" loading="lazy">
+              <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
+            </div>
+            <span class="pruthvi-rv-name">${escapeHtml(name)}</span>
+            ${subs ? `<span class="pruthvi-rv-subs">${escapeHtml(subs)}</span>` : ""}
+          </div>
+          <div class="pruthvi-rv-bubble">
+            ${escapeHtml(bubble)}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <section class="pruthvi-reviews-section" id="reviews" aria-label="Creator Reviews">
+        <header class="pruthvi-reviews-header">
+          <span class="pruthvi-section-eyebrow">${escapeHtml(eyebrow)}</span>
+          <h2 class="pruthvi-reviews-title">${escapeHtml(title)}</h2>
+        </header>
+        <div class="pruthvi-rv-list">
+          ${rowsHtml}
+        </div>
+      </section>
+    `;
+  }
+
   function normalizePortfolioManifest(payload, sourceUrl) {
     const candidate = payload?.portfolio || payload?.data || payload;
     if (!candidate || typeof candidate !== "object") {
@@ -462,8 +625,41 @@
           .slice(0, MAX_SPIRAL_THUMBNAILS)
       : [];
 
+    const rawBa = candidate.beforeAfter || DEFAULT_PORTFOLIO.beforeAfter;
+    const beforeAfter = {
+      eyebrow: rawBa.eyebrow || "Transformation",
+      title: rawBa.title || "From raw capture to the click.",
+      items: (rawBa.items || []).map((item, idx) => ({
+        ...item,
+        id: item.id || `ba-${String(idx + 1).padStart(2, "0")}`,
+        before: resolveAsset(item.before),
+        after: resolveAsset(item.after),
+        beforeTag: item.beforeTag || "Raw In-Game",
+        afterTag: item.afterTag || "Final Click"
+      }))
+    };
+
+    const rawRv = candidate.reviews || DEFAULT_PORTFOLIO.reviews;
+    const reviews = {
+      eyebrow: rawRv.eyebrow || "Creator Reviews",
+      title: rawRv.title || "Loved by creators who reach millions.",
+      items: (rawRv.items || []).map((item, idx) => ({
+        ...item,
+        id: item.id || `rv-${String(idx + 1).padStart(2, "0")}`,
+        avatar: resolveAsset(item.avatar),
+        name: item.name || "Creator",
+        subs: item.subs || "",
+        bubble: item.bubble || ""
+      }))
+    };
+
+    const creatorsSection = candidate.creatorsSection || DEFAULT_PORTFOLIO.creatorsSection;
+
     return {
       ...candidate,
+      creatorsSection,
+      beforeAfter,
+      reviews,
       collaborators: candidate.collaborators.map((creator, index) => ({
         ...creator,
         id: String(
@@ -972,6 +1168,15 @@
     const collaboratorsChanged =
       JSON.stringify(portfolio?.collaborators) !==
       JSON.stringify(nextPortfolio.collaborators);
+    const creatorsSectionChanged =
+      JSON.stringify(portfolio?.creatorsSection) !==
+      JSON.stringify(nextPortfolio.creatorsSection);
+    const beforeAfterChanged =
+      JSON.stringify(portfolio?.beforeAfter) !==
+      JSON.stringify(nextPortfolio.beforeAfter);
+    const reviewsChanged =
+      JSON.stringify(portfolio?.reviews) !==
+      JSON.stringify(nextPortfolio.reviews);
     const thumbnailsChanged =
       JSON.stringify(portfolio?.thumbnails) !==
       JSON.stringify(nextPortfolio.thumbnails);
@@ -996,6 +1201,16 @@
           link.href = nextPortfolio.discordUrl;
         });
     }
+    if (creatorsSectionChanged) {
+      const head = workPage.querySelector(".zeox-work-collaborators-head");
+      if (head) {
+        const titleSpans = head.querySelectorAll("h2 span");
+        if (titleSpans[0]) titleSpans[0].textContent = nextPortfolio.creatorsSection?.titleLine1 || "Creators";
+        if (titleSpans[1]) titleSpans[1].textContent = nextPortfolio.creatorsSection?.titleLine2 || "in the Frame.";
+        const dd = head.querySelector("dl dd");
+        if (dd) dd.textContent = nextPortfolio.creatorsSection?.experienceLabel || "days of experience";
+      }
+    }
     if (collaboratorsChanged) {
       workPage
         .querySelectorAll(".zeox-collaborator-group")
@@ -1012,6 +1227,20 @@
         gallery.innerHTML = renderGalleryItems(nextPortfolio.thumbnails);
       }
       enhanceLegacyTriggers();
+    }
+    if (beforeAfterChanged) {
+      const baSection = workPage.querySelector(".pruthvi-ba-section");
+      if (baSection) {
+        baSection.outerHTML = renderBeforeAfterSection(nextPortfolio.beforeAfter);
+        setupBeforeAfterSliders(workPage);
+      }
+    }
+    if (reviewsChanged) {
+      const rvSection = workPage.querySelector(".pruthvi-reviews-section");
+      if (rvSection) {
+        rvSection.outerHTML = renderReviewsSection(nextPortfolio.reviews);
+        setupReviewsReveal(workPage);
+      }
     }
     updateLiveDays();
     if (thumbnailsChanged) {
@@ -1113,8 +1342,8 @@
             <div class="zeox-work-collaborators-inner">
               <div class="zeox-work-collaborators-head">
                 <h2 aria-label="Made with creators">
-                  <span>Creators</span>
-                  <span>in the Frame.</span>
+                  <span>${escapeHtml(data.creatorsSection?.titleLine1 || 'Creators')}</span>
+                  <span>${escapeHtml(data.creatorsSection?.titleLine2 || 'in the Frame.')}</span>
                 </h2>
                 <dl class="zeox-work-facts" aria-label="Experience in days">
                   <div>
@@ -1124,7 +1353,7 @@
                       data-target="${days}"
                       data-counter-delay="0"
                     >0</dt>
-                    <dd>days of experience</dd>
+                    <dd>${escapeHtml(data.creatorsSection?.experienceLabel || 'days of experience')}</dd>
                   </div>
                 </dl>
               </div>
@@ -1156,145 +1385,14 @@
           </section>
 
           <!-- ==========================================================================
-               BOUTIQUE BEFORE / AFTER SECTION
+               BOUTIQUE BEFORE / AFTER SECTION (DYNAMIC)
                ========================================================================== -->
-          <section class="pruthvi-ba-section" id="before-after" aria-label="Before and After transformations">
-            <header class="pruthvi-ba-header">
-              <span class="pruthvi-section-eyebrow">Transformation</span>
-              <h2 class="pruthvi-ba-title">From raw capture to the click.</h2>
-            </header>
-            <div class="pruthvi-ba-grid">
-              <!-- Item 1: Minecraft Hardcore / Insane RMK -->
-              <figure class="pruthvi-ba-item" style="margin: 0;">
-                <div class="pruthvi-cmp" role="slider" tabindex="0" aria-label="Minecraft Hardcore before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-                  <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_02_after.webp" alt="Hardcore Thumbnail (Final Composited Click)" loading="lazy" draggable="false">
-                  <div class="pruthvi-cmp-before">
-                    <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_01_build.webp" alt="Raw In-Game Viewport (Before)" loading="lazy" draggable="false">
-                  </div>
-                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-before">Raw In-Game</span>
-                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-after">Final Click</span>
-                  <svg class="pruthvi-cmp-svg" viewBox="0 0 640 360" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M 320 0 Q 320 180 320 360"></path>
-                  </svg>
-                  <span class="pruthvi-cmp-grip" style="left: 50%;">
-                    <span class="pruthvi-cmp-knob" aria-hidden="true">
-                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 1 1 6l4 5M11 1l4 5-4 5"/>
-                      </svg>
-                    </span>
-                  </span>
-                </div>
-              </figure>
-
-              <!-- Item 2: Survival Finale / Haider Playz -->
-              <figure class="pruthvi-ba-item" style="margin: 0;">
-                <div class="pruthvi-cmp" role="slider" tabindex="0" aria-label="Survival Finale before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-                  <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_03_flamefrag.webp" alt="Flame Frag War (Final Color Graded)" loading="lazy" draggable="false">
-                  <div class="pruthvi-cmp-before">
-                    <img class="pruthvi-cmp-img" src="/images/pruthvi_thumb_04_gaming_grill.webp" alt="Base Asset Render (Before)" loading="lazy" draggable="false">
-                  </div>
-                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-before">Raw Asset</span>
-                  <span class="pruthvi-cmp-tag pruthvi-cmp-tag-after">Final Click</span>
-                  <svg class="pruthvi-cmp-svg" viewBox="0 0 640 360" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M 320 0 Q 320 180 320 360"></path>
-                  </svg>
-                  <span class="pruthvi-cmp-grip" style="left: 50%;">
-                    <span class="pruthvi-cmp-knob" aria-hidden="true">
-                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 1 1 6l4 5M11 1l4 5-4 5"/>
-                      </svg>
-                    </span>
-                  </span>
-                </div>
-              </figure>
-            </div>
-          </section>
+          ${renderBeforeAfterSection(data.beforeAfter)}
 
           <!-- ==========================================================================
-               BOUTIQUE CREATOR REVIEWS SECTION (CHAT DM BUBBLES)
+               BOUTIQUE CREATOR REVIEWS SECTION (DYNAMIC)
                ========================================================================== -->
-          <section class="pruthvi-reviews-section" id="reviews" aria-label="Creator Reviews">
-            <header class="pruthvi-reviews-header">
-              <span class="pruthvi-section-eyebrow">Creator Reviews</span>
-              <h2 class="pruthvi-reviews-title">Loved by creators who reach millions.</h2>
-            </header>
-            <div class="pruthvi-rv-list">
-              <!-- Review 1: INSANE RMK -->
-              <div class="pruthvi-rv-row pruthvi-rv-left">
-                <div class="pruthvi-rv-who">
-                  <div class="pruthvi-rv-avatar-wrap">
-                    <img class="pruthvi-rv-avatar" src="/images/creators/insane_rmk.webp" alt="INSANE RMK" loading="lazy">
-                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
-                  </div>
-                  <span class="pruthvi-rv-name">INSANE RMK</span>
-                  <span class="pruthvi-rv-subs">580K+</span>
-                </div>
-                <div class="pruthvi-rv-bubble">
-                  Bro the thumbnail CTR went absolutely crazy on the premiere! Volumetric lighting is insane 🔥
-                </div>
-              </div>
-
-              <!-- Review 2: Mikey Chan -->
-              <div class="pruthvi-rv-row pruthvi-rv-right">
-                <div class="pruthvi-rv-who">
-                  <div class="pruthvi-rv-avatar-wrap">
-                    <img class="pruthvi-rv-avatar" src="/images/creators/mikey_chan.webp" alt="Mikey Chan" loading="lazy">
-                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
-                  </div>
-                  <span class="pruthvi-rv-name">Mikey Chan</span>
-                  <span class="pruthvi-rv-subs">420K+</span>
-                </div>
-                <div class="pruthvi-rv-bubble">
-                  Genuinely best thumbnail designer in the space. Delivered under 4 hours and it popped out of the feed completely.
-                </div>
-              </div>
-
-              <!-- Review 3: Kabeer -->
-              <div class="pruthvi-rv-row pruthvi-rv-left">
-                <div class="pruthvi-rv-who">
-                  <div class="pruthvi-rv-avatar-wrap">
-                    <img class="pruthvi-rv-avatar" src="/images/creators/kabeer.webp" alt="Kabeer" loading="lazy">
-                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
-                  </div>
-                  <span class="pruthvi-rv-name">Kabeer</span>
-                  <span class="pruthvi-rv-subs">310K+</span>
-                </div>
-                <div class="pruthvi-rv-bubble">
-                  W thumbnail brother! 100 Days video hit #1 trending on release day!
-                </div>
-              </div>
-
-              <!-- Review 4: Mr Overrated -->
-              <div class="pruthvi-rv-row pruthvi-rv-right">
-                <div class="pruthvi-rv-who">
-                  <div class="pruthvi-rv-avatar-wrap">
-                    <img class="pruthvi-rv-avatar" src="/images/creators/mr_overrated.webp" alt="Mr Overrated" loading="lazy">
-                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
-                  </div>
-                  <span class="pruthvi-rv-name">Mr Overrated</span>
-                  <span class="pruthvi-rv-subs">290K+</span>
-                </div>
-                <div class="pruthvi-rv-bubble">
-                  Cleanest 3D character pose and depth composition. Everyone in the comments was asking who made the thumbnail!
-                </div>
-              </div>
-
-              <!-- Review 5: Znsu -->
-              <div class="pruthvi-rv-row pruthvi-rv-left">
-                <div class="pruthvi-rv-who">
-                  <div class="pruthvi-rv-avatar-wrap">
-                    <img class="pruthvi-rv-avatar" src="/images/creators/znsu.webp" alt="Znsu" loading="lazy">
-                    <span class="pruthvi-rv-online-pip" aria-hidden="true"></span>
-                  </div>
-                  <span class="pruthvi-rv-name">Znsu</span>
-                  <span class="pruthvi-rv-subs">180K+</span>
-                </div>
-                <div class="pruthvi-rv-bubble">
-                  10/10 visual storytelling. Pruthvi always knows exactly how to hook the viewer instantly.
-                </div>
-              </div>
-            </div>
-          </section>
+          ${renderReviewsSection(data.reviews)}
 
           <section
             class="zeox-work-statement"
@@ -3663,18 +3761,24 @@ let fbConfig = null;
     const rows = container.querySelectorAll(".pruthvi-rv-row:not([data-rv-ready])");
     if (!rows.length) return;
 
+    const scrollRoot = container.closest?.(".zeox-work-page") || document.querySelector(".zeox-work-page") || null;
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-in-view");
         }
       });
-    }, { threshold: 0.25, rootMargin: "0px 0px -40px 0px" });
+    }, { root: scrollRoot, threshold: 0.1, rootMargin: "0px 0px 80px 0px" });
 
     rows.forEach((row, i) => {
       row.setAttribute("data-rv-ready", "true");
       row.style.transitionDelay = `${(i % 3) * 0.12}s`;
       observer.observe(row);
+      const rect = row.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        row.classList.add("is-in-view");
+      }
     });
   }
 

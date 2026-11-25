@@ -118,7 +118,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (reqUrl === '/' || reqUrl === '') {
+  if (reqUrl === '/' || reqUrl === '' || reqUrl === '/work' || reqUrl === '/work/') {
     reqUrl = '/index.html';
   }
 

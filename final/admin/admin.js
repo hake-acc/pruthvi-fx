@@ -20,7 +20,22 @@ let portfolioData = {
   instagram: "pruthvifx99",
   instagramUrl: "https://www.instagram.com/pruthvifx99?dmpr=MTh5Y3Z6aTRjdTBkb",
   lifetimeThumbnails: 100,
+  creatorsSection: {
+    titleLine1: "Creators",
+    titleLine2: "in the Frame.",
+    experienceLabel: "days of experience"
+  },
   collaborators: [],
+  beforeAfter: {
+    eyebrow: "Transformation",
+    title: "From raw capture to the click.",
+    items: []
+  },
+  reviews: {
+    eyebrow: "Creator Reviews",
+    title: "Loved by creators who reach millions.",
+    items: []
+  },
   thumbnails: [],
   spiralThumbnailIds: []
 };
@@ -252,6 +267,8 @@ document.getElementById("syncDefaultsBtn").addEventListener("click", async () =>
 function renderAllData() {
   renderThumbnails();
   renderCreators();
+  renderBeforeAfter();
+  renderReviews();
   renderSettingsForm();
   if (portfolioData.theme) {
     currentTheme = { ...DEFAULT_THEME, ...portfolioData.theme };
@@ -331,6 +348,16 @@ function renderCreators() {
   const creators = portfolioData.collaborators || [];
 
   countBadge.textContent = creators.length;
+
+  if (portfolioData.creatorsSection) {
+    const t1 = document.getElementById("creatorsTitleLine1");
+    const t2 = document.getElementById("creatorsTitleLine2");
+    const exp = document.getElementById("creatorsExpLabel");
+    if (t1) t1.value = portfolioData.creatorsSection.titleLine1 || "Creators";
+    if (t2) t2.value = portfolioData.creatorsSection.titleLine2 || "in the Frame.";
+    if (exp) exp.value = portfolioData.creatorsSection.experienceLabel || "days of experience";
+  }
+
   container.innerHTML = "";
 
   if (creators.length === 0) {
@@ -347,8 +374,9 @@ function renderCreators() {
           <img src="${escapeHtml(c.avatar || '/favicon.svg')}" alt="${escapeHtml(c.name)}">
         </div>
         <div class="cms-card-title">${escapeHtml(c.name)}</div>
-        <a href="${escapeHtml(c.profileUrl)}" target="_blank" class="creator-link">
-          ${escapeHtml(c.profileUrl.replace(/^https?:\/\/(www\.)?/, ''))} ↗
+        ${c.subs ? `<div class="cms-review-subs-badge" style="margin-top: 4px;">${escapeHtml(c.subs)}</div>` : ''}
+        <a href="${escapeHtml(c.profileUrl)}" target="_blank" class="creator-link" style="margin-top: 8px;">
+          ${escapeHtml((c.profileUrl || '').replace(/^https?:\/\/(www\.)?/, ''))} ↗
         </a>
         <div class="cms-card-actions" style="width: 100%; margin-top: 20px;">
           <div style="display: flex; gap: 6px;">
@@ -377,6 +405,140 @@ function renderCreators() {
   });
   container.querySelectorAll(".move-creator-down").forEach(btn => {
     btn.addEventListener("click", () => moveCreator(Number(btn.dataset.idx), 1));
+  });
+}
+
+function renderBeforeAfter() {
+  const container = document.getElementById("beforeAfterGrid");
+  const countBadge = document.getElementById("baCountBadge");
+  const baData = portfolioData.beforeAfter || { eyebrow: "Transformation", title: "From raw capture to the click.", items: [] };
+  const items = baData.items || [];
+
+  if (countBadge) countBadge.textContent = items.length;
+  const eyebrowInput = document.getElementById("baEyebrowInput");
+  const titleInput = document.getElementById("baTitleInput");
+  if (eyebrowInput) eyebrowInput.value = baData.eyebrow || "Transformation";
+  if (titleInput) titleInput.value = baData.title || "From raw capture to the click.";
+
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (items.length === 0) {
+    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted); font-family: var(--font-mono);">No comparisons added yet. Click "+ Add Comparison" above.</div>`;
+    return;
+  }
+
+  items.forEach((item, idx) => {
+    const card = document.createElement("div");
+    card.className = "cms-card";
+    card.innerHTML = `
+      <div class="cms-ba-preview">
+        <div class="cms-ba-half">
+          <img src="${escapeHtml(item.before)}" alt="Before: ${escapeHtml(item.title)}">
+          <span class="cms-ba-half-label left">${escapeHtml(item.beforeTag || 'Raw In-Game')}</span>
+        </div>
+        <div class="cms-ba-divider-line">
+          <div class="cms-ba-divider-knob">&lt;&gt;</div>
+        </div>
+        <div class="cms-ba-half">
+          <img src="${escapeHtml(item.after)}" alt="After: ${escapeHtml(item.title)}">
+          <span class="cms-ba-half-label right">${escapeHtml(item.afterTag || 'Final Click')}</span>
+        </div>
+      </div>
+      <div class="cms-card-body">
+        <div class="cms-card-title">${escapeHtml(item.title || `Comparison ${idx + 1}`)}</div>
+        <div class="cms-card-meta">
+          <span>${escapeHtml(item.subtitle || 'Transformation')}</span>
+          • <span>${escapeHtml(item.beforeTag || 'Raw')} &rarr; ${escapeHtml(item.afterTag || 'Final')}</span>
+        </div>
+        <div class="cms-card-actions" style="margin-top: 14px;">
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-icon move-ba-up" data-idx="${idx}" title="Move up" ${idx === 0 ? 'disabled style="opacity:0.3"' : ''}>↑</button>
+            <button class="btn-icon move-ba-down" data-idx="${idx}" title="Move down" ${idx === items.length - 1 ? 'disabled style="opacity:0.3"' : ''}>↓</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-secondary edit-ba-btn" data-idx="${idx}">Edit</button>
+            <button class="btn-danger delete-ba-btn" data-id="${escapeHtml(item.id)}">Delete</button>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  container.querySelectorAll(".delete-ba-btn").forEach(btn => {
+    btn.addEventListener("click", () => deleteBeforeAfter(btn.dataset.id));
+  });
+  container.querySelectorAll(".edit-ba-btn").forEach(btn => {
+    btn.addEventListener("click", () => openBeforeAfterModal(Number(btn.dataset.idx)));
+  });
+  container.querySelectorAll(".move-ba-up").forEach(btn => {
+    btn.addEventListener("click", () => moveBeforeAfter(Number(btn.dataset.idx), -1));
+  });
+  container.querySelectorAll(".move-ba-down").forEach(btn => {
+    btn.addEventListener("click", () => moveBeforeAfter(Number(btn.dataset.idx), 1));
+  });
+}
+
+function renderReviews() {
+  const container = document.getElementById("reviewsGrid");
+  const countBadge = document.getElementById("reviewCountBadge");
+  const rvData = portfolioData.reviews || { eyebrow: "Creator Reviews", title: "Loved by creators who reach millions.", items: [] };
+  const items = rvData.items || [];
+
+  if (countBadge) countBadge.textContent = items.length;
+  const eyebrowInput = document.getElementById("reviewEyebrowInput");
+  const titleInput = document.getElementById("reviewTitleInput");
+  if (eyebrowInput) eyebrowInput.value = rvData.eyebrow || "Creator Reviews";
+  if (titleInput) titleInput.value = rvData.title || "Loved by creators who reach millions.";
+
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (items.length === 0) {
+    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted); font-family: var(--font-mono);">No reviews added yet. Click "+ Add Review" above.</div>`;
+    return;
+  }
+
+  items.forEach((item, idx) => {
+    const card = document.createElement("div");
+    card.className = "cms-review-card";
+    card.innerHTML = `
+      <div class="cms-review-header">
+        <img class="cms-review-avatar" src="${escapeHtml(item.avatar || '/favicon.svg')}" alt="${escapeHtml(item.name)}">
+        <div class="cms-review-info">
+          <div class="cms-review-name">${escapeHtml(item.name)}</div>
+          <span class="cms-review-subs-badge">${escapeHtml(item.subs || 'Creator')}</span>
+        </div>
+      </div>
+      <div class="cms-review-bubble">
+        &ldquo;${escapeHtml(item.bubble)}&rdquo;
+      </div>
+      <div class="cms-card-actions" style="margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+        <div style="display: flex; gap: 6px;">
+          <button class="btn-icon move-review-up" data-idx="${idx}" title="Move up" ${idx === 0 ? 'disabled style="opacity:0.3"' : ''}>↑</button>
+          <button class="btn-icon move-review-down" data-idx="${idx}" title="Move down" ${idx === items.length - 1 ? 'disabled style="opacity:0.3"' : ''}>↓</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-secondary edit-review-btn" data-idx="${idx}">Edit</button>
+          <button class="btn-danger delete-review-btn" data-id="${escapeHtml(item.id)}">Delete</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  container.querySelectorAll(".delete-review-btn").forEach(btn => {
+    btn.addEventListener("click", () => deleteReview(btn.dataset.id));
+  });
+  container.querySelectorAll(".edit-review-btn").forEach(btn => {
+    btn.addEventListener("click", () => openReviewModal(Number(btn.dataset.idx)));
+  });
+  container.querySelectorAll(".move-review-up").forEach(btn => {
+    btn.addEventListener("click", () => moveReview(Number(btn.dataset.idx), -1));
+  });
+  container.querySelectorAll(".move-review-down").forEach(btn => {
+    btn.addEventListener("click", () => moveReview(Number(btn.dataset.idx), 1));
   });
 }
 
@@ -461,9 +623,91 @@ async function moveCreator(fromIdx, dir) {
   await savePortfolioToFirestore();
 }
 
-// 9. Modals (Thumbnail & Creator)
+async function deleteBeforeAfter(id) {
+  if (!confirm("Are you sure you want to delete this before/after comparison?")) return;
+  const items = (portfolioData.beforeAfter?.items || []).filter(item => item.id !== id);
+  portfolioData.beforeAfter = { ...(portfolioData.beforeAfter || {}), items };
+  renderBeforeAfter();
+  await savePortfolioToFirestore();
+}
+
+async function moveBeforeAfter(fromIdx, dir) {
+  const toIdx = fromIdx + dir;
+  const list = [...(portfolioData.beforeAfter?.items || [])];
+  if (toIdx < 0 || toIdx >= list.length) return;
+  const [item] = list.splice(fromIdx, 1);
+  list.splice(toIdx, 0, item);
+  portfolioData.beforeAfter = { ...(portfolioData.beforeAfter || {}), items: list };
+  renderBeforeAfter();
+  await savePortfolioToFirestore();
+}
+
+async function deleteReview(id) {
+  if (!confirm("Are you sure you want to delete this creator review?")) return;
+  const items = (portfolioData.reviews?.items || []).filter(item => item.id !== id);
+  portfolioData.reviews = { ...(portfolioData.reviews || {}), items };
+  renderReviews();
+  await savePortfolioToFirestore();
+}
+
+async function moveReview(fromIdx, dir) {
+  const toIdx = fromIdx + dir;
+  const list = [...(portfolioData.reviews?.items || [])];
+  if (toIdx < 0 || toIdx >= list.length) return;
+  const [item] = list.splice(fromIdx, 1);
+  list.splice(toIdx, 0, item);
+  portfolioData.reviews = { ...(portfolioData.reviews || {}), items: list };
+  renderReviews();
+  await savePortfolioToFirestore();
+}
+
+// 8b. Section Header Save Handlers
+const saveCreatorsHeaderBtn = document.getElementById("saveCreatorsHeaderBtn");
+if (saveCreatorsHeaderBtn) {
+  saveCreatorsHeaderBtn.addEventListener("click", async () => {
+    portfolioData.creatorsSection = {
+      titleLine1: document.getElementById("creatorsTitleLine1").value.trim() || "Creators",
+      titleLine2: document.getElementById("creatorsTitleLine2").value.trim() || "in the Frame.",
+      experienceLabel: document.getElementById("creatorsExpLabel").value.trim() || "days of experience"
+    };
+    await savePortfolioToFirestore();
+    showToast("Creators section titles saved!", "success");
+  });
+}
+
+const saveBaHeaderBtn = document.getElementById("saveBaHeaderBtn");
+if (saveBaHeaderBtn) {
+  saveBaHeaderBtn.addEventListener("click", async () => {
+    portfolioData.beforeAfter = {
+      ...(portfolioData.beforeAfter || {}),
+      eyebrow: document.getElementById("baEyebrowInput").value.trim() || "Transformation",
+      title: document.getElementById("baTitleInput").value.trim() || "From raw capture to the click.",
+      items: portfolioData.beforeAfter?.items || []
+    };
+    await savePortfolioToFirestore();
+    showToast("Before & After section header saved!", "success");
+  });
+}
+
+const saveReviewHeaderBtn = document.getElementById("saveReviewHeaderBtn");
+if (saveReviewHeaderBtn) {
+  saveReviewHeaderBtn.addEventListener("click", async () => {
+    portfolioData.reviews = {
+      ...(portfolioData.reviews || {}),
+      eyebrow: document.getElementById("reviewEyebrowInput").value.trim() || "Creator Reviews",
+      title: document.getElementById("reviewTitleInput").value.trim() || "Loved by creators who reach millions.",
+      items: portfolioData.reviews?.items || []
+    };
+    await savePortfolioToFirestore();
+    showToast("Reviews section header saved!", "success");
+  });
+}
+
+// 9. Modals (Thumbnail, Creator, Before/After, Review)
 const thumbnailModal = document.getElementById("thumbnailModal");
 const creatorModal = document.getElementById("creatorModal");
+const beforeAfterModal = document.getElementById("beforeAfterModal");
+const reviewModal = document.getElementById("reviewModal");
 
 document.querySelectorAll("[data-modal]").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -474,6 +718,10 @@ document.querySelectorAll("[data-modal]").forEach(btn => {
 
 document.getElementById("addThumbnailBtn").addEventListener("click", () => openThumbnailModal());
 document.getElementById("addCreatorBtn").addEventListener("click", () => openCreatorModal());
+const addBaBtn = document.getElementById("addBeforeAfterBtn");
+if (addBaBtn) addBaBtn.addEventListener("click", () => openBeforeAfterModal());
+const addRvBtn = document.getElementById("addReviewBtn");
+if (addRvBtn) addRvBtn.addEventListener("click", () => openReviewModal());
 
 function openThumbnailModal(editIdx = null) {
   const form = document.getElementById("thumbnailForm");
@@ -518,6 +766,8 @@ function openCreatorModal(editIdx = null) {
     document.getElementById("creatorEditId").value = c.id;
     document.getElementById("creatorName").value = c.name || "";
     document.getElementById("creatorProfileUrl").value = c.profileUrl || "";
+    const subsInput = document.getElementById("creatorSubs");
+    if (subsInput) subsInput.value = c.subs || "";
     document.getElementById("creatorAvatarInput").value = c.avatar || "";
     if (c.avatar) {
       preview.src = c.avatar;
@@ -526,9 +776,82 @@ function openCreatorModal(editIdx = null) {
   } else {
     document.getElementById("creatorModalTitle").textContent = "Add Creator";
     document.getElementById("creatorEditId").value = "";
+    const subsInput = document.getElementById("creatorSubs");
+    if (subsInput) subsInput.value = "";
   }
 
   creatorModal.classList.add("open");
+}
+
+function openBeforeAfterModal(editIdx = null) {
+  if (!beforeAfterModal) return;
+  const form = document.getElementById("beforeAfterForm");
+  form.reset();
+  const previewBefore = document.getElementById("baBeforePreviewImg");
+  const previewAfter = document.getElementById("baAfterPreviewImg");
+  if (previewBefore) { previewBefore.style.display = "none"; previewBefore.src = ""; }
+  if (previewAfter) { previewAfter.style.display = "none"; previewAfter.src = ""; }
+
+  const items = portfolioData.beforeAfter?.items || [];
+  if (editIdx !== null && items[editIdx]) {
+    const item = items[editIdx];
+    document.getElementById("beforeAfterModalTitle").textContent = "Edit Comparison";
+    document.getElementById("baEditId").value = item.id;
+    document.getElementById("baItemTitle").value = item.title || "";
+    document.getElementById("baItemSubtitle").value = item.subtitle || "";
+    document.getElementById("baBeforeTag").value = item.beforeTag || "Raw In-Game";
+    document.getElementById("baAfterTag").value = item.afterTag || "Final Click";
+    document.getElementById("baBeforeSrcInput").value = item.before || "";
+    document.getElementById("baAfterSrcInput").value = item.after || "";
+    if (item.before && previewBefore) {
+      previewBefore.src = item.before;
+      previewBefore.style.display = "block";
+    }
+    if (item.after && previewAfter) {
+      previewAfter.src = item.after;
+      previewAfter.style.display = "block";
+    }
+  } else {
+    document.getElementById("beforeAfterModalTitle").textContent = "Add Comparison";
+    document.getElementById("baEditId").value = "";
+    document.getElementById("baItemTitle").value = `Transformation ${items.length + 1}`;
+    document.getElementById("baItemSubtitle").value = "";
+    document.getElementById("baBeforeTag").value = "Raw In-Game";
+    document.getElementById("baAfterTag").value = "Final Click";
+  }
+
+  beforeAfterModal.classList.add("open");
+}
+
+function openReviewModal(editIdx = null) {
+  if (!reviewModal) return;
+  const form = document.getElementById("reviewForm");
+  form.reset();
+  const preview = document.getElementById("reviewPreviewImg");
+  if (preview) { preview.style.display = "none"; preview.src = ""; }
+
+  const items = portfolioData.reviews?.items || [];
+  if (editIdx !== null && items[editIdx]) {
+    const item = items[editIdx];
+    document.getElementById("reviewModalTitle").textContent = "Edit Creator Review";
+    document.getElementById("reviewEditId").value = item.id;
+    document.getElementById("reviewName").value = item.name || "";
+    document.getElementById("reviewSubs").value = item.subs || "";
+    document.getElementById("reviewAvatarInput").value = item.avatar || "";
+    document.getElementById("reviewBubble").value = item.bubble || "";
+    if (item.avatar && preview) {
+      preview.src = item.avatar;
+      preview.style.display = "block";
+    }
+  } else {
+    document.getElementById("reviewModalTitle").textContent = "Add Creator Review";
+    document.getElementById("reviewEditId").value = "";
+    document.getElementById("reviewName").value = "";
+    document.getElementById("reviewSubs").value = "500K+";
+    document.getElementById("reviewBubble").value = "";
+  }
+
+  reviewModal.classList.add("open");
 }
 
 // 10. Image Dropzone & File Handling (Converts to DataURL or Firebase Storage)
@@ -537,6 +860,7 @@ function setupDropzone(dropzoneId, inputId, previewId, urlInputId) {
   const input = document.getElementById(inputId);
   const preview = document.getElementById(previewId);
   const urlInput = document.getElementById(urlInputId);
+  if (!dropzone || !input || !preview || !urlInput) return;
 
   dropzone.addEventListener("click", () => input.click());
 
@@ -572,6 +896,9 @@ function setupDropzone(dropzoneId, inputId, previewId, urlInputId) {
 
 setupDropzone("thumbDropzone", "thumbFileInput", "thumbPreviewImg", "thumbSrcInput");
 setupDropzone("creatorDropzone", "creatorFileInput", "creatorPreviewImg", "creatorAvatarInput");
+setupDropzone("baBeforeDropzone", "baBeforeFileInput", "baBeforePreviewImg", "baBeforeSrcInput");
+setupDropzone("baAfterDropzone", "baAfterFileInput", "baAfterPreviewImg", "baAfterSrcInput");
+setupDropzone("reviewDropzone", "reviewFileInput", "reviewPreviewImg", "reviewAvatarInput");
 
 // 11. Form Submissions
 document.getElementById("thumbnailForm").addEventListener("submit", async (e) => {
@@ -619,6 +946,7 @@ document.getElementById("creatorForm").addEventListener("submit", async (e) => {
   const editId = document.getElementById("creatorEditId").value;
   const name = document.getElementById("creatorName").value.trim();
   const profileUrl = document.getElementById("creatorProfileUrl").value.trim();
+  const subs = (document.getElementById("creatorSubs")?.value || "").trim();
   const avatar = document.getElementById("creatorAvatarInput").value.trim();
 
   const creators = [...(portfolioData.collaborators || [])];
@@ -626,11 +954,11 @@ document.getElementById("creatorForm").addEventListener("submit", async (e) => {
   if (editId) {
     const idx = creators.findIndex(c => c.id === editId);
     if (idx !== -1) {
-      creators[idx] = { ...creators[idx], name, profileUrl, avatar };
+      creators[idx] = { ...creators[idx], name, profileUrl, avatar, subs };
     }
   } else {
     const newId = `creator-${Date.now()}`;
-    creators.push({ id: newId, name, profileUrl, avatar });
+    creators.push({ id: newId, name, profileUrl, avatar, subs });
   }
 
   portfolioData.collaborators = creators;
@@ -638,6 +966,84 @@ document.getElementById("creatorForm").addEventListener("submit", async (e) => {
   renderCreators();
   await savePortfolioToFirestore();
 });
+
+const beforeAfterForm = document.getElementById("beforeAfterForm");
+if (beforeAfterForm) {
+  beforeAfterForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const editId = document.getElementById("baEditId").value;
+    const title = document.getElementById("baItemTitle").value.trim();
+    const subtitle = document.getElementById("baItemSubtitle").value.trim();
+    const beforeTag = document.getElementById("baBeforeTag").value.trim() || "Raw In-Game";
+    const afterTag = document.getElementById("baAfterTag").value.trim() || "Final Click";
+    const before = document.getElementById("baBeforeSrcInput").value.trim();
+    const after = document.getElementById("baAfterSrcInput").value.trim();
+
+    if (!before || !after) {
+      showToast("Please provide both before and after images", "error");
+      return;
+    }
+
+    const items = [...(portfolioData.beforeAfter?.items || [])];
+
+    if (editId) {
+      const idx = items.findIndex(item => item.id === editId);
+      if (idx !== -1) {
+        items[idx] = { ...items[idx], title, subtitle, beforeTag, afterTag, before, after };
+      }
+    } else {
+      const newId = `ba-${Date.now()}`;
+      items.push({ id: newId, title, subtitle, beforeTag, afterTag, before, after });
+    }
+
+    portfolioData.beforeAfter = {
+      ...(portfolioData.beforeAfter || {}),
+      items
+    };
+
+    beforeAfterModal.classList.remove("open");
+    renderBeforeAfter();
+    await savePortfolioToFirestore();
+  });
+}
+
+const reviewForm = document.getElementById("reviewForm");
+if (reviewForm) {
+  reviewForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const editId = document.getElementById("reviewEditId").value;
+    const name = document.getElementById("reviewName").value.trim();
+    const subs = document.getElementById("reviewSubs").value.trim();
+    const avatar = document.getElementById("reviewAvatarInput").value.trim();
+    const bubble = document.getElementById("reviewBubble").value.trim();
+
+    if (!name || !bubble) {
+      showToast("Please provide creator name and review quote", "error");
+      return;
+    }
+
+    const items = [...(portfolioData.reviews?.items || [])];
+
+    if (editId) {
+      const idx = items.findIndex(item => item.id === editId);
+      if (idx !== -1) {
+        items[idx] = { ...items[idx], name, subs, avatar, bubble };
+      }
+    } else {
+      const newId = `rv-${Date.now()}`;
+      items.push({ id: newId, name, subs, avatar, bubble });
+    }
+
+    portfolioData.reviews = {
+      ...(portfolioData.reviews || {}),
+      items
+    };
+
+    reviewModal.classList.remove("open");
+    renderReviews();
+    await savePortfolioToFirestore();
+  });
+}
 
 document.getElementById("settingsForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -652,8 +1058,17 @@ document.getElementById("settingsForm").addEventListener("submit", async (e) => 
 });
 
 // 12. Startup sequence
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   initVisualBuilder();
+  try {
+    const res = await fetch("/content/portfolio.json");
+    if (res.ok) {
+      const localData = await res.json();
+      portfolioData = { ...portfolioData, ...localData };
+      renderAllData();
+    }
+  } catch (_) {}
+
   const config = getSavedFirebaseConfig();
   if (config) {
     initFirebase(config);

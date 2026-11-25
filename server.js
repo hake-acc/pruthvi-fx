@@ -155,6 +155,12 @@ const server = http.createServer((req, res) => {
       fs.createReadStream(workPath).pipe(res);
       return;
     }
+    const indexPath = fs.existsSync(path.join(PUBLIC_DIR, 'index.html'))
+      ? path.join(PUBLIC_DIR, 'index.html')
+      : path.join(ROOT_DIR, 'index.html');
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    fs.createReadStream(indexPath).pipe(res);
+    return;
   }
 
   // Handle /projects or /projects/

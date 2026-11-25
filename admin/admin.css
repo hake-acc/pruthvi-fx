@@ -1033,3 +1033,159 @@ body {
   color: #f5f5f7;
   transition: all 0.3s ease;
 }
+
+/* ==========================================================================
+   Before / After CMS Cards & Dual Dropzone
+   ========================================================================== */
+.cms-section-settings-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.cms-ba-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+}
+
+.cms-ba-half {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.cms-ba-half img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cms-ba-half-label {
+  position: absolute;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+.cms-ba-half-label.left {
+  left: 8px;
+  color: var(--accent-yellow);
+}
+
+.cms-ba-half-label.right {
+  right: 8px;
+  color: #c084fc;
+}
+
+.cms-ba-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: #ffffff;
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.cms-ba-divider-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  z-index: 3;
+}
+
+/* ==========================================================================
+   Creator Reviews CMS Cards
+   ========================================================================== */
+.cms-review-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cms-review-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.cms-review-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cms-review-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: #14121c;
+  flex-shrink: 0;
+}
+
+.cms-review-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cms-review-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.cms-review-subs-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-yellow);
+  background: rgba(255, 237, 41, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.cms-review-bubble {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #e2e0ea;
+  position: relative;
+  font-style: italic;
+}
