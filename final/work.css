@@ -3264,6 +3264,8 @@ html.zeox-work-open canvas.webgl {
 .zeox-work-page .zeox-collaborator-marquee {
   width: 100%;
   overflow: hidden;
+  padding: 28px 0 40px 0;
+  margin: -28px 0 -40px 0;
   -webkit-mask-image:
     linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
   mask-image:
