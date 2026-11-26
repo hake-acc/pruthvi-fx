@@ -1,1 +1,0 @@
-import{n as e}from"./app-DjHRamTc.js";var t=class{constructor(e){this.section=e}enter=()=>{e.instances.get(`pitchDeck`)?.handleOpenPitchdeck(null,null,`brandbook`)}};export{t as default};
