@@ -3799,6 +3799,11 @@ let fbConfig = null;
     } else if (dialog.parentElement !== showreel) {
       showreel.appendChild(dialog);
     }
+    if (!showreel.dataset.hoverWired) {
+      showreel.dataset.hoverWired = "true";
+      showreel.addEventListener("mouseenter", () => showreel.classList.add("is-hovered"));
+      showreel.addEventListener("mouseleave", () => showreel.classList.remove("is-hovered"));
+    }
     if (dialog.dataset.renderedText !== badgeText) {
       dialog.dataset.renderedText = badgeText;
       dialog.innerHTML = `
