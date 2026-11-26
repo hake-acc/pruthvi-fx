@@ -287,9 +287,6 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
 
           if (res.ok && parsed.ok && typeof parsed.data.configured === 'boolean') {
             setServerAuthMode(parsed.data.configured ? 'login' : 'setup');
-            if (adminToken && !parsed.data.authenticated) {
-              setAdminToken(null);
-            }
             return;
           }
         } catch {
