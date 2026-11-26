@@ -448,10 +448,10 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
   if (!open) return null;
 
   const requireCloudSync = (): boolean => {
-    if (!isAdmin) {
+    if (!isAdmin && !adminToken) {
       notify(
         'err',
-        'Click "Connect Google Sync" in the top banner first so changes publish live to all phones & browsers.'
+        'Please sign in to the Admin Panel to publish live changes.'
       );
       return false;
     }
