@@ -1,0 +1,148 @@
+{
+  "entities": {
+    "SiteConfig": {
+      "title": "SiteConfig",
+      "description": "Global real-time configuration for the Pruthvi FX portfolio, including brand, logo, hero, about, theme colors, sound settings, contact, and social links.",
+      "type": "object",
+      "properties": {
+        "brandPrefix": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "brandSuffix": { "type": "string", "minLength": 0, "maxLength": 40 },
+        "brandName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "logoSrc": { "type": "string", "minLength": 1, "maxLength": 350000 },
+        "hero": { "type": "object", "description": "Hero text, availability badge, CTAs, avatar badge, and 3 stat items" },
+        "about": { "type": "object", "description": "About section heading, bio, experience badge, and CTA" },
+        "clientsSection": { "type": "object", "description": "Clients marquee section kicker, title, and subtitle" },
+        "contact": { "type": "object", "description": "Contact section heading, subtitle, and button labels" },
+        "footerTagline": { "type": "string", "minLength": 0, "maxLength": 180 },
+        "socials": { "type": "object", "description": "Discord and X social links and handles" },
+        "theme": { "type": "object", "description": "Live theme mode, preset, custom primary/accent/background/card colors, and shader colors" },
+        "sound": { "type": "object", "description": "Live UI sound enabled state, volume (0..1), and tone profile" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "brandPrefix",
+        "brandSuffix",
+        "brandName",
+        "logoSrc",
+        "hero",
+        "about",
+        "clientsSection",
+        "contact",
+        "footerTagline",
+        "socials",
+        "theme",
+        "sound",
+        "updatedAt"
+      ]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "A thumbnail showcase category such as Minecraft, Roblox, or IRL.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 220 },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "description", "order", "updatedAt"]
+    },
+    "Thumbnail": {
+      "title": "Thumbnail",
+      "description": "An individual 16:9 YouTube thumbnail belonging to a category.",
+      "type": "object",
+      "properties": {
+        "categoryId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "src": { "type": "string", "minLength": 1, "maxLength": 450000 },
+        "client": { "type": "string", "minLength": 0, "maxLength": 80 },
+        "videoUrl": { "type": "string", "minLength": 0, "maxLength": 400 },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["categoryId", "title", "src", "client", "videoUrl", "order", "updatedAt"]
+    },
+    "BeforeAfter": {
+      "title": "BeforeAfter",
+      "description": "A before/after thumbnail transformation pair.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "subtitle": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "beforeSrc": { "type": "string", "minLength": 1, "maxLength": 450000 },
+        "afterSrc": { "type": "string", "minLength": 1, "maxLength": 450000 },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "subtitle", "beforeSrc", "afterSrc", "order", "updatedAt"]
+    },
+    "Client": {
+      "title": "Client",
+      "description": "A creator client entry displayed in the dual-row marquee.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "subs": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "avatar": { "type": "string", "minLength": 1, "maxLength": 350000 },
+        "channelUrl": { "type": "string", "minLength": 1, "maxLength": 400 },
+        "row": { "type": "number", "enum": [1, 2] },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "subs", "avatar", "channelUrl", "row", "order", "updatedAt"]
+    },
+    "Faq": {
+      "title": "Faq",
+      "description": "A frequently asked question and answer pair.",
+      "type": "object",
+      "properties": {
+        "question": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "answer": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["question", "answer", "order", "updatedAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized admin UID registry with isolated email metadata.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "addedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "addedBy", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/site_config/{configId}": {
+      "schema": { "$ref": "#/entities/SiteConfig" },
+      "description": "Singleton public portfolio configuration document at /site_config/main"
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Public portfolio categories editable by verified admins"
+    },
+    "/thumbnails/{thumbnailId}": {
+      "schema": { "$ref": "#/entities/Thumbnail" },
+      "description": "Public portfolio thumbnails linked to existing categories"
+    },
+    "/before_after/{itemId}": {
+      "schema": { "$ref": "#/entities/BeforeAfter" },
+      "description": "Public before/after slider comparison pairs"
+    },
+    "/clients/{clientId}": {
+      "schema": { "$ref": "#/entities/Client" },
+      "description": "Public YouTube creator clients displayed in the dual-row marquee"
+    },
+    "/faqs/{faqId}": {
+      "schema": { "$ref": "#/entities/Faq" },
+      "description": "Public FAQ entries editable by verified admins"
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Private admin access control registry restricted to verified admins"
+    }
+  }
+}

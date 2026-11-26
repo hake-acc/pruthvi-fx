@@ -1,0 +1,449 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // Global Hardened Primitives
+    // -------------------------------------------------------------------------
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerifiedUser() && request.auth.token.email == 'gamerking94p@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() ||
+        (isVerifiedUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isNonEmptyString(val, maxLen) {
+      return val is string && val.size() > 0 && val.size() <= maxLen;
+    }
+
+    function isBoundedString(val, maxLen) {
+      return val is string && val.size() <= maxLen;
+    }
+
+    function isHexColor(val) {
+      return val is string && val.size() == 7 && val.matches('^#[0-9a-fA-F]{6}$');
+    }
+
+    function isSafeUrlOrAsset(val, maxLen) {
+      return val is string && val.size() > 0 && val.size() <= maxLen && (
+        (val.size() >= 8 && val[0:8] == 'https://') ||
+        (val.size() >= 1 && val[0:1] == '/') ||
+        (val.size() >= 22 && val[0:22] == 'data:image/png;base64,') ||
+        (val.size() >= 23 && val[0:23] == 'data:image/jpeg;base64,') ||
+        (val.size() >= 22 && val[0:22] == 'data:image/jpg;base64,') ||
+        (val.size() >= 23 && val[0:23] == 'data:image/webp;base64,')
+      );
+    }
+
+    function isOptionalSafeUrl(val, maxLen) {
+      return val is string && val.size() <= maxLen && (
+        val.size() == 0 ||
+        (val.size() >= 8 && val[0:8] == 'https://')
+      );
+    }
+
+    // -------------------------------------------------------------------------
+    // Entity Validation Blueprints
+    // -------------------------------------------------------------------------
+    function isValidStatItem(stat) {
+      return stat is map &&
+        stat.keys().hasAll(['value', 'label']) &&
+        stat.keys().hasOnly(['value', 'label']) &&
+        isNonEmptyString(stat.value, 24) &&
+        isNonEmptyString(stat.label, 32);
+    }
+
+    function isValidHero(hero) {
+      return hero is map &&
+        hero.keys().hasAll([
+          'availabilityText',
+          'availabilityOpen',
+          'descriptionLine1',
+          'descriptionLine2Prefix',
+          'descriptionHighlight',
+          'primaryCta',
+          'secondaryCta',
+          'avatarBadge',
+          'stats'
+        ]) &&
+        hero.keys().hasOnly([
+          'availabilityText',
+          'availabilityOpen',
+          'descriptionLine1',
+          'descriptionLine2Prefix',
+          'descriptionHighlight',
+          'primaryCta',
+          'secondaryCta',
+          'avatarBadge',
+          'stats'
+        ]) &&
+        isBoundedString(hero.availabilityText, 80) &&
+        hero.availabilityOpen is bool &&
+        isBoundedString(hero.descriptionLine1, 160) &&
+        isBoundedString(hero.descriptionLine2Prefix, 120) &&
+        isBoundedString(hero.descriptionHighlight, 80) &&
+        isNonEmptyString(hero.primaryCta, 40) &&
+        isNonEmptyString(hero.secondaryCta, 40) &&
+        isBoundedString(hero.avatarBadge, 32) &&
+        hero.stats is list &&
+        hero.stats.size() >= 1 &&
+        hero.stats.size() <= 4 &&
+        isValidStatItem(hero.stats[0]) &&
+        (hero.stats.size() < 2 || isValidStatItem(hero.stats[1])) &&
+        (hero.stats.size() < 3 || isValidStatItem(hero.stats[2])) &&
+        (hero.stats.size() < 4 || isValidStatItem(hero.stats[3]));
+    }
+
+    function isValidAbout(about) {
+      return about is map &&
+        about.keys().hasAll([
+          'badge',
+          'headingPrefix',
+          'headingHighlight',
+          'bio',
+          'experienceBadge',
+          'ctaLabel'
+        ]) &&
+        about.keys().hasOnly([
+          'badge',
+          'headingPrefix',
+          'headingHighlight',
+          'bio',
+          'experienceBadge',
+          'ctaLabel'
+        ]) &&
+        isBoundedString(about.badge, 50) &&
+        isBoundedString(about.headingPrefix, 60) &&
+        isBoundedString(about.headingHighlight, 60) &&
+        isBoundedString(about.bio, 1200) &&
+        isBoundedString(about.experienceBadge, 60) &&
+        isNonEmptyString(about.ctaLabel, 60);
+    }
+
+    function isValidClientsSection(cs) {
+      return cs is map &&
+        cs.keys().hasAll(['kicker', 'headingPrefix', 'headingHighlight', 'subtitle']) &&
+        cs.keys().hasOnly(['kicker', 'headingPrefix', 'headingHighlight', 'subtitle']) &&
+        isBoundedString(cs.kicker, 60) &&
+        isBoundedString(cs.headingPrefix, 80) &&
+        isBoundedString(cs.headingHighlight, 80) &&
+        isBoundedString(cs.subtitle, 300);
+    }
+
+    function isValidContact(c) {
+      return c is map &&
+        c.keys().hasAll(['kicker', 'headingPrefix', 'headingHighlight', 'subtitle', 'discordCta', 'xCta']) &&
+        c.keys().hasOnly(['kicker', 'headingPrefix', 'headingHighlight', 'subtitle', 'discordCta', 'xCta']) &&
+        isBoundedString(c.kicker, 60) &&
+        isBoundedString(c.headingPrefix, 80) &&
+        isBoundedString(c.headingHighlight, 80) &&
+        isBoundedString(c.subtitle, 300) &&
+        isNonEmptyString(c.discordCta, 60) &&
+        isNonEmptyString(c.xCta, 60);
+    }
+
+    function isValidSocials(s) {
+      return s is map &&
+        s.keys().hasAll(['discord', 'discordId', 'x', 'xHandle']) &&
+        s.keys().hasOnly(['discord', 'discordId', 'x', 'xHandle']) &&
+        isOptionalSafeUrl(s.discord, 300) &&
+        isBoundedString(s.discordId, 60) &&
+        isOptionalSafeUrl(s.x, 300) &&
+        isBoundedString(s.xHandle, 60);
+    }
+
+    function isValidTheme(t) {
+      return t is map &&
+        t.keys().hasAll([
+          'defaultMode',
+          'preset',
+          'primaryColor',
+          'kickerColor',
+          'navActiveColor',
+          'darkBg',
+          'darkCard',
+          'shaderColor1',
+          'shaderColor2',
+          'shaderColor3',
+          'lightShaderColor1',
+          'lightShaderColor2',
+          'lightShaderColor3'
+        ]) &&
+        t.keys().hasOnly([
+          'defaultMode',
+          'preset',
+          'primaryColor',
+          'kickerColor',
+          'navActiveColor',
+          'darkBg',
+          'darkCard',
+          'shaderColor1',
+          'shaderColor2',
+          'shaderColor3',
+          'lightShaderColor1',
+          'lightShaderColor2',
+          'lightShaderColor3'
+        ]) &&
+        (t.defaultMode == 'dark' || t.defaultMode == 'light') &&
+        isNonEmptyString(t.preset, 40) &&
+        isHexColor(t.primaryColor) &&
+        isHexColor(t.kickerColor) &&
+        isHexColor(t.navActiveColor) &&
+        isHexColor(t.darkBg) &&
+        isHexColor(t.darkCard) &&
+        isHexColor(t.shaderColor1) &&
+        isHexColor(t.shaderColor2) &&
+        isHexColor(t.shaderColor3) &&
+        isHexColor(t.lightShaderColor1) &&
+        isHexColor(t.lightShaderColor2) &&
+        isHexColor(t.lightShaderColor3);
+    }
+
+    function isValidSound(s) {
+      return s is map &&
+        s.keys().hasAll(['enabled', 'volume', 'profile']) &&
+        s.keys().hasOnly(['enabled', 'volume', 'profile']) &&
+        s.enabled is bool &&
+        s.volume is number && s.volume >= 0 && s.volume <= 1 &&
+        (s.profile == 'studio' || s.profile == 'soft' || s.profile == 'crisp');
+    }
+
+    function isValidSiteConfig(data) {
+      return data.keys().hasAll([
+          'brandPrefix',
+          'brandSuffix',
+          'brandName',
+          'logoSrc',
+          'hero',
+          'about',
+          'clientsSection',
+          'contact',
+          'footerTagline',
+          'socials',
+          'theme',
+          'sound',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'brandPrefix',
+          'brandSuffix',
+          'brandName',
+          'logoSrc',
+          'hero',
+          'about',
+          'clientsSection',
+          'contact',
+          'footerTagline',
+          'socials',
+          'theme',
+          'sound',
+          'updatedAt'
+        ]) &&
+        isNonEmptyString(data.brandPrefix, 40) &&
+        isBoundedString(data.brandSuffix, 40) &&
+        isNonEmptyString(data.brandName, 80) &&
+        isSafeUrlOrAsset(data.logoSrc, 350000) &&
+        isValidHero(data.hero) &&
+        isValidAbout(data.about) &&
+        isValidClientsSection(data.clientsSection) &&
+        isValidContact(data.contact) &&
+        isBoundedString(data.footerTagline, 180) &&
+        isValidSocials(data.socials) &&
+        isValidTheme(data.theme) &&
+        isValidSound(data.sound) &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidCategory(data) {
+      return data.keys().hasAll(['name', 'description', 'order', 'updatedAt']) &&
+        data.keys().hasOnly(['name', 'description', 'order', 'updatedAt']) &&
+        isNonEmptyString(data.name, 60) &&
+        isBoundedString(data.description, 220) &&
+        data.order is number && data.order >= 0 && data.order <= 1000 &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidThumbnail(data) {
+      return data.keys().hasAll(['categoryId', 'title', 'src', 'client', 'videoUrl', 'order', 'updatedAt']) &&
+        data.keys().hasOnly(['categoryId', 'title', 'src', 'client', 'videoUrl', 'order', 'updatedAt']) &&
+        isValidId(data.categoryId) &&
+        isNonEmptyString(data.title, 140) &&
+        isSafeUrlOrAsset(data.src, 450000) &&
+        isBoundedString(data.client, 80) &&
+        isOptionalSafeUrl(data.videoUrl, 400) &&
+        data.order is number && data.order >= 0 && data.order <= 2000 &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidBeforeAfter(data) {
+      return data.keys().hasAll(['title', 'subtitle', 'beforeSrc', 'afterSrc', 'order', 'updatedAt']) &&
+        data.keys().hasOnly(['title', 'subtitle', 'beforeSrc', 'afterSrc', 'order', 'updatedAt']) &&
+        isNonEmptyString(data.title, 120) &&
+        isBoundedString(data.subtitle, 160) &&
+        isSafeUrlOrAsset(data.beforeSrc, 450000) &&
+        isSafeUrlOrAsset(data.afterSrc, 450000) &&
+        data.order is number && data.order >= 0 && data.order <= 500 &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidClient(data) {
+      return data.keys().hasAll(['name', 'subs', 'avatar', 'channelUrl', 'row', 'order', 'updatedAt']) &&
+        data.keys().hasOnly(['name', 'subs', 'avatar', 'channelUrl', 'row', 'order', 'updatedAt']) &&
+        isNonEmptyString(data.name, 80) &&
+        isNonEmptyString(data.subs, 60) &&
+        isSafeUrlOrAsset(data.avatar, 350000) &&
+        isSafeUrlOrAsset(data.channelUrl, 400) &&
+        (data.row == 1 || data.row == 2) &&
+        data.order is number && data.order >= 0 && data.order <= 1000 &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidFaq(data) {
+      return data.keys().hasAll(['question', 'answer', 'order', 'updatedAt']) &&
+        data.keys().hasOnly(['question', 'answer', 'order', 'updatedAt']) &&
+        isNonEmptyString(data.question, 200) &&
+        isNonEmptyString(data.answer, 1000) &&
+        data.order is number && data.order >= 0 && data.order <= 500 &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidAdminUser(data) {
+      return data.keys().hasAll(['email', 'addedBy', 'createdAt']) &&
+        data.keys().hasOnly(['email', 'addedBy', 'createdAt']) &&
+        isNonEmptyString(data.email, 160) &&
+        isValidId(data.addedBy) &&
+        data.createdAt is timestamp;
+    }
+
+    // -------------------------------------------------------------------------
+    // Public Portfolio Collections (No PII — Public Read, Verified Admin Write)
+    // -------------------------------------------------------------------------
+    match /site_config/{configId} {
+      allow get: if configId == 'main';
+      allow list: if false;
+      allow create: if isSignedIn() && configId == 'main' && isValidSiteConfig(incoming()) && isAdmin();
+      allow update: if isSignedIn() && configId == 'main' && isValidSiteConfig(incoming()) && (
+        isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly([
+          'brandPrefix',
+          'brandSuffix',
+          'brandName',
+          'logoSrc',
+          'hero',
+          'about',
+          'clientsSection',
+          'contact',
+          'footerTagline',
+          'socials',
+          'theme',
+          'sound',
+          'updatedAt'
+        ])
+      );
+      allow delete: if false;
+    }
+
+    match /categories/{categoryId} {
+      allow get: if isValidId(categoryId);
+      allow list: if resource.data.order >= 0;
+      allow create: if isSignedIn() && isValidId(categoryId) && isValidCategory(incoming()) && isAdmin();
+      allow update: if isSignedIn() && isValidId(categoryId) && isValidCategory(incoming()) && (
+        isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'description', 'order', 'updatedAt'])
+      );
+      allow delete: if isSignedIn() && isValidId(categoryId) && isAdmin();
+    }
+
+    match /thumbnails/{thumbnailId} {
+      allow get: if isValidId(thumbnailId);
+      allow list: if resource.data.order >= 0;
+      allow create: if isSignedIn() &&
+        isValidId(thumbnailId) &&
+        isValidThumbnail(incoming()) &&
+        isAdmin() &&
+        exists(/databases/$(database)/documents/categories/$(incoming().categoryId));
+      allow update: if isSignedIn() && isValidId(thumbnailId) && isValidThumbnail(incoming()) && (
+        isAdmin() &&
+        exists(/databases/$(database)/documents/categories/$(incoming().categoryId)) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['categoryId', 'title', 'src', 'client', 'videoUrl', 'order', 'updatedAt'])
+      );
+      allow delete: if isSignedIn() && isValidId(thumbnailId) && isAdmin();
+    }
+
+    match /before_after/{itemId} {
+      allow get: if isValidId(itemId);
+      allow list: if resource.data.order >= 0;
+      allow create: if isSignedIn() && isValidId(itemId) && isValidBeforeAfter(incoming()) && isAdmin();
+      allow update: if isSignedIn() && isValidId(itemId) && isValidBeforeAfter(incoming()) && (
+        isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'subtitle', 'beforeSrc', 'afterSrc', 'order', 'updatedAt'])
+      );
+      allow delete: if isSignedIn() && isValidId(itemId) && isAdmin();
+    }
+
+    match /clients/{clientId} {
+      allow get: if isValidId(clientId);
+      allow list: if resource.data.order >= 0;
+      allow create: if isSignedIn() && isValidId(clientId) && isValidClient(incoming()) && isAdmin();
+      allow update: if isSignedIn() && isValidId(clientId) && isValidClient(incoming()) && (
+        isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'subs', 'avatar', 'channelUrl', 'row', 'order', 'updatedAt'])
+      );
+      allow delete: if isSignedIn() && isValidId(clientId) && isAdmin();
+    }
+
+    match /faqs/{faqId} {
+      allow get: if isValidId(faqId);
+      allow list: if resource.data.order >= 0;
+      allow create: if isSignedIn() && isValidId(faqId) && isValidFaq(incoming()) && isAdmin();
+      allow update: if isSignedIn() && isValidId(faqId) && isValidFaq(incoming()) && (
+        isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['question', 'answer', 'order', 'updatedAt'])
+      );
+      allow delete: if isSignedIn() && isValidId(faqId) && isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // Private Admin Registry (Strict PII Isolation & Zero DB-Read List Gate)
+    // -------------------------------------------------------------------------
+    match /admins/{adminId} {
+      allow get: if isSignedIn() && isValidId(adminId) && (request.auth.uid == adminId || isAdmin());
+      allow list: if isBootstrappedAdmin() || (isVerifiedUser() && resource.data.addedBy == request.auth.uid);
+      allow create: if isSignedIn() &&
+        isValidId(adminId) &&
+        isValidAdminUser(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().addedBy == request.auth.uid &&
+        isAdmin();
+      allow update: if isSignedIn() &&
+        isValidId(adminId) &&
+        isValidAdminUser(incoming()) &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().addedBy == existing().addedBy &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['email']) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(adminId) && isAdmin();
+    }
+  }
+}
