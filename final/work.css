@@ -6221,10 +6221,10 @@ body:has(.wrapper.opened) .switch {
 
 .showreel-scroll-dialog {
   position: absolute !important;
-  top: -38px !important;
-  left: 48px !important;
-  transform: scale(0.6) rotate(-10deg) translate(-10%, 12px) !important;
-  transform-origin: left bottom !important;
+  top: -36px !important;
+  left: 205px !important;
+  transform: scale(0.6) rotate(-8deg) translate(-50%, 12px) !important;
+  transform-origin: center bottom !important;
   height: fit-content !important;
   width: fit-content !important;
   background: transparent !important;
@@ -6285,11 +6285,12 @@ body:has(.wrapper.opened) .switch {
 /* Hover reveal - strictly only when hovering showreel card */
 .thumbnail-wrapper:hover .showreel-scroll-dialog,
 .showreel-thumbnail:hover .showreel-scroll-dialog,
-.showreel-thumbnail.is-hovered .showreel-scroll-dialog {
+.showreel-thumbnail.is-hovered .showreel-scroll-dialog,
+.thumbnail-wrapper.is-hovered .showreel-scroll-dialog {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  transform: scale(1.06) rotate(-6deg) translateY(-8px) !important;
+  transform: scale(1.06) rotate(-5deg) translate(-50%, -8px) !important;
   filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 16px rgba(192, 132, 252, 0.45)) !important;
   animation: mascotTagFloat 3.2s ease-in-out infinite !important;
 }

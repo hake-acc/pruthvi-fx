@@ -3789,20 +3789,35 @@ let fbConfig = null;
   function ensureShowreelScrollDialog() {
     const showreel = document.querySelector(".showreel-thumbnail");
     if (!showreel) return;
-    let dialog = showreel.querySelector(".showreel-scroll-dialog");
+    const targetParent = showreel.querySelector(".thumbnail-wrapper") || showreel;
+    let dialog = targetParent.querySelector(".showreel-scroll-dialog");
+    if (!dialog) {
+      dialog = showreel.querySelector(".showreel-scroll-dialog");
+    }
     const badgeText = (portfolio?.theme?.showreelBadge || "scroll me").trim();
     if (!dialog) {
       dialog = document.createElement("div");
       dialog.className = "showreel-scroll-dialog logo-tag-wrapper";
       dialog.setAttribute("aria-hidden", "true");
-      showreel.appendChild(dialog);
-    } else if (dialog.parentElement !== showreel) {
-      showreel.appendChild(dialog);
+      targetParent.appendChild(dialog);
+    } else if (dialog.parentElement !== targetParent) {
+      targetParent.appendChild(dialog);
     }
     if (!showreel.dataset.hoverWired) {
       showreel.dataset.hoverWired = "true";
       showreel.addEventListener("mouseenter", () => showreel.classList.add("is-hovered"));
       showreel.addEventListener("mouseleave", () => showreel.classList.remove("is-hovered"));
+    }
+    if (!targetParent.dataset.hoverWired) {
+      targetParent.dataset.hoverWired = "true";
+      targetParent.addEventListener("mouseenter", () => {
+        showreel.classList.add("is-hovered");
+        targetParent.classList.add("is-hovered");
+      });
+      targetParent.addEventListener("mouseleave", () => {
+        showreel.classList.remove("is-hovered");
+        targetParent.classList.remove("is-hovered");
+      });
     }
     if (dialog.dataset.renderedText !== badgeText) {
       dialog.dataset.renderedText = badgeText;
