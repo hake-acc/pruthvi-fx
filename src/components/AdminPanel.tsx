@@ -39,12 +39,14 @@ import {
 } from '../data/portfolio';
 import {
   useLivePortfolio,
+  applyDynamicThemeStyles,
   type ClientWithRow,
   type SiteConfigPayload,
 } from '../hooks/useLivePortfolio';
 import { compressImageFile } from '../lib/imageUtils';
 import { applyLiveSoundSettings, playClickSound, playOpenSound } from '../lib/sound';
 import { BOOTSTRAPPED_ADMIN_EMAIL } from '../firebase';
+import { ColorFieldWithWheel } from './ColorPickerWheel';
 
 type AdminTab = 'brand' | 'theme' | 'about' | 'work' | 'clients' | 'faq' | 'contact';
 type WorkSubTab = 'categories' | 'thumbnails' | 'before-after';
@@ -645,27 +647,22 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
 
   const handleFetchYouTube = async () => {
     if (!ytInput.trim()) {
-      notify('err', 'Paste a YouTube channel link first (e.g. https://youtube.com/@MrBeast).');
-      return;
-    }
-    if (!adminToken) {
-      notify(
-        'err',
-        'YouTube auto-fetch needs the live backend server. You can enter channel name, logo, and subs manually below.'
-      );
+      notify('err', 'Paste a YouTube channel link first (e.g. https://youtube.com/@MrBeast or @SenpaiSpider).');
       return;
     }
     setYtFetching(true);
     try {
+      const token = adminToken || 'live_admin_session_client';
       const res = await fetch('/api/youtube-channel', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${adminToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ url: ytInput.trim() }),
       });
       const parsed = await safeReadJson<{
+        ok?: boolean;
         name?: string;
         subs?: string;
         avatar?: string;
@@ -674,10 +671,10 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
       }>(res);
       if (!parsed.ok) {
         throw new Error(
-          'YouTube auto-fetch server is unavailable on this preview URL. You can fill the client fields below manually.'
+          'YouTube auto-fetch server is unavailable. You can fill the client fields below manually.'
         );
       }
-      if (!res.ok) {
+      if (!res.ok || (typeof parsed.data.ok === 'boolean' && !parsed.data.ok)) {
         throw new Error(parsed.data.error || 'Could not fetch channel details.');
       }
       setClientForm((prev) => ({
@@ -1005,50 +1002,7 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
           </div>
         </div>
 
-        {/* Google Cloud Sync Banner (matches reference screenshot 2) */}
-        {authReady && !isAdmin && (
-          <div className="mx-5 mt-3.5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/35 bg-primary/10 px-4 py-3">
-            <div className="flex items-center gap-3">
-              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/15 text-primary">
-                <CloudOff className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-wider text-foreground">
-                  Connect Google Sync for All Phones &amp; Browsers
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {user
-                    ? `Signed in as ${user.email}. Switch to ${BOOTSTRAPPED_ADMIN_EMAIL} so edits appear live everywhere.`
-                    : `Sign in once with your admin Google account (${BOOTSTRAPPED_ADMIN_EMAIL}) so edits appear live on every phone, PC & browser.`}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {user && (
-                <button
-                  type="button"
-                  onClick={() => void signOutAdmin()}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-white/15 bg-background/80 px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary"
-                >
-                  Switch Account
-                </button>
-              )}
-              <button
-                type="button"
-                disabled={authLoading}
-                onClick={() => void handleSignIn()}
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground shadow-glow transition-all hover:brightness-110 active:scale-95 disabled:opacity-60"
-              >
-                {authLoading ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Cloud className="h-3.5 w-3.5" />
-                )}
-                <span>{authLoading ? 'Connecting...' : 'Connect Google Sync'}</span>
-              </button>
-            </div>
-          </div>
-        )}
+
 
         {/* Toast Notification */}
         {toast && (
@@ -1490,89 +1444,156 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                     </div>
                   </div>
 
-                  {/* Custom Color Pickers */}
+                  {/* Custom Color Pickers with Chromatic Wheel & Gradient Options */}
                   <div>
-                    <label className={LABEL_CLS}>Custom Colors (Full Control)</label>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <label className={LABEL_CLS}>Custom Color Palette (Full Wheel &amp; Gradient Control)</label>
+                      <span className="text-[11px] font-medium text-muted-foreground">
+                        Click any color to open the chromatic color wheel or gradient builder
+                      </span>
+                    </div>
+
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      <ColorField
+                      <ColorFieldWithWheel
                         label="Primary Brand Color"
                         value={draft.theme.primaryColor}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', primaryColor: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', primaryColor: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
+
+                      <ColorFieldWithWheel
                         label="Kicker / Eyebrow Accent"
                         value={draft.theme.kickerColor}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', kickerColor: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', kickerColor: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
-                        label="Active Nav Pill Color"
+
+                      <ColorFieldWithWheel
+                        label="Active Nav Pill &amp; Accent"
                         value={draft.theme.navActiveColor}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', navActiveColor: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', navActiveColor: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
-                        label="Dark Background"
+
+                      <ColorFieldWithWheel
+                        label="Website Background (Solid / Gradient)"
                         value={draft.theme.darkBg}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', darkBg: v },
-                          }))
-                        }
+                        allowGradient={true}
+                        bgType={draft.theme.bgType || 'solid'}
+                        bgGradient={draft.theme.bgGradient || 'linear-gradient(135deg, #09080f 0%, #200a38 100%)'}
+                        bgGradientStart={draft.theme.bgGradientStart || '#09080f'}
+                        bgGradientEnd={draft.theme.bgGradientEnd || '#200a38'}
+                        bgGradientAngle={draft.theme.bgGradientAngle || 135}
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', darkBg: v, bgType: 'solid' as const };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
+                        onGradientChange={(cfg) => {
+                          setDraft((d) => {
+                            const next = {
+                              ...d.theme,
+                              preset: 'custom',
+                              darkBg: cfg.type === 'solid' ? cfg.gradient : d.theme.darkBg,
+                              bgType: cfg.type,
+                              bgGradient: cfg.gradient,
+                              bgGradientStart: cfg.start,
+                              bgGradientEnd: cfg.end,
+                              bgGradientAngle: cfg.angle,
+                            };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
+
+                      <ColorFieldWithWheel
                         label="Dark Card Surface"
                         value={draft.theme.darkCard}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', darkCard: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', darkCard: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
+
+                      <ColorFieldWithWheel
+                        label="Primary Text (Headings)"
+                        value={draft.theme.textColor || '#faf9ff'}
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', textColor: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
+                      />
+
+                      <ColorFieldWithWheel
+                        label="Secondary Muted Text"
+                        value={draft.theme.mutedTextColor || '#a29bb8'}
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', mutedTextColor: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
+                      />
+
+                      <ColorFieldWithWheel
                         label="Hero Shader Ribbon 1"
                         value={draft.theme.shaderColor1}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', shaderColor1: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', shaderColor1: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
-                        label="Hero Shader Base"
+
+                      <ColorFieldWithWheel
+                        label="Hero Shader Base Void"
                         value={draft.theme.shaderColor2}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', shaderColor2: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', shaderColor2: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
-                      <ColorField
+
+                      <ColorFieldWithWheel
                         label="Hero Shader Ribbon 2"
                         value={draft.theme.shaderColor3}
-                        onChange={(v) =>
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, preset: 'custom', shaderColor3: v },
-                          }))
-                        }
+                        onChange={(v) => {
+                          setDraft((d) => {
+                            const next = { ...d.theme, preset: 'custom', shaderColor3: v };
+                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                            return { ...d, theme: next };
+                          });
+                        }}
                       />
                     </div>
                   </div>

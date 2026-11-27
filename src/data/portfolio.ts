@@ -48,6 +48,13 @@ export interface ThemeConfig {
   navActiveColor: string;
   darkBg: string;
   darkCard: string;
+  bgType?: 'solid' | 'gradient';
+  bgGradient?: string;
+  bgGradientStart?: string;
+  bgGradientEnd?: string;
+  bgGradientAngle?: number;
+  textColor?: string;
+  mutedTextColor?: string;
   shaderColor1: string;
   shaderColor2: string;
   shaderColor3: string;
@@ -581,6 +588,13 @@ export const PORTFOLIO_DATA: PortfolioData = {
     navActiveColor: '#0f4c5c',
     darkBg: '#09080f',
     darkCard: '#131020',
+    bgType: 'solid',
+    bgGradient: 'linear-gradient(135deg, #09080f 0%, #200a38 100%)',
+    bgGradientStart: '#09080f',
+    bgGradientEnd: '#200a38',
+    bgGradientAngle: 135,
+    textColor: '#faf9ff',
+    mutedTextColor: '#a29bb8',
     shaderColor1: '#7c3aed',
     shaderColor2: '#09080f',
     shaderColor3: '#38e8d6',

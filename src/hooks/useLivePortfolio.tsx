@@ -205,6 +205,16 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
     navActiveColor: sanitizeHexColor(t.navActiveColor, def.theme.navActiveColor),
     darkBg: sanitizeHexColor(t.darkBg, def.theme.darkBg),
     darkCard: sanitizeHexColor(t.darkCard, def.theme.darkCard),
+    bgType: t.bgType === 'gradient' ? 'gradient' : 'solid',
+    bgGradient:
+      typeof t.bgGradient === 'string' && t.bgGradient.trim().length < 400
+        ? t.bgGradient.trim()
+        : 'linear-gradient(135deg, #09080f 0%, #200a38 100%)',
+    bgGradientStart: sanitizeHexColor(t.bgGradientStart, '#09080f'),
+    bgGradientEnd: sanitizeHexColor(t.bgGradientEnd, '#200a38'),
+    bgGradientAngle: Number.isFinite(t.bgGradientAngle) ? Number(t.bgGradientAngle) : 135,
+    textColor: sanitizeHexColor(t.textColor, '#faf9ff'),
+    mutedTextColor: sanitizeHexColor(t.mutedTextColor, '#a29bb8'),
     shaderColor1: sanitizeHexColor(t.shaderColor1, def.theme.shaderColor1),
     shaderColor2: sanitizeHexColor(t.shaderColor2, def.theme.shaderColor2),
     shaderColor3: sanitizeHexColor(t.shaderColor3, def.theme.shaderColor3),
@@ -274,7 +284,7 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
   };
 }
 
-function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, logoSrc: string) {
+export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, logoSrc: string) {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
   const isLight = root.dataset.theme === 'light';
@@ -285,14 +295,45 @@ function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, logoSrc:
   root.style.setProperty('--nav-active', theme.navActiveColor);
   root.style.setProperty('--accent', theme.navActiveColor);
 
+  if (theme.textColor) {
+    root.style.setProperty('--foreground', theme.textColor);
+  }
+  if (theme.mutedTextColor) {
+    root.style.setProperty('--muted-foreground', theme.mutedTextColor);
+  }
+
+  // Live dynamic glow calculation
+  root.style.setProperty(
+    '--ambient-warm',
+    `color-mix(in oklab, ${theme.primaryColor} 16%, transparent)`
+  );
+  root.style.setProperty(
+    '--ambient-cool',
+    `color-mix(in oklab, ${theme.kickerColor} 10%, transparent)`
+  );
+  root.style.setProperty(
+    '--shadow-glow',
+    `0 18px 50px -12px color-mix(in oklab, ${theme.primaryColor} 52%, transparent)`
+  );
+
   if (isLight) {
     root.style.removeProperty('--background');
     root.style.removeProperty('--card');
     root.style.removeProperty('--popover');
+    document.body.style.removeProperty('background');
+    document.body.style.removeProperty('background-attachment');
   } else {
     root.style.setProperty('--background', theme.darkBg);
     root.style.setProperty('--card', theme.darkCard);
     root.style.setProperty('--popover', theme.darkCard);
+
+    if (theme.bgType === 'gradient' && theme.bgGradient) {
+      document.body.style.background = theme.bgGradient;
+      document.body.style.backgroundAttachment = 'fixed';
+    } else {
+      document.body.style.background = theme.darkBg;
+      document.body.style.removeProperty('background-attachment');
+    }
   }
 
   document.title = `${brandName} | Thumbnail Artist`;

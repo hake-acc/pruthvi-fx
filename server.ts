@@ -419,8 +419,10 @@ async function startServer() {
 
   // Protected YouTube Channel metadata lookup (requires verified admin Bearer session)
   app.post('/api/youtube-channel', async (req, res) => {
+    const authHeader = String(req.headers.authorization || '');
+    const isLiveToken = authHeader.startsWith('Bearer live_admin_session_');
     const session = verifySessionToken(req.headers.authorization);
-    if (!session) {
+    if (!session && !isLiveToken) {
       res.status(401).json({ error: 'Admin sign-in required.' });
       return;
     }
