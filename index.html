@@ -27,6 +27,57 @@
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     />
     <link rel="icon" href="/assets/aistudio/image_58923e46.png" type="image/png" />
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('pruthvifx_cached_site_config_v2');
+          if (raw) {
+            var cfg = JSON.parse(raw);
+            if (cfg && cfg.brandName) {
+              document.title = cfg.brandName + ' | Thumbnail Artist';
+            }
+            if (cfg && cfg.logoSrc) {
+              var f = document.querySelector('link[rel="icon"]');
+              if (f) f.href = cfg.logoSrc;
+            }
+            if (cfg && cfg.theme) {
+              var t = cfg.theme;
+              var r = document.documentElement;
+              if (t.primaryColor) {
+                r.style.setProperty('--primary', t.primaryColor);
+                r.style.setProperty('--ring', t.primaryColor);
+              }
+              if (t.kickerColor) r.style.setProperty('--kicker', t.kickerColor);
+              if (t.navActiveColor) {
+                r.style.setProperty('--nav-active', t.navActiveColor);
+                r.style.setProperty('--accent', t.navActiveColor);
+              }
+              if (t.darkBg) {
+                r.style.setProperty('--background', t.darkBg);
+                document.documentElement.style.background = t.darkBg;
+              }
+              if (t.darkCard) {
+                r.style.setProperty('--card', t.darkCard);
+                r.style.setProperty('--popover', t.darkCard);
+              }
+              var disp = (t.customFont || t.displayFont || '').trim();
+              if (disp && !['sans-serif', 'system-ui', 'monospace'].includes(disp.toLowerCase())) {
+                r.style.setProperty('--font-display', '"' + disp + '", sans-serif');
+                r.style.setProperty('--font-tagline', '"' + disp + '", sans-serif');
+                var l = document.createElement('link');
+                l.id = 'dynamic-google-fonts';
+                l.rel = 'stylesheet';
+                l.href =
+                  'https://fonts.googleapis.com/css2?family=' +
+                  encodeURIComponent(disp.replace(/\+/g, ' ')) +
+                  ':ital,wght@0,300..900;1,300..900&display=swap';
+                document.head.appendChild(l);
+              }
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

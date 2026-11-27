@@ -391,19 +391,75 @@ export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, l
   }
 }
 
+export const LIVE_PORTFOLIO_CACHE_KEYS = {
+  siteConfig: 'pruthvifx_cached_site_config_v2',
+  categories: 'pruthvifx_cached_categories_v2',
+  thumbnails: 'pruthvifx_cached_thumbnails_v2',
+  beforeAfter: 'pruthvifx_cached_before_after_v2',
+  clients: 'pruthvifx_cached_clients_v2',
+  faqs: 'pruthvifx_cached_faqs_v2',
+  cloudInitialized: 'pruthvifx_cached_cloud_init_v2',
+} as const;
+
+function getCachedJson<T>(key: string): T | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedJson<T>(key: string, data: T): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(data));
+  } catch {
+    // safe ignore for private mode / quota
+  }
+}
+
 export function LivePortfolioProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [cloudInitialized, setCloudInitialized] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-  const [siteConfig, setSiteConfig] = useState<SiteConfigPayload>(extractDefaultSiteConfig);
-  const [categories, setCategories] = useState<OrderedCategory[] | null>(null);
-  const [thumbnails, setThumbnails] = useState<OrderedThumbnail[] | null>(null);
-  const [beforeAfter, setBeforeAfter] = useState<OrderedBeforeAfter[] | null>(null);
-  const [clients, setClients] = useState<ClientWithRow[] | null>(null);
-  const [faqs, setFaqs] = useState<OrderedFaq[] | null>(null);
+  // Synchronously initialize state from persistent localStorage cache to eliminate 1s stale/default flash
+  const [cloudInitialized, setCloudInitialized] = useState<boolean>(() => {
+    return Boolean(getCachedJson<boolean>(LIVE_PORTFOLIO_CACHE_KEYS.cloudInitialized));
+  });
+
+  const [siteConfig, setSiteConfig] = useState<SiteConfigPayload>(() => {
+    const cached = getCachedJson<SiteConfigPayload>(LIVE_PORTFOLIO_CACHE_KEYS.siteConfig);
+    if (cached) {
+      const sanitized = sanitizeSiteConfig(cached);
+      applyDynamicThemeStyles(sanitized.theme, sanitized.brandName, sanitized.logoSrc);
+      applyLiveSoundSettings(sanitized.sound);
+      return sanitized;
+    }
+    const def = extractDefaultSiteConfig();
+    applyDynamicThemeStyles(def.theme, def.brandName, def.logoSrc);
+    return def;
+  });
+
+  const [categories, setCategories] = useState<OrderedCategory[] | null>(() => {
+    return getCachedJson<OrderedCategory[]>(LIVE_PORTFOLIO_CACHE_KEYS.categories);
+  });
+  const [thumbnails, setThumbnails] = useState<OrderedThumbnail[] | null>(() => {
+    return getCachedJson<OrderedThumbnail[]>(LIVE_PORTFOLIO_CACHE_KEYS.thumbnails);
+  });
+  const [beforeAfter, setBeforeAfter] = useState<OrderedBeforeAfter[] | null>(() => {
+    return getCachedJson<OrderedBeforeAfter[]>(LIVE_PORTFOLIO_CACHE_KEYS.beforeAfter);
+  });
+  const [clients, setClients] = useState<ClientWithRow[] | null>(() => {
+    return getCachedJson<ClientWithRow[]>(LIVE_PORTFOLIO_CACHE_KEYS.clients);
+  });
+  const [faqs, setFaqs] = useState<OrderedFaq[] | null>(() => {
+    return getCachedJson<OrderedFaq[]>(LIVE_PORTFOLIO_CACHE_KEYS.faqs);
+  });
 
   // 1. Auth listener & admin role check
   useEffect(() => {
@@ -447,8 +503,9 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
           if (snap.exists()) {
             const raw = snap.data() as Partial<SiteConfigPayload>;
             setCloudInitialized(true);
-            setSiteConfig((prev) =>
-              sanitizeSiteConfig({
+            setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.cloudInitialized, true);
+            setSiteConfig((prev) => {
+              const updated = sanitizeSiteConfig({
                 ...prev,
                 ...raw,
                 hero: { ...prev.hero, ...(raw.hero || {}) },
@@ -458,8 +515,10 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
                 socials: { ...prev.socials, ...(raw.socials || {}) },
                 theme: { ...prev.theme, ...(raw.theme || {}) },
                 sound: { ...prev.sound, ...(raw.sound || {}) },
-              })
-            );
+              });
+              setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.siteConfig, updated);
+              return updated;
+            });
           } else {
             setCloudInitialized(false);
           }
@@ -484,6 +543,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
             };
           });
           setCategories(items);
+          setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.categories, items);
         },
         (error) => {
           console.error('categories listener error:', error);
@@ -508,6 +568,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
             };
           });
           setThumbnails(items);
+          setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.thumbnails, items);
         },
         (error) => {
           console.error('thumbnails listener error:', error);
@@ -531,6 +592,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
             };
           });
           setBeforeAfter(items);
+          setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.beforeAfter, items);
         },
         (error) => {
           console.error('before_after listener error:', error);
@@ -555,6 +617,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
             };
           });
           setClients(items);
+          setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.clients, items);
         },
         (error) => {
           console.error('clients listener error:', error);
@@ -576,6 +639,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
             };
           });
           setFaqs(items);
+          setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.faqs, items);
         },
         (error) => {
           console.error('faqs listener error:', error);
@@ -787,13 +851,21 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
 
   const saveSiteConfig = useCallback(
     async (next: SiteConfigPayload) => {
+      const clean = sanitizeSiteConfig(next);
+      // Synchronous optimistic update to eliminate any 1-second lag
+      setSiteConfig(clean);
+      setCloudInitialized(true);
+      setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.siteConfig, clean);
+      setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.cloudInitialized, true);
+      applyDynamicThemeStyles(clean.theme, clean.brandName, clean.logoSrc);
+      applyLiveSoundSettings(clean.sound);
+
       if (!cloudInitialized) {
         await seedCloudDefaults(next);
         return;
       }
       setSyncing(true);
       try {
-        const clean = sanitizeSiteConfig(next);
         await setDoc(doc(db, 'site_config', 'main'), {
           ...clean,
           updatedAt: serverTimestamp(),
@@ -809,17 +881,32 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
 
   const upsertCategory = useCallback(
     async (cat: { id?: string; name: string; description: string; order?: number }) => {
-      setSyncing(true);
       const id =
         cat.id && isValidDocId(cat.id) ? cat.id : makeSafeDocId('cat', cat.name);
+      const name = cat.name.trim().slice(0, 60);
+      if (!name) throw new Error('Category name is required.');
+      const description = (cat.description || '').trim().slice(0, 220);
+      const order = Math.max(0, Math.min(1000, Number(cat.order ?? data.categories.length)));
+
+      // Optimistic update
+      setCategories((prev) => {
+        const list = prev ? [...prev] : [...data.categories];
+        const idx = list.findIndex((c) => c.id === id);
+        const item: OrderedCategory = { id, name, description, order };
+        if (idx >= 0) list[idx] = item;
+        else list.push(item);
+        list.sort((a, b) => a.order - b.order);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.categories, list);
+        return list;
+      });
+
+      setSyncing(true);
       try {
         await ensureCloudReady();
-        const name = cat.name.trim().slice(0, 60);
-        if (!name) throw new Error('Category name is required.');
         await setDoc(doc(db, 'categories', id), {
           name,
-          description: (cat.description || '').trim().slice(0, 220),
-          order: Math.max(0, Math.min(1000, Number(cat.order ?? data.categories.length))),
+          description,
+          order,
           updatedAt: serverTimestamp(),
         });
         return id;
@@ -829,11 +916,23 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady, data.categories.length]
+    [ensureCloudReady, data.categories]
   );
 
   const deleteCategory = useCallback(
     async (categoryId: string) => {
+      // Optimistic update
+      setCategories((prev) => {
+        const list = (prev ? [...prev] : [...data.categories]).filter((c) => c.id !== categoryId);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.categories, list);
+        return list;
+      });
+      setThumbnails((prev) => {
+        const list = (prev ? [...prev] : [...data.thumbnails]).filter((t) => t.categoryId !== categoryId);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.thumbnails, list);
+        return list;
+      });
+
       setSyncing(true);
       try {
         await ensureCloudReady();
@@ -851,7 +950,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady, data.thumbnails]
+    [ensureCloudReady, data.categories, data.thumbnails]
   );
 
   const upsertThumbnail = useCallback(
@@ -864,28 +963,51 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
       videoUrl?: string;
       order?: number;
     }) => {
-      setSyncing(true);
       const id =
         item.id && isValidDocId(item.id) ? item.id : makeSafeDocId('thumb', item.title);
+      const title = item.title.trim().slice(0, 140);
+      if (!title) throw new Error('Thumbnail title is required.');
+      if (!isValidDocId(item.categoryId)) throw new Error('Please choose a valid category.');
+      if (!isSafeAssetOrUrl(item.src, 450000)) {
+        throw new Error('Please provide a valid HTTPS image URL or upload an image.');
+      }
+      const videoUrl = (item.videoUrl || '').trim();
+      if (!isSafeOptionalUrl(videoUrl, 400)) {
+        throw new Error('Video URL must start with https:// or be left blank.');
+      }
+      const client = (item.client || '').trim().slice(0, 80);
+      const nextOrder = Math.max(0, Math.min(2000, Number(item.order ?? data.thumbnails.length)));
+
+      // Optimistic update: instantly reflects in UI and cache without 1-second delay
+      setThumbnails((prev) => {
+        const list = prev ? [...prev] : [...data.thumbnails];
+        const idx = list.findIndex((t) => t.id === id);
+        const nextThumb: OrderedThumbnail = {
+          id,
+          categoryId: item.categoryId,
+          title,
+          src: item.src.trim(),
+          client,
+          videoUrl,
+          order: nextOrder,
+        };
+        if (idx >= 0) list[idx] = nextThumb;
+        else list.push(nextThumb);
+        list.sort((a, b) => a.order - b.order);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.thumbnails, list);
+        return list;
+      });
+
+      setSyncing(true);
       try {
         await ensureCloudReady();
-        const title = item.title.trim().slice(0, 140);
-        if (!title) throw new Error('Thumbnail title is required.');
-        if (!isValidDocId(item.categoryId)) throw new Error('Please choose a valid category.');
-        if (!isSafeAssetOrUrl(item.src, 450000)) {
-          throw new Error('Please provide a valid HTTPS image URL or upload an image.');
-        }
-        const videoUrl = (item.videoUrl || '').trim();
-        if (!isSafeOptionalUrl(videoUrl, 400)) {
-          throw new Error('Video URL must start with https:// or be left blank.');
-        }
         await setDoc(doc(db, 'thumbnails', id), {
           categoryId: item.categoryId,
           title,
           src: item.src.trim(),
-          client: (item.client || '').trim().slice(0, 80),
+          client,
           videoUrl,
-          order: Math.max(0, Math.min(2000, Number(item.order ?? data.thumbnails.length))),
+          order: nextOrder,
           updatedAt: serverTimestamp(),
         });
         return id;
@@ -895,12 +1017,22 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady, data.thumbnails.length]
+    [ensureCloudReady, data.thumbnails]
   );
 
   const reorderThumbnails = useCallback(
     async (items: { id: string; order: number }[]) => {
       if (!items.length) return;
+      // Optimistic update: instantly reflects new order in UI and cache
+      setThumbnails((prev) => {
+        const base = prev ? [...prev] : [...data.thumbnails];
+        const orderMap = new Map(items.map((i) => [i.id, i.order]));
+        const updated = base.map((t) => (orderMap.has(t.id) ? { ...t, order: orderMap.get(t.id)! } : t));
+        updated.sort((a, b) => a.order - b.order);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.thumbnails, updated);
+        return updated;
+      });
+
       setSyncing(true);
       try {
         await ensureCloudReady();
@@ -918,11 +1050,18 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady]
+    [ensureCloudReady, data.thumbnails]
   );
 
   const deleteThumbnail = useCallback(
     async (id: string) => {
+      // Optimistic update
+      setThumbnails((prev) => {
+        const list = (prev ? [...prev] : [...data.thumbnails]).filter((t) => t.id !== id);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.thumbnails, list);
+        return list;
+      });
+
       setSyncing(true);
       try {
         await ensureCloudReady();
@@ -933,7 +1072,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady]
+    [ensureCloudReady, data.thumbnails]
   );
 
   const upsertBeforeAfter = useCallback(
@@ -945,21 +1084,38 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
       afterSrc: string;
       order?: number;
     }) => {
-      setSyncing(true);
       const id =
         item.id && isValidDocId(item.id) ? item.id : makeSafeDocId('ba', item.title);
+      const title = item.title.trim().slice(0, 120) || 'Comparison';
+      if (!isSafeAssetOrUrl(item.beforeSrc, 450000) || !isSafeAssetOrUrl(item.afterSrc, 450000)) {
+        throw new Error('Both Before and After images must be valid HTTPS URLs or uploaded images.');
+      }
+      const subtitle = (item.subtitle || '').trim().slice(0, 160);
+      const beforeSrc = item.beforeSrc.trim();
+      const afterSrc = item.afterSrc.trim();
+      const order = Math.max(0, Math.min(500, Number(item.order ?? data.beforeAfter.length)));
+
+      // Optimistic update
+      setBeforeAfter((prev) => {
+        const list = prev ? [...prev] : [...data.beforeAfter];
+        const idx = list.findIndex((b) => b.id === id);
+        const nextBA: OrderedBeforeAfter = { id, title, subtitle, beforeSrc, afterSrc, order };
+        if (idx >= 0) list[idx] = nextBA;
+        else list.push(nextBA);
+        list.sort((a, b) => a.order - b.order);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.beforeAfter, list);
+        return list;
+      });
+
+      setSyncing(true);
       try {
         await ensureCloudReady();
-        const title = item.title.trim().slice(0, 120) || 'Comparison';
-        if (!isSafeAssetOrUrl(item.beforeSrc, 450000) || !isSafeAssetOrUrl(item.afterSrc, 450000)) {
-          throw new Error('Both Before and After images must be valid HTTPS URLs or uploaded images.');
-        }
         await setDoc(doc(db, 'before_after', id), {
           title,
-          subtitle: (item.subtitle || '').trim().slice(0, 160),
-          beforeSrc: item.beforeSrc.trim(),
-          afterSrc: item.afterSrc.trim(),
-          order: Math.max(0, Math.min(500, Number(item.order ?? data.beforeAfter.length))),
+          subtitle,
+          beforeSrc,
+          afterSrc,
+          order,
           updatedAt: serverTimestamp(),
         });
         return id;
@@ -969,11 +1125,18 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady, data.beforeAfter.length]
+    [ensureCloudReady, data.beforeAfter]
   );
 
   const deleteBeforeAfter = useCallback(
     async (id: string) => {
+      // Optimistic update
+      setBeforeAfter((prev) => {
+        const list = (prev ? [...prev] : [...data.beforeAfter]).filter((b) => b.id !== id);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.beforeAfter, list);
+        return list;
+      });
+
       setSyncing(true);
       try {
         await ensureCloudReady();
@@ -984,7 +1147,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady]
+    [ensureCloudReady, data.beforeAfter]
   );
 
   const upsertClient = useCallback(
@@ -997,27 +1160,44 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
       row: 1 | 2;
       order?: number;
     }) => {
-      setSyncing(true);
       const id =
         item.id && isValidDocId(item.id) ? item.id : makeSafeDocId('client', item.name);
+      const name = item.name.trim().slice(0, 80);
+      const subs = item.subs.trim().slice(0, 60) || 'Creator';
+      if (!name) throw new Error('Creator name is required.');
+      if (!isSafeAssetOrUrl(item.avatar, 350000)) {
+        throw new Error('Creator logo/avatar must be a valid HTTPS URL or uploaded image.');
+      }
+      if (!isSafeAssetOrUrl(item.channelUrl, 400)) {
+        throw new Error('Channel link must be a valid HTTPS URL.');
+      }
+      const avatar = item.avatar.trim();
+      const channelUrl = item.channelUrl.trim();
+      const row = item.row === 2 ? 2 : 1;
+      const order = Math.max(0, Math.min(1000, Number(item.order ?? resolvedClients.length)));
+
+      // Optimistic update
+      setClients((prev) => {
+        const list = prev ? [...prev] : [...resolvedClients];
+        const idx = list.findIndex((c) => c.id === id);
+        const nextClient: ClientWithRow = { id, name, subs, avatar, channelUrl, row, order };
+        if (idx >= 0) list[idx] = nextClient;
+        else list.push(nextClient);
+        list.sort((a, b) => a.order - b.order);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.clients, list);
+        return list;
+      });
+
+      setSyncing(true);
       try {
         await ensureCloudReady();
-        const name = item.name.trim().slice(0, 80);
-        const subs = item.subs.trim().slice(0, 60) || 'Creator';
-        if (!name) throw new Error('Creator name is required.');
-        if (!isSafeAssetOrUrl(item.avatar, 350000)) {
-          throw new Error('Creator logo/avatar must be a valid HTTPS URL or uploaded image.');
-        }
-        if (!isSafeAssetOrUrl(item.channelUrl, 400)) {
-          throw new Error('Channel link must be a valid HTTPS URL.');
-        }
         await setDoc(doc(db, 'clients', id), {
           name,
           subs,
-          avatar: item.avatar.trim(),
-          channelUrl: item.channelUrl.trim(),
-          row: item.row === 2 ? 2 : 1,
-          order: Math.max(0, Math.min(1000, Number(item.order ?? resolvedClients.length))),
+          avatar,
+          channelUrl,
+          row,
+          order,
           updatedAt: serverTimestamp(),
         });
         return id;
@@ -1027,11 +1207,18 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady, resolvedClients.length]
+    [ensureCloudReady, resolvedClients]
   );
 
   const deleteClient = useCallback(
     async (id: string) => {
+      // Optimistic update
+      setClients((prev) => {
+        const list = (prev ? [...prev] : [...resolvedClients]).filter((c) => c.id !== id);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.clients, list);
+        return list;
+      });
+
       setSyncing(true);
       try {
         await ensureCloudReady();
@@ -1042,23 +1229,37 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady]
+    [ensureCloudReady, resolvedClients]
   );
 
   const upsertFaq = useCallback(
     async (item: { id?: string; question: string; answer: string; order?: number }) => {
-      setSyncing(true);
       const id =
         item.id && isValidDocId(item.id) ? item.id : makeSafeDocId('faq', item.question);
+      const question = item.question.trim().slice(0, 200);
+      const answer = item.answer.trim().slice(0, 1000);
+      if (!question || !answer) throw new Error('Both question and answer are required.');
+      const order = Math.max(0, Math.min(500, Number(item.order ?? data.faqs.length)));
+
+      // Optimistic update
+      setFaqs((prev) => {
+        const list = prev ? [...prev] : [...data.faqs];
+        const idx = list.findIndex((f) => f.id === id);
+        const nextFaq: OrderedFaq = { id, question, answer, order };
+        if (idx >= 0) list[idx] = nextFaq;
+        else list.push(nextFaq);
+        list.sort((a, b) => a.order - b.order);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.faqs, list);
+        return list;
+      });
+
+      setSyncing(true);
       try {
         await ensureCloudReady();
-        const question = item.question.trim().slice(0, 200);
-        const answer = item.answer.trim().slice(0, 1000);
-        if (!question || !answer) throw new Error('Both question and answer are required.');
         await setDoc(doc(db, 'faqs', id), {
           question,
           answer,
-          order: Math.max(0, Math.min(500, Number(item.order ?? data.faqs.length))),
+          order,
           updatedAt: serverTimestamp(),
         });
         return id;
@@ -1068,11 +1269,18 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady, data.faqs.length]
+    [ensureCloudReady, data.faqs]
   );
 
   const deleteFaq = useCallback(
     async (id: string) => {
+      // Optimistic update
+      setFaqs((prev) => {
+        const list = (prev ? [...prev] : [...data.faqs]).filter((f) => f.id !== id);
+        setCachedJson(LIVE_PORTFOLIO_CACHE_KEYS.faqs, list);
+        return list;
+      });
+
       setSyncing(true);
       try {
         await ensureCloudReady();
@@ -1083,7 +1291,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
         setSyncing(false);
       }
     },
-    [ensureCloudReady]
+    [ensureCloudReady, data.faqs]
   );
 
   const value = useMemo<LivePortfolioContextValue>(

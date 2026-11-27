@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft,
   ArrowUpToLine,
@@ -342,33 +342,37 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
     sound: { ...data.sound },
   }));
 
-  // Sync draft whenever panel opens or remote site config changes
+  // Sync draft only when the panel transitions from closed to open,
+  // preventing background snapshot roundtrips from overwriting active form edits
+  const openPrevRef = useRef(false);
   useEffect(() => {
-    if (!open) return;
-    setDraft({
-      brandPrefix: data.brandPrefix,
-      brandSuffix: data.brandSuffix,
-      brandName: data.brandName,
-      logoSrc: data.logoSrc,
-      hero: {
-        availabilityText: data.hero.availabilityText,
-        availabilityOpen: data.hero.availabilityOpen,
-        descriptionLine1: data.hero.descriptionLine1,
-        descriptionLine2Prefix: data.hero.descriptionLine2Prefix,
-        descriptionHighlight: data.hero.descriptionHighlight,
-        primaryCta: data.hero.primaryCta,
-        secondaryCta: data.hero.secondaryCta,
-        avatarBadge: data.hero.avatarBadge,
-        stats: data.hero.stats.map((s) => ({ ...s })),
-      },
-      about: { ...data.about },
-      clientsSection: { ...data.clientsSection },
-      contact: { ...data.contact },
-      footerTagline: data.footerTagline,
-      socials: { ...data.socials },
-      theme: { ...data.theme },
-      sound: { ...data.sound },
-    });
+    if (open && !openPrevRef.current) {
+      setDraft({
+        brandPrefix: data.brandPrefix,
+        brandSuffix: data.brandSuffix,
+        brandName: data.brandName,
+        logoSrc: data.logoSrc,
+        hero: {
+          availabilityText: data.hero.availabilityText,
+          availabilityOpen: data.hero.availabilityOpen,
+          descriptionLine1: data.hero.descriptionLine1,
+          descriptionLine2Prefix: data.hero.descriptionLine2Prefix,
+          descriptionHighlight: data.hero.descriptionHighlight,
+          primaryCta: data.hero.primaryCta,
+          secondaryCta: data.hero.secondaryCta,
+          avatarBadge: data.hero.avatarBadge,
+          stats: data.hero.stats.map((s) => ({ ...s })),
+        },
+        about: { ...data.about },
+        clientsSection: { ...data.clientsSection },
+        contact: { ...data.contact },
+        footerTagline: data.footerTagline,
+        socials: { ...data.socials },
+        theme: { ...data.theme },
+        sound: { ...data.sound },
+      });
+    }
+    openPrevRef.current = open;
   }, [open, data]);
 
   // Category form state
@@ -563,6 +567,7 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
     if (!requireCloudSync()) return;
     try {
       const payload = customDraft || draft;
+      setDraft(payload);
       await saveSiteConfig(payload);
       notify('ok', label);
     } catch (error) {
