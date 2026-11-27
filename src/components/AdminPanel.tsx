@@ -1979,6 +1979,39 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                     )}
                   </div>
 
+                  {/* Animated SVG Curl Strokes Customizer */}
+                  <div className="rounded-2xl border border-white/10 bg-background/50 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                        <div>
+                          <h4 className="text-sm font-bold">Animated SVG Curl Strokes</h4>
+                          <p className="text-xs text-muted-foreground">
+                            Subtle, hand-drawn procedural spiral curls that drift, breathe, and draw across sections.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setDraft((d) => ({
+                            ...d,
+                            theme: { ...d.theme, showCurls: d.theme.showCurls === false },
+                          }))
+                        }
+                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                          draft.theme.showCurls !== false ? 'bg-primary' : 'bg-white/20'
+                        }`}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                            draft.theme.showCurls !== false ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="flex justify-end pt-2">
                     <button
                       type="button"

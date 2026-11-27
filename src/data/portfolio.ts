@@ -60,6 +60,7 @@ export interface ThemeConfig {
   customFont?: string;
   bgStyle?: 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
   bgImageUrl?: string;
+  showCurls?: boolean;
   shaderColor1: string;
   shaderColor2: string;
   shaderColor3: string;
@@ -605,6 +606,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     customFont: '',
     bgStyle: 'geometric-waves',
     bgImageUrl: '',
+    showCurls: true,
     shaderColor1: '#7c3aed',
     shaderColor2: '#09080f',
     shaderColor3: '#38e8d6',

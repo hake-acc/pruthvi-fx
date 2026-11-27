@@ -7,6 +7,7 @@ import { AdminPanel } from './components/AdminPanel';
 import { attachGlobalSoundListeners } from './lib/sound';
 import { AmbientBackground } from './components/AmbientBackground';
 import { HeroBackground } from './components/HeroBackground';
+import { AnimatedCurls } from './components/AnimatedCurls';
 import { OpeningReveal } from './components/OpeningReveal';
 import {
   HeroTitle,
@@ -484,7 +485,7 @@ export default function App() {
           {/* Hero Section with Choreographed Entrance */}
           <section
             id="home"
-            className="hero-section relative flex min-h-screen items-center px-5 pb-14 pt-24 sm:px-8 lg:pt-24"
+            className="hero-section relative flex min-h-screen items-center overflow-hidden px-5 pb-14 pt-24 sm:px-8 lg:pt-24"
           >
             <div
               aria-hidden="true"
@@ -497,6 +498,9 @@ export default function App() {
                 kickerColor={data.theme.kickerColor}
               />
             </div>
+
+            {/* Subtle Hand-Drawn Animated SVG Curl Strokes */}
+            <AnimatedCurls enabled={data.theme.showCurls !== false} count={14} minSize={28} maxSize={85} minOpacity={0.04} maxOpacity={0.12} seed={101} />
 
             <div className="relative z-20 mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-12">
               {/* Left Column */}
@@ -607,8 +611,11 @@ export default function App() {
           </section>
 
           {/* About Section */}
-          <section id="about" className="relative px-5 py-24 sm:px-8 md:py-28">
-            <div className="mx-auto grid max-w-5xl items-center gap-14 md:grid-cols-[minmax(0,280px)_1fr] md:gap-16 md:text-left">
+          <section id="about" className="relative overflow-hidden px-5 py-24 sm:px-8 md:py-28">
+            {/* Subtle Hand-Drawn Animated SVG Curl Strokes */}
+            <AnimatedCurls enabled={data.theme.showCurls !== false} count={12} minSize={26} maxSize={75} minOpacity={0.04} maxOpacity={0.11} seed={202} />
+
+            <div className="relative z-10 mx-auto grid max-w-5xl items-center gap-14 md:grid-cols-[minmax(0,280px)_1fr] md:gap-16 md:text-left">
               <Reveal className="relative mx-auto w-52 sm:w-60 md:w-full">
                 <ScrollParallax offset={22}>
                   <div aria-hidden="true" className="about-aura absolute -inset-8 rounded-full" />
@@ -664,141 +671,161 @@ export default function App() {
           </section>
 
           {/* Portfolio / Work + Before/After Section */}
-          <section id="work" className="relative px-4 py-24 md:px-6 md:py-28">
-            <Reveal className="mx-auto max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-kicker">
-                Portfolio
-              </p>
-              <h2 className="font-display mt-4 text-4xl font-extrabold leading-[1.02] md:text-6xl">
-                <WordReveal text="Featured" />{' '}
-                <WordReveal text="work." start={180} className="studio-gradient-text" />
-              </h2>
-              <p className="mt-5 text-muted-foreground">
-                Browse Minecraft, Roblox, and IRL thumbnails built to grab attention and earn
-                the click.
-              </p>
-            </Reveal>
+          <section id="work" className="relative overflow-hidden px-4 py-24 md:px-6 md:py-28">
+            {/* Subtle Hand-Drawn Animated SVG Curl Strokes */}
+            <AnimatedCurls enabled={data.theme.showCurls !== false} count={15} minSize={28} maxSize={80} minOpacity={0.03} maxOpacity={0.10} seed={303} />
 
-            <Reveal delay={90}>
-              <PortfolioSection
-                categories={data.categories}
-                activeCategoryId={activeCategoryId}
-                onSelectCategory={setActiveCategoryId}
-                thumbnails={data.thumbnails}
-                onSelectThumbnail={(item) =>
-                  setSelectedImage(toLightboxImage(item, activeCategory?.name, data.brandName))
-                }
-                brandName={data.brandName}
+            <div className="relative z-10">
+              <Reveal className="mx-auto max-w-2xl">
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-kicker">
+                  Portfolio
+                </p>
+                <h2 className="font-display mt-4 text-4xl font-extrabold leading-[1.02] md:text-6xl">
+                  <WordReveal text="Featured" />{' '}
+                  <WordReveal text="work." start={180} className="studio-gradient-text" />
+                </h2>
+                <p className="mt-5 text-muted-foreground">
+                  Browse Minecraft, Roblox, and IRL thumbnails built to grab attention and earn
+                  the click.
+                </p>
+              </Reveal>
+
+              <Reveal delay={90}>
+                <PortfolioSection
+                  categories={data.categories}
+                  activeCategoryId={activeCategoryId}
+                  onSelectCategory={setActiveCategoryId}
+                  thumbnails={data.thumbnails}
+                  onSelectThumbnail={(item) =>
+                    setSelectedImage(toLightboxImage(item, activeCategory?.name, data.brandName))
+                  }
+                  brandName={data.brandName}
+                />
+              </Reveal>
+
+              <Reveal delay={120}>
+                <BeforeAfterShowcase items={data.beforeAfter} />
+              </Reveal>
+
+              <Lightbox
+                image={selectedImage}
+                items={lightboxItems}
+                onChange={(img) => setSelectedImage(img)}
+                onClose={() => setSelectedImage(null)}
               />
-            </Reveal>
-
-            <Reveal delay={120}>
-              <BeforeAfterShowcase items={data.beforeAfter} />
-            </Reveal>
-
-            <Lightbox
-              image={selectedImage}
-              items={lightboxItems}
-              onChange={(img) => setSelectedImage(img)}
-              onClose={() => setSelectedImage(null)}
-            />
+            </div>
           </section>
 
           {/* Clients Dual-Row Opposing Marquee Section */}
-          <section id="clients" className="relative py-24 md:py-32">
-            <Reveal className="mx-auto max-w-3xl px-4">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-kicker">
-                {data.clientsSection.kicker}
-              </p>
-              <h2 className="font-display mt-4 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-                <WordReveal text={data.clientsSection.headingPrefix} />{' '}
-                <WordReveal
-                  text={data.clientsSection.headingHighlight}
-                  start={160}
-                  className="studio-gradient-text"
-                />
-              </h2>
-              <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-                {data.clientsSection.subtitle}
-              </p>
-            </Reveal>
+          <section id="clients" className="relative overflow-hidden py-24 md:py-32">
+            {/* Subtle Hand-Drawn Animated SVG Curl Strokes */}
+            <AnimatedCurls enabled={data.theme.showCurls !== false} count={12} minSize={25} maxSize={75} minOpacity={0.04} maxOpacity={0.12} seed={404} />
 
-            <Reveal delay={120}>
-              <ClientMarquee
-                rowOne={data.clientRows.rowOne}
-                rowTwo={data.clientRows.rowTwo}
-              />
-            </Reveal>
+            <div className="relative z-10">
+              <Reveal className="mx-auto max-w-3xl px-4">
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-kicker">
+                  {data.clientsSection.kicker}
+                </p>
+                <h2 className="font-display mt-4 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+                  <WordReveal text={data.clientsSection.headingPrefix} />{' '}
+                  <WordReveal
+                    text={data.clientsSection.headingHighlight}
+                    start={160}
+                    className="studio-gradient-text"
+                  />
+                </h2>
+                <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+                  {data.clientsSection.subtitle}
+                </p>
+              </Reveal>
+
+              <Reveal delay={120}>
+                <ClientMarquee
+                  rowOne={data.clientRows.rowOne}
+                  rowTwo={data.clientRows.rowTwo}
+                />
+              </Reveal>
+            </div>
           </section>
 
           {/* FAQs Section */}
-          <section id="faq" className="px-4 py-20 md:px-6 md:py-28">
-            <Reveal className="mx-auto max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-kicker">
-                FAQs
-              </p>
-              <h2 className="font-display mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
-                <WordReveal text="Good questions." />{' '}
-                <WordReveal
-                  text="Clear answers."
-                  className="studio-gradient-text"
-                  start={180}
-                />
-              </h2>
-              <p className="mt-5 text-muted-foreground">
-                Everything you need to know before we start.
-              </p>
-            </Reveal>
+          <section id="faq" className="relative overflow-hidden px-4 py-20 md:px-6 md:py-28">
+            {/* Subtle Hand-Drawn Animated SVG Curl Strokes */}
+            <AnimatedCurls enabled={data.theme.showCurls !== false} count={10} minSize={24} maxSize={70} minOpacity={0.03} maxOpacity={0.10} seed={505} />
 
-            <Reveal delay={100}>
-              <FaqAccordion faqs={data.faqs} />
-            </Reveal>
+            <div className="relative z-10">
+              <Reveal className="mx-auto max-w-2xl">
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-kicker">
+                  FAQs
+                </p>
+                <h2 className="font-display mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
+                  <WordReveal text="Good questions." />{' '}
+                  <WordReveal
+                    text="Clear answers."
+                    className="studio-gradient-text"
+                    start={180}
+                  />
+                </h2>
+                <p className="mt-5 text-muted-foreground">
+                  Everything you need to know before we start.
+                </p>
+              </Reveal>
+
+              <Reveal delay={100}>
+                <FaqAccordion faqs={data.faqs} />
+              </Reveal>
+            </div>
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="relative px-4 pb-24 pt-12 md:pb-32">
-            <Reveal className="mx-auto max-w-3xl">
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-kicker">
-                {data.contact.kicker}
-              </p>
-              <h2 className="font-display mt-4 text-4xl font-extrabold leading-[1.02] md:text-6xl">
-                <WordReveal text={data.contact.headingPrefix} />{' '}
-                <WordReveal
-                  text={data.contact.headingHighlight}
-                  start={180}
-                  className="studio-gradient-text"
-                />
-              </h2>
-              <p className="mx-auto mt-5 max-w-lg text-muted-foreground">
-                {data.contact.subtitle}
-              </p>
+          <section id="contact" className="relative overflow-hidden px-4 pb-24 pt-12 md:pb-32">
+            {/* Subtle Hand-Drawn Animated SVG Curl Strokes */}
+            <AnimatedCurls enabled={data.theme.showCurls !== false} count={12} minSize={26} maxSize={75} minOpacity={0.04} maxOpacity={0.12} seed={606} />
 
-              <div className="mx-auto mt-9 flex max-w-sm flex-col items-stretch">
-                <a
-                  href={data.socials.discord}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={PRIMARY_BTN}
-                >
-                  <DiscordIcon /> {data.contact.discordCta}
-                </a>
+            <div className="relative z-10">
+              <Reveal className="mx-auto max-w-3xl">
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-kicker">
+                  {data.contact.kicker}
+                </p>
+                <h2 className="font-display mt-4 text-4xl font-extrabold leading-[1.02] md:text-6xl">
+                  <WordReveal text={data.contact.headingPrefix} />{' '}
+                  <WordReveal
+                    text={data.contact.headingHighlight}
+                    start={180}
+                    className="studio-gradient-text"
+                  />
+                </h2>
+                <p className="mx-auto mt-5 max-w-lg text-muted-foreground">
+                  {data.contact.subtitle}
+                </p>
 
-                <div className="my-5 flex items-center gap-4 text-xs uppercase tracking-widest text-muted-foreground">
-                  <span className="h-px flex-1 bg-border" />
-                  or
-                  <span className="h-px flex-1 bg-border" />
+                <div className="mx-auto mt-9 flex max-w-sm flex-col items-stretch">
+                  <a
+                    href={data.socials.discord}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={PRIMARY_BTN}
+                  >
+                    <DiscordIcon /> {data.contact.discordCta}
+                  </a>
+
+                  <div className="my-5 flex items-center gap-4 text-xs uppercase tracking-widest text-muted-foreground">
+                    <span className="h-px flex-1 bg-border" />
+                    or
+                    <span className="h-px flex-1 bg-border" />
+                  </div>
+
+                  <a
+                    href={data.socials.x}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={SECONDARY_BTN}
+                  >
+                    <XIcon /> {data.contact.xCta}
+                  </a>
                 </div>
-
-                <a
-                  href={data.socials.x}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={SECONDARY_BTN}
-                >
-                  <XIcon /> {data.contact.xCta}
-                </a>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
           </section>
         </main>
 

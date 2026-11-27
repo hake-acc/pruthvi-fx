@@ -223,6 +223,7 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
       ? (t.bgStyle as 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image')
       : 'geometric-waves'),
     bgImageUrl: typeof t.bgImageUrl === 'string' && t.bgImageUrl.trim().length < 500 ? t.bgImageUrl.trim() : '',
+    showCurls: t.showCurls !== false,
     shaderColor1: sanitizeHexColor(t.shaderColor1, def.theme.shaderColor1),
     shaderColor2: sanitizeHexColor(t.shaderColor2, def.theme.shaderColor2),
     shaderColor3: sanitizeHexColor(t.shaderColor3, def.theme.shaderColor3),
