@@ -1,0 +1,251 @@
+{
+  "brandPrefix": "Pruthvi",
+  "brandSuffix": "FX",
+  "brandName": "Pruthvi FX",
+  "logoSrc": "/assets/live/logo.webp",
+  "hero": {
+    "primaryCta": "View My Work",
+    "descriptionHighlight": "more clicks.",
+    "descriptionLine1": "A professional Minecraft Thumbnail Artist making",
+    "availabilityOpen": true,
+    "secondaryCta": "Contact Me",
+    "availabilityText": "Open for new projects",
+    "avatarBadge": "open for client",
+    "stats": [
+      {
+        "value": "50+",
+        "label": "THUMBNAILS"
+      },
+      {
+        "value": "20+",
+        "label": "CREATORS"
+      },
+      {
+        "value": "1M+",
+        "label": "VIEWS"
+      }
+    ],
+    "descriptionLine2Prefix": "thumbnails that get your videos "
+  },
+  "about": {
+    "headingPrefix": "Hey, I'm",
+    "ctaLabel": "Let's create something great",
+    "bio": "My name is Pruthvi FX, and I bring 2+ years of hands-on experience creating high-performing Minecraft, Roblox, and IRL thumbnails. I focus on the exact split second a viewer scrolls past your video — taking your raw idea, capturing the sharpest story and emotion, and crafting one bold, crystal-clear frame engineered to earn the click.",
+    "experienceBadge": "2+ Years Experience",
+    "badge": "About me",
+    "headingHighlight": "Pruthvi FX"
+  },
+  "clientsSection": {
+    "subtitle": "From rising channels to million-subscriber names — creators count on Pruthvi FX for the frame that earns the click.",
+    "headingPrefix": "Built alongside",
+    "kicker": "Trusted by creators",
+    "headingHighlight": "top creators."
+  },
+  "contact": {
+    "discordCta": "Message me on Discord",
+    "subtitle": "Send me your video idea. I will reply fast. Discord and X are the best ways to reach me.",
+    "kicker": "Contact",
+    "xCta": "Follow @PruthviFX on X",
+    "headingHighlight": "together.",
+    "headingPrefix": "Let's work"
+  },
+  "footerTagline": "Minecraft, Roblox & IRL YouTube thumbnails that get clicks.",
+  "socials": {
+    "discord": "https://discord.com/users/828130504305410048",
+    "xHandle": "@PruthviFX",
+    "x": "https://x.com/PruthviFX",
+    "discordId": "828130504305410048"
+  },
+  "theme": {
+    "bgGradientEnd": "#200a38",
+    "showCurls": true,
+    "textColor": "#faf9ff",
+    "lightShaderColor3": "#fdba74",
+    "defaultMode": "dark",
+    "shaderColor3": "#a915f9",
+    "customFont": "",
+    "bgStyle": "geometric-waves",
+    "lightShaderColor1": "#fca5a5",
+    "bgGradient": "linear-gradient(135deg, #09080f 0%, #200a38 100%)",
+    "bgImageUrl": "",
+    "shaderColor1": "#dc2626",
+    "displayFont": "Syne",
+    "shaderColor2": "#0d0709",
+    "primaryColor": "#fb00ff",
+    "bodyFont": "Plus Jakarta Sans",
+    "darkBg": "#0d0709",
+    "darkCard": "#1a0e12",
+    "mutedTextColor": "#a29bb8",
+    "preset": "custom",
+    "bgGradientAngle": 135,
+    "navActiveColor": "#e580f9",
+    "bgGradientStart": "#09080f",
+    "bgType": "solid",
+    "kickerColor": "#0b15a8",
+    "lightShaderColor2": "#fff5f5"
+  },
+  "sound": {
+    "profile": "studio",
+    "enabled": true,
+    "volume": 0.75
+  },
+  "categories": [
+    {
+      "id": "minecraft",
+      "name": "Minecraft",
+      "description": "SMP storytelling, 100-player events, PvP wars & modpacks"
+    }
+  ],
+  "thumbnails": [
+    {
+      "id": "thumb-flame-frag-speed-art-x8yzc",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-flame-frag-speed-art-x8yzc.webp",
+      "title": "Flame Frag Speed Art"
+    },
+    {
+      "id": "thumb-mikey-chan-radiant-smp-live-83edm",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-mikey-chan-radiant-smp-live-83edm.webp",
+      "title": "Mikey Chan Radiant SMP Live"
+    },
+    {
+      "id": "thumb-pikachu-speed-art-imeg3",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-pikachu-speed-art-imeg3.webp",
+      "title": "Pikachu Speed Art"
+    },
+    {
+      "id": "thumb-live-first-video-thumbnail-mfwyy",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-live-first-video-thumbnail-mfwyy.webp",
+      "title": "Live + First Video Thumbnail"
+    },
+    {
+      "id": "thumb-making-huge-build-buk7u",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-making-huge-build-buk7u.webp",
+      "title": "Making Huge Build"
+    },
+    {
+      "id": "thumb-kabeer-mace-cart-pvp-6qla6",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-kabeer-mace-cart-pvp-6qla6.webp",
+      "title": "Kabeer Mace Cart PvP"
+    },
+    {
+      "id": "thumb-practice-work-hvinq",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-practice-work-hvinq.webp",
+      "title": "Practice Work"
+    },
+    {
+      "id": "thumb-op-chicken-py73t",
+      "categoryId": "minecraft",
+      "src": "/assets/live/thumb-op-chicken-py73t.webp",
+      "title": "Op Chicken"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "id": "ba-mimikyu",
+      "title": "Mimikyu Encounter",
+      "subtitle": "Raw Blender Scene → Final Composite",
+      "beforeSrc": "/assets/live/ba-mimikyu_before.webp",
+      "afterSrc": "/assets/live/ba-mimikyu_after.webp"
+    }
+  ],
+  "clientRows": {
+    "rowOne": [],
+    "rowTwo": [
+      {
+        "id": "c-teddygaming",
+        "name": "Teddy Gaming",
+        "subs": "1.22M+ subscribers",
+        "avatar": "/src/assets/clients/teddy-gaming.webp",
+        "channelUrl": "https://youtube.com/@teddygaming"
+      },
+      {
+        "id": "client-gamingrill-6e0cz",
+        "name": "Gamingrill",
+        "subs": "13.4k+ subscribers",
+        "avatar": "/assets/live/client-gamingrill-6e0cz.webp",
+        "channelUrl": "https://youtube.com/@gaming_grill"
+      },
+      {
+        "id": "client-insane-rmk-xg1gp",
+        "name": "INSANE RMK",
+        "subs": "19.3k+ subscribers",
+        "avatar": "/assets/live/client-insane-rmk-xg1gp.webp",
+        "channelUrl": "https://www.youtube.com/channel/UCW5IulT-68OzztImQ8S3mkw"
+      },
+      {
+        "id": "client-kabeer-qohez",
+        "name": "Kabeer",
+        "subs": "3.31k+ subscribers",
+        "avatar": "/assets/live/client-kabeer-qohez.webp",
+        "channelUrl": "https://www.youtube.com/channel/UC2fZbxsqLsjWCAD1lp1ZNSw"
+      },
+      {
+        "id": "client-mikey-chan-v6fe3",
+        "name": "Mikey Chan",
+        "subs": "110k+ subscribers",
+        "avatar": "/assets/live/client-mikey-chan-v6fe3.webp",
+        "channelUrl": "https://youtube.com/@mickeychaan"
+      },
+      {
+        "id": "client-mr-overrated-zpzvp",
+        "name": "Mr Overrated",
+        "subs": "14.6k+ subscribers",
+        "avatar": "/assets/live/client-mr-overrated-zpzvp.webp",
+        "channelUrl": "https://youtube.com/@mr_overratedxd"
+      },
+      {
+        "id": "client-rock-x-pro-ascol",
+        "name": "Rock X Pro",
+        "subs": "80.2k+ subscribers",
+        "avatar": "/assets/live/client-rock-x-pro-ascol.webp",
+        "channelUrl": "https://www.youtube.com/channel/UCeqVSzz7aQyknjQNTowWIJg"
+      },
+      {
+        "id": "client-znsu-otxh0",
+        "name": "Znsu",
+        "subs": "1.34k+ subscribers",
+        "avatar": "/assets/live/client-znsu-otxh0.webp",
+        "channelUrl": "https://www.youtube.com/channel/UCP3skj36pm3rUyMaGhH7Nqg"
+      }
+    ]
+  },
+  "faqs": [
+    {
+      "id": "faq-order",
+      "question": "How do I order a thumbnail?",
+      "answer": "Message me on Discord or X (@PruthviFX) with your video concept, title idea, and any reference styles you like."
+    },
+    {
+      "id": "faq-niches",
+      "question": "Which niches do you specialize in?",
+      "answer": "I have over 2 years of experience designing high-performing Minecraft, Roblox, and IRL thumbnails tailored to boost click-through rate."
+    },
+    {
+      "id": "faq-send",
+      "question": "What should I send you?",
+      "answer": "Share your video topic, working title, skins or facecam photos if needed, and any key moment or emotion you want highlighted."
+    },
+    {
+      "id": "faq-cost",
+      "question": "How much does a thumbnail cost?",
+      "answer": "Pricing depends on complexity, custom 3D renders, and turnaround speed. Reach out on Discord or X to discuss your upload and get a quick quote."
+    },
+    {
+      "id": "faq-turnaround",
+      "question": "How long does a thumbnail take?",
+      "answer": "Most thumbnails are delivered within 24 to 72 hours. Let me know your upload schedule so we can lock in your slot ahead of time."
+    },
+    {
+      "id": "faq-revisions",
+      "question": "Can I ask for changes?",
+      "answer": "Of course. I share clean composition drafts first and refine lighting, expressions, or layout until the frame feels clickable."
+    }
+  ]
+}

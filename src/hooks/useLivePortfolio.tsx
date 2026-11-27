@@ -329,7 +329,7 @@ export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, l
 
   if (fontsToLoad.size > 0) {
     const familyQueries = Array.from(fontsToLoad)
-      .map((f) => `family=${encodeURIComponent(f.replace(/\+/g, ' '))}:ital,wght@0,300..900;1,300..900`)
+      .map((f) => `family=${encodeURIComponent(f.replace(/\+/g, ' '))}:wght@400;500;600;700;800`)
       .join('&');
     const href = `https://fonts.googleapis.com/css2?${familyQueries}&display=swap`;
     let link = document.getElementById('dynamic-google-fonts') as HTMLLinkElement | null;
