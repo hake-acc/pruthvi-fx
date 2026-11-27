@@ -1868,6 +1868,117 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                     </div>
                   </div>
 
+                  {/* Background Style & Samples (Bespoke Non-Infringing Styles) */}
+                  <div className="rounded-2xl border border-white/10 bg-background/50 p-4 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <h4 className="text-sm font-bold">Hero &amp; Website Background Style</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Choose from 100% original, copyright-clean boutique background styles matching your purple aesthetic, or upload your own. The previous artist's shader has been completely replaced.
+                    </p>
+
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {[
+                        {
+                          id: 'geometric-waves',
+                          name: 'Geometric Fluid Waves',
+                          badge: 'Your Sample Reference',
+                          desc: 'Deep purple organic layered waves, floating concentric rings, & tech dot grid matrix.',
+                          preview: 'bg-gradient-to-br from-[#1a0f35] to-[#09080f]',
+                        },
+                        {
+                          id: 'liquid-silk',
+                          name: 'Boutique Liquid Silk',
+                          badge: 'Web Sample 1',
+                          desc: 'Smooth 3D dark violet satin ribbon curves with ambient radial glow.',
+                          preview: 'bg-gradient-to-br from-[#260f38] via-[#150a24] to-[#09080f]',
+                        },
+                        {
+                          id: 'cosmic-aurora',
+                          name: 'Cosmic Aurora Nebula',
+                          badge: 'Web Sample 2',
+                          desc: 'Deep obsidian cosmic purple nebulae with luminous violet clouds.',
+                          preview: 'bg-gradient-to-br from-[#1c0828] via-[#100720] to-[#06040a]',
+                        },
+                        {
+                          id: 'cyber-mesh',
+                          name: 'Cyber Tech Dot Matrix',
+                          badge: 'Web Sample 3',
+                          desc: 'Minimalist tech perspective matrix with glowing purple dot array.',
+                          preview: 'bg-gradient-to-br from-[#0f0c24] to-[#07050e]',
+                        },
+                        {
+                          id: 'minimal-obsidian',
+                          name: 'Studio Minimal Obsidian',
+                          badge: 'Web Sample 4',
+                          desc: 'High-contrast pure obsidian dark (#09080f) with soft radial spotlights.',
+                          preview: 'bg-[#09080f]',
+                        },
+                        {
+                          id: 'custom-image',
+                          name: 'Custom Image / Wallpaper',
+                          badge: 'Custom URL',
+                          desc: 'Use your own custom image URL or uploaded background file.',
+                          preview: 'bg-card',
+                        },
+                      ].map((sample) => {
+                        const active = (draft.theme.bgStyle || 'geometric-waves') === sample.id;
+                        return (
+                          <button
+                            key={sample.id}
+                            type="button"
+                            onClick={() =>
+                              setDraft((d) => ({
+                                ...d,
+                                theme: { ...d.theme, bgStyle: sample.id as any },
+                              }))
+                            }
+                            className={`flex cursor-pointer flex-col justify-between rounded-xl border p-3 text-left transition-all ${
+                              active
+                                ? 'border-primary bg-primary/15 text-foreground shadow-glow ring-1 ring-primary/40'
+                                : 'border-white/10 bg-background/60 text-muted-foreground hover:border-white/25 hover:text-foreground'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between gap-1.5">
+                                <span className="text-xs font-bold text-foreground">{sample.name}</span>
+                                <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[9px] font-bold text-primary">
+                                  {sample.badge}
+                                </span>
+                              </div>
+                              <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">{sample.desc}</p>
+                            </div>
+                            <div className="mt-2.5 flex items-center justify-between border-t border-white/10 pt-2">
+                              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono">
+                                {active ? '● Selected' : 'Select Style'}
+                              </span>
+                              <div className={`h-4 w-12 rounded border border-white/20 ${sample.preview}`} />
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {draft.theme.bgStyle === 'custom-image' && (
+                      <div className="mt-3 rounded-xl border border-white/10 bg-background/80 p-3 space-y-2">
+                        <label className={LABEL_CLS}>Custom Background Image URL</label>
+                        <input
+                          type="text"
+                          value={draft.theme.bgImageUrl || ''}
+                          onChange={(e) =>
+                            setDraft((d) => ({
+                              ...d,
+                              theme: { ...d.theme, bgImageUrl: e.target.value },
+                            }))
+                          }
+                          placeholder="https://images.unsplash.com/... or https://..."
+                          className={INPUT_CLS}
+                        />
+                      </div>
+                    )}
+                  </div>
+
                   <div className="flex justify-end pt-2">
                     <button
                       type="button"

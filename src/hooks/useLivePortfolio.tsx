@@ -219,6 +219,10 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
     displayFont: (t.displayFont || def.theme.displayFont || 'Outfit').trim().slice(0, 60),
     bodyFont: (t.bodyFont || def.theme.bodyFont || 'Plus Jakarta Sans').trim().slice(0, 60),
     customFont: (t.customFont || '').trim().slice(0, 80),
+    bgStyle: (['geometric-waves', 'liquid-silk', 'cosmic-aurora', 'cyber-mesh', 'minimal-obsidian', 'custom-image'].includes(t.bgStyle as string)
+      ? (t.bgStyle as 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image')
+      : 'geometric-waves'),
+    bgImageUrl: typeof t.bgImageUrl === 'string' && t.bgImageUrl.trim().length < 500 ? t.bgImageUrl.trim() : '',
     shaderColor1: sanitizeHexColor(t.shaderColor1, def.theme.shaderColor1),
     shaderColor2: sanitizeHexColor(t.shaderColor2, def.theme.shaderColor2),
     shaderColor3: sanitizeHexColor(t.shaderColor3, def.theme.shaderColor3),

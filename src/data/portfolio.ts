@@ -58,6 +58,8 @@ export interface ThemeConfig {
   displayFont?: string;
   bodyFont?: string;
   customFont?: string;
+  bgStyle?: 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
+  bgImageUrl?: string;
   shaderColor1: string;
   shaderColor2: string;
   shaderColor3: string;
@@ -601,6 +603,8 @@ export const PORTFOLIO_DATA: PortfolioData = {
     displayFont: 'Outfit',
     bodyFont: 'Plus Jakarta Sans',
     customFont: '',
+    bgStyle: 'geometric-waves',
+    bgImageUrl: '',
     shaderColor1: '#7c3aed',
     shaderColor2: '#09080f',
     shaderColor3: '#38e8d6',

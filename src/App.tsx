@@ -6,7 +6,7 @@ import { useLivePortfolio } from './hooks/useLivePortfolio';
 import { AdminPanel } from './components/AdminPanel';
 import { attachGlobalSoundListeners } from './lib/sound';
 import { AmbientBackground } from './components/AmbientBackground';
-import { HeroShader } from './components/HeroShader';
+import { HeroBackground } from './components/HeroBackground';
 import { OpeningReveal } from './components/OpeningReveal';
 import {
   HeroTitle,
@@ -490,17 +490,11 @@ export default function App() {
               aria-hidden="true"
               className="hero-glass pointer-events-none absolute inset-0 z-0 overflow-hidden"
             >
-              <HeroShader
-                color1={data.shader.dark.color1}
-                color2={data.shader.dark.color2}
-                color3={data.shader.dark.color3}
-                lightColor1={data.shader.light.color1}
-                lightColor2={data.shader.light.color2}
-                lightColor3={data.shader.light.color3}
-                speed={0.35}
-                scale={1}
-                noise={0.08}
-                className="absolute inset-0 h-full w-full"
+              <HeroBackground
+                styleType={data.theme.bgStyle || 'geometric-waves'}
+                customImageUrl={data.theme.bgImageUrl}
+                primaryColor={data.theme.primaryColor}
+                kickerColor={data.theme.kickerColor}
               />
             </div>
 
