@@ -123,6 +123,7 @@ interface LivePortfolioContextValue {
     videoUrl?: string;
     order?: number;
   }) => Promise<string>;
+  reorderThumbnails: (items: { id: string; order: number }[]) => Promise<void>;
   deleteThumbnail: (id: string) => Promise<void>;
   upsertBeforeAfter: (item: {
     id?: string;
@@ -215,6 +216,9 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
     bgGradientAngle: Number.isFinite(t.bgGradientAngle) ? Number(t.bgGradientAngle) : 135,
     textColor: sanitizeHexColor(t.textColor, '#faf9ff'),
     mutedTextColor: sanitizeHexColor(t.mutedTextColor, '#a29bb8'),
+    displayFont: (t.displayFont || def.theme.displayFont || 'Outfit').trim().slice(0, 60),
+    bodyFont: (t.bodyFont || def.theme.bodyFont || 'Plus Jakarta Sans').trim().slice(0, 60),
+    customFont: (t.customFont || '').trim().slice(0, 80),
     shaderColor1: sanitizeHexColor(t.shaderColor1, def.theme.shaderColor1),
     shaderColor2: sanitizeHexColor(t.shaderColor2, def.theme.shaderColor2),
     shaderColor3: sanitizeHexColor(t.shaderColor3, def.theme.shaderColor3),
@@ -301,6 +305,44 @@ export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, l
   if (theme.mutedTextColor) {
     root.style.setProperty('--muted-foreground', theme.mutedTextColor);
   }
+
+  // Live dynamic typography & Google Font injection
+  const displayFont = (theme.displayFont || 'Outfit').trim();
+  const bodyFont = (theme.bodyFont || 'Plus Jakarta Sans').trim();
+  const customFont = (theme.customFont || '').trim();
+
+  const fontsToLoad = new Set<string>();
+  if (displayFont && !['sans-serif', 'system-ui', 'monospace'].includes(displayFont.toLowerCase())) {
+    fontsToLoad.add(displayFont);
+  }
+  if (bodyFont && !['sans-serif', 'system-ui', 'monospace'].includes(bodyFont.toLowerCase())) {
+    fontsToLoad.add(bodyFont);
+  }
+  if (customFont && !['sans-serif', 'system-ui', 'monospace'].includes(customFont.toLowerCase())) {
+    fontsToLoad.add(customFont);
+  }
+
+  if (fontsToLoad.size > 0) {
+    const familyQueries = Array.from(fontsToLoad)
+      .map((f) => `family=${encodeURIComponent(f.replace(/\+/g, ' '))}:ital,wght@0,300..900;1,300..900`)
+      .join('&');
+    const href = `https://fonts.googleapis.com/css2?${familyQueries}&display=swap`;
+    let link = document.getElementById('dynamic-google-fonts') as HTMLLinkElement | null;
+    if (!link) {
+      link = document.createElement('link');
+      link.id = 'dynamic-google-fonts';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+    if (link.href !== href) {
+      link.href = href;
+    }
+  }
+
+  const activeDisplayFont = customFont || displayFont;
+  root.style.setProperty('--font-display', `"${activeDisplayFont}", sans-serif`);
+  root.style.setProperty('--font-tagline', `"${activeDisplayFont}", sans-serif`);
+  root.style.setProperty('--font-sans', `"${bodyFont}", sans-serif`);
 
   // Live dynamic glow calculation
   root.style.setProperty(
@@ -851,6 +893,29 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
     [ensureCloudReady, data.thumbnails.length]
   );
 
+  const reorderThumbnails = useCallback(
+    async (items: { id: string; order: number }[]) => {
+      if (!items.length) return;
+      setSyncing(true);
+      try {
+        await ensureCloudReady();
+        const batch = writeBatch(db);
+        items.forEach(({ id, order }) => {
+          batch.update(doc(db, 'thumbnails', id), {
+            order,
+            updatedAt: serverTimestamp(),
+          });
+        });
+        await batch.commit();
+      } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, 'thumbnails/reorder');
+      } finally {
+        setSyncing(false);
+      }
+    },
+    [ensureCloudReady]
+  );
+
   const deleteThumbnail = useCallback(
     async (id: string) => {
       setSyncing(true);
@@ -1032,6 +1097,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
       upsertCategory,
       deleteCategory,
       upsertThumbnail,
+      reorderThumbnails,
       deleteThumbnail,
       upsertBeforeAfter,
       deleteBeforeAfter,
@@ -1055,6 +1121,7 @@ export function LivePortfolioProvider({ children }: { children: ReactNode }) {
       upsertCategory,
       deleteCategory,
       upsertThumbnail,
+      reorderThumbnails,
       deleteThumbnail,
       upsertBeforeAfter,
       deleteBeforeAfter,

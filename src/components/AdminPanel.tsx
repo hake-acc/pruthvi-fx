@@ -1,7 +1,10 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft,
+  ArrowUpToLine,
   Check,
+  ChevronDown,
+  ChevronUp,
   Cloud,
   CloudOff,
   CloudUpload,
@@ -23,6 +26,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   Trash2,
+  Type,
   Upload,
   User as UserIcon,
   Users,
@@ -243,6 +247,7 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
     upsertCategory,
     deleteCategory,
     upsertThumbnail,
+    reorderThumbnails,
     deleteThumbnail,
     upsertBeforeAfter,
     deleteBeforeAfter,
@@ -621,6 +626,42 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
       notify('ok', thumbForm.id ? 'Thumbnail updated live!' : 'Thumbnail added live!');
     } catch (error) {
       notify('err', formatFriendlyError(error, 'Failed to save thumbnail.'));
+    }
+  };
+
+  const handleMoveThumbnail = async (item: ThumbnailItem, direction: -1 | 1) => {
+    if (!requireCloudSync()) return;
+    const currentIdx = visibleThumbnails.findIndex((t) => t.id === item.id);
+    if (currentIdx < 0) return;
+    const targetIdx = currentIdx + direction;
+    if (targetIdx < 0 || targetIdx >= visibleThumbnails.length) return;
+
+    const reordered = [...visibleThumbnails];
+    const [removed] = reordered.splice(currentIdx, 1);
+    reordered.splice(targetIdx, 0, removed);
+
+    try {
+      await reorderThumbnails(reordered.map((t, idx) => ({ id: t.id, order: idx })));
+      notify('ok', `Moved "${item.title}" ${direction === -1 ? 'up' : 'down'} live!`);
+    } catch (err) {
+      notify('err', formatFriendlyError(err, 'Failed to reorder thumbnails.'));
+    }
+  };
+
+  const handleMoveThumbnailToTop = async (item: ThumbnailItem) => {
+    if (!requireCloudSync()) return;
+    const currentIdx = visibleThumbnails.findIndex((t) => t.id === item.id);
+    if (currentIdx <= 0) return;
+
+    const reordered = [...visibleThumbnails];
+    const [removed] = reordered.splice(currentIdx, 1);
+    reordered.unshift(removed);
+
+    try {
+      await reorderThumbnails(reordered.map((t, idx) => ({ id: t.id, order: idx })));
+      notify('ok', `Moved "${item.title}" to top of list live!`);
+    } catch (err) {
+      notify('err', formatFriendlyError(err, 'Failed to move thumbnail to top.'));
     }
   };
 
@@ -1695,6 +1736,138 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                     </div>
                   </div>
 
+                  {/* Typography & Custom Fonts Customizer */}
+                  <div className="rounded-2xl border border-white/10 bg-background/50 p-4 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Type className="h-4 w-4 text-primary" />
+                      <h4 className="text-sm font-bold">Typography &amp; Studio Fonts</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Choose high-contrast boutique studio fonts for headlines and body text, or enter any custom Google Font. Changes reflect live across the entire website instantly.
+                    </p>
+
+                    {/* Display Font Grid */}
+                    <div>
+                      <label className={LABEL_CLS}>Headline / Display Font</label>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        {[
+                          { name: 'Outfit', desc: 'Punchy & Geometric' },
+                          { name: 'Syne', desc: 'Avant-Garde Editorial' },
+                          { name: 'Space Grotesk', desc: 'Cyber & Technical' },
+                          { name: 'Bricolage Grotesque', desc: 'Expressive Modern' },
+                          { name: 'Cinzel', desc: 'Cinematic Luxury' },
+                          { name: 'Playfair Display', desc: 'Boutique Serif' },
+                          { name: 'Cabinet Grotesk', desc: 'Swiss Editorial' },
+                          { name: 'Inter', desc: 'Clean Neo-Grotesque' },
+                        ].map((font) => (
+                          <button
+                            key={font.name}
+                            type="button"
+                            onClick={() =>
+                              setDraft((d) => ({
+                                ...d,
+                                theme: { ...d.theme, displayFont: font.name, customFont: '' },
+                              }))
+                            }
+                            className={`flex cursor-pointer flex-col rounded-xl border p-2.5 text-left transition-all ${
+                              (!draft.theme.customFont && (draft.theme.displayFont || 'Outfit') === font.name)
+                                ? 'border-primary bg-primary/15 text-foreground shadow-glow'
+                                : 'border-white/10 bg-background/60 text-muted-foreground hover:border-white/25 hover:text-foreground'
+                            }`}
+                          >
+                            <span className="text-xs font-bold">{font.name}</span>
+                            <span className="text-[10px] text-muted-foreground">{font.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Body Font Grid */}
+                    <div>
+                      <label className={LABEL_CLS}>Body &amp; Tagline Font</label>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        {[
+                          { name: 'Plus Jakarta Sans', desc: 'Clean & Legible' },
+                          { name: 'Inter', desc: 'Modern System Standard' },
+                          { name: 'Outfit', desc: 'Geometric Flow' },
+                          { name: 'Space Grotesk', desc: 'Tech Monospace Feel' },
+                        ].map((font) => (
+                          <button
+                            key={font.name}
+                            type="button"
+                            onClick={() =>
+                              setDraft((d) => ({
+                                ...d,
+                                theme: { ...d.theme, bodyFont: font.name },
+                              }))
+                            }
+                            className={`flex cursor-pointer flex-col rounded-xl border p-2.5 text-left transition-all ${
+                              (draft.theme.bodyFont || 'Plus Jakarta Sans') === font.name
+                                ? 'border-primary bg-primary/15 text-foreground shadow-glow'
+                                : 'border-white/10 bg-background/60 text-muted-foreground hover:border-white/25 hover:text-foreground'
+                            }`}
+                          >
+                            <span className="text-xs font-bold">{font.name}</span>
+                            <span className="text-[10px] text-muted-foreground">{font.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Custom Google Font Input */}
+                    <div className="rounded-xl border border-white/10 bg-background/80 p-3">
+                      <label className={LABEL_CLS}>Or Enter Any Custom Google Font</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={draft.theme.customFont || ''}
+                          onChange={(e) =>
+                            setDraft((d) => ({
+                              ...d,
+                              theme: { ...d.theme, customFont: e.target.value },
+                            }))
+                          }
+                          placeholder="e.g. Righteous, Bebas Neue, Montserrat, Urbanist..."
+                          className={INPUT_CLS}
+                        />
+                        {draft.theme.customFont && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setDraft((d) => ({
+                                ...d,
+                                theme: { ...d.theme, customFont: '' },
+                              }))
+                            }
+                            className="cursor-pointer rounded-xl border border-white/15 px-3 text-xs font-semibold hover:border-primary"
+                          >
+                            Reset
+                          </button>
+                        )}
+                      </div>
+                      <p className="mt-1.5 text-[11px] text-muted-foreground">
+                        Auto-loads Google Web Fonts on the fly without changing HTML.
+                      </p>
+                    </div>
+
+                    {/* Live Typography Preview Box */}
+                    <div className="rounded-xl border border-white/15 bg-card/70 p-4 backdrop-blur-sm">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Live Typography Preview</span>
+                      <h2
+                        className="mt-1 text-2xl font-black text-foreground"
+                        style={{ fontFamily: `"${draft.theme.customFont || draft.theme.displayFont || 'Outfit'}", sans-serif` }}
+                      >
+                        CREATING THUMBNAILS THAT COMMAND MILLIONS OF VIEWS
+                      </h2>
+                      <p
+                        className="mt-1.5 text-xs text-muted-foreground"
+                        style={{ fontFamily: `"${draft.theme.bodyFont || 'Plus Jakarta Sans'}", sans-serif` }}
+                      >
+                        High-converting YouTube graphic design with bespoke color grading, 3D character manipulation, and atmospheric depth.
+                      </p>
+                    </div>
+                  </div>
+
                   <div className="flex justify-end pt-2">
                     <button
                       type="button"
@@ -2113,17 +2286,56 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                       </div>
 
                       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {visibleThumbnails.map((item) => (
+                        {visibleThumbnails.map((item, idx) => (
                           <div
                             key={item.id}
-                            className="overflow-hidden rounded-xl border border-white/10 bg-background/60"
+                            className="group relative overflow-hidden rounded-xl border border-white/10 bg-background/60 transition-all hover:border-white/20"
                           >
-                            <img
-                              src={item.src}
-                              alt={item.title}
-                              referrerPolicy="no-referrer"
-                              className="aspect-video w-full object-cover"
-                            />
+                            <div className="relative aspect-video w-full overflow-hidden bg-black/40">
+                              <img
+                                src={item.src}
+                                alt={item.title}
+                                referrerPolicy="no-referrer"
+                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                              {/* Order & Rank Badge */}
+                              <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5 rounded-full border border-white/20 bg-background/85 px-2.5 py-0.5 text-[11px] font-mono font-bold backdrop-blur-md">
+                                <span className="text-primary">#{idx + 1}</span>
+                              </div>
+
+                              {/* Quick Reorder Toolbar Overlay */}
+                              <div className="absolute right-2 top-2 flex items-center gap-1 rounded-lg border border-white/15 bg-background/80 p-1 opacity-90 shadow-md backdrop-blur-md transition-opacity group-hover:opacity-100">
+                                {idx > 0 && (
+                                  <button
+                                    type="button"
+                                    title="Move to Top"
+                                    onClick={() => void handleMoveThumbnailToTop(item)}
+                                    className="grid h-6 w-6 cursor-pointer place-items-center rounded-md border border-white/10 bg-card/80 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                                  >
+                                    <ArrowUpToLine className="h-3 w-3" />
+                                  </button>
+                                )}
+                                <button
+                                  type="button"
+                                  title="Move Up"
+                                  disabled={idx === 0}
+                                  onClick={() => void handleMoveThumbnail(item, -1)}
+                                  className="grid h-6 w-6 cursor-pointer place-items-center rounded-md border border-white/10 bg-card/80 text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-30"
+                                >
+                                  <ChevronUp className="h-3 w-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  title="Move Down"
+                                  disabled={idx === visibleThumbnails.length - 1}
+                                  onClick={() => void handleMoveThumbnail(item, 1)}
+                                  className="grid h-6 w-6 cursor-pointer place-items-center rounded-md border border-white/10 bg-card/80 text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-30"
+                                >
+                                  <ChevronDown className="h-3 w-3" />
+                                </button>
+                              </div>
+                            </div>
+
                             <div className="flex items-center justify-between gap-2 p-3">
                               <div className="min-w-0">
                                 <p className="truncate text-xs font-bold">{item.title}</p>
@@ -2133,7 +2345,7 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                                   {item.client ? ` • ${item.client}` : ''}
                                 </p>
                               </div>
-                              <div className="flex shrink-0 gap-1">
+                              <div className="flex shrink-0 items-center gap-1">
                                 <button
                                   type="button"
                                   onClick={() =>

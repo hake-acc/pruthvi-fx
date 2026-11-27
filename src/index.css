@@ -31,6 +31,9 @@
 
 :root {
   color-scheme: dark;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-tagline: "Outfit", sans-serif;
   --online: #22c55e;
   --radius: 1.25rem;
   --background: #09080f;

@@ -55,6 +55,9 @@ export interface ThemeConfig {
   bgGradientAngle?: number;
   textColor?: string;
   mutedTextColor?: string;
+  displayFont?: string;
+  bodyFont?: string;
+  customFont?: string;
   shaderColor1: string;
   shaderColor2: string;
   shaderColor3: string;
@@ -595,6 +598,9 @@ export const PORTFOLIO_DATA: PortfolioData = {
     bgGradientAngle: 135,
     textColor: '#faf9ff',
     mutedTextColor: '#a29bb8',
+    displayFont: 'Outfit',
+    bodyFont: 'Plus Jakarta Sans',
+    customFont: '',
     shaderColor1: '#7c3aed',
     shaderColor2: '#09080f',
     shaderColor3: '#38e8d6',
