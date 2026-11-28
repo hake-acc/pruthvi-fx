@@ -1,21 +1,23 @@
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 const ID_RE = /^[a-zA-Z0-9_-]{1,128}$/;
 
-export function isValidHexColor(val: string): boolean {
+export function isValidHexColor(val: string | undefined | null): boolean {
+  if (typeof val !== 'string') return false;
   return HEX_RE.test(val.trim());
 }
 
-export function sanitizeHexColor(val: string, fallback: string): string {
+export function sanitizeHexColor(val: string | undefined | null, fallback: string): string {
+  if (typeof val !== 'string') return fallback;
   const trimmed = val.trim();
   return HEX_RE.test(trimmed) ? trimmed : fallback;
 }
 
 export function isValidDocId(id: string): boolean {
-  return ID_RE.test(id);
+  return typeof id === 'string' && ID_RE.test(id);
 }
 
 export function makeSafeDocId(prefix: string, label: string): string {
-  const slug = label
+  const slug = (label || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
@@ -24,7 +26,8 @@ export function makeSafeDocId(prefix: string, label: string): string {
   return `${prefix}-${slug || 'item'}-${rand}`.slice(0, 80);
 }
 
-export function isSafeAssetOrUrl(val: string, maxLen: number): boolean {
+export function isSafeAssetOrUrl(val: string | undefined | null, maxLen: number): boolean {
+  if (typeof val !== 'string') return false;
   const v = val.trim();
   if (!v || v.length > maxLen) return false;
   return (
@@ -34,7 +37,8 @@ export function isSafeAssetOrUrl(val: string, maxLen: number): boolean {
   );
 }
 
-export function isSafeOptionalUrl(val: string, maxLen: number): boolean {
+export function isSafeOptionalUrl(val: string | undefined | null, maxLen: number): boolean {
+  if (typeof val !== 'string') return false;
   const v = val.trim();
   if (v.length > maxLen) return false;
   return v.length === 0 || v.startsWith('https://');
