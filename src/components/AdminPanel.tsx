@@ -53,6 +53,7 @@ import { BOOTSTRAPPED_ADMIN_EMAIL } from '../firebase';
 import { ColorFieldWithWheel } from './ColorPickerWheel';
 import { MasterColorWheel, type HarmonizedPalette } from './MasterColorWheel';
 import { TypographyStudio } from './TypographyStudio';
+import { ThemeColorStudio } from './ThemeColorStudio';
 
 type AdminTab = 'brand' | 'theme' | 'typography' | 'about' | 'work' | 'clients' | 'faq' | 'contact';
 type WorkSubTab = 'categories' | 'thumbnails' | 'before-after';
@@ -376,6 +377,9 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
     }
     openPrevRef.current = open;
   }, [open, data]);
+
+  // Expandable advanced color wheel toggle
+  const [showAdvancedColors, setShowAdvancedColors] = useState(false);
 
   // Category form state
   const [catForm, setCatForm] = useState<{ id?: string; name: string; description: string }>({
@@ -1419,270 +1423,118 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
               {/* TAB 2: THEME, CUSTOM COLORS & SOUND */}
               {tab === 'theme' && (
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="font-display text-xl font-extrabold">
-                      Theme, Custom Colors &amp; Sound
-                    </h3>
-                    <p className="text-xs text-muted-foreground">
-                      Switch presets, pick any custom brand color, or tune UI sound effects live
-                      for all visitors.
-                    </p>
-                  </div>
-
-                  {/* Theme Mode */}
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {(['dark', 'light'] as const).map((mode) => (
-                      <button
-                        key={mode}
-                        type="button"
-                        onClick={() => {
-                          document.documentElement.dataset.theme = mode;
-                          try {
-                            localStorage.setItem('pruthvifx-theme', mode);
-                          } catch {
-                            // ignore
-                          }
-                          setDraft((d) => ({
-                            ...d,
-                            theme: { ...d.theme, defaultMode: mode },
-                          }));
-                        }}
-                        className={`flex cursor-pointer items-center justify-between rounded-2xl border px-4 py-3 text-sm font-bold capitalize transition-all ${
-                          draft.theme.defaultMode === mode
-                            ? 'border-primary bg-primary/15 text-foreground shadow-glow'
-                            : 'border-white/10 bg-background/50 text-muted-foreground hover:border-white/25'
-                        }`}
-                      >
-                        <span>Default {mode} Theme</span>
-                        {draft.theme.defaultMode === mode && (
-                          <Check className="h-4 w-4 text-primary" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* MASTER COLOR WHEEL: 1 Big Wheel That Sets Entire Site Palette with Cooler/Warmer Harmonies */}
-                  <MasterColorWheel
-                    currentTheme={draft.theme}
-                    onApplyPalette={handleApplyHarmonizedPalette}
-                    brandName={draft.brandName}
-                    logoSrc={draft.logoSrc}
+                  {/* Primary 2-Column Color & Appearance Studio (Exact Layout from Reference Image) */}
+                  <ThemeColorStudio
+                    draft={draft}
+                    setDraft={setDraft}
+                    applyStyles={applyDynamicThemeStyles}
+                    onSave={handleSaveConfig}
+                    onSeedDefaults={seedCloudDefaults}
+                    notify={notify}
+                    syncing={syncing}
                   />
 
-                  {/* Quick Theme Presets */}
-                  <div>
-                    <label className={LABEL_CLS}>One-Click Color Presets</label>
-                    <div className="grid gap-2.5 sm:grid-cols-3">
-                      {THEME_PRESETS.map((preset) => {
-                        const active = draft.theme.preset === preset.id;
-                        return (
-                          <button
-                            key={preset.id}
-                            type="button"
-                            onClick={() =>
-                              setDraft((d) => ({
-                                ...d,
-                                theme: {
-                                  ...d.theme,
-                                  preset: preset.id,
-                                  primaryColor: preset.primaryColor,
-                                  kickerColor: preset.kickerColor,
-                                  navActiveColor: preset.navActiveColor,
-                                  darkBg: preset.darkBg,
-                                  darkCard: preset.darkCard,
-                                  shaderColor1: preset.shaderColor1,
-                                  shaderColor2: preset.shaderColor2,
-                                  shaderColor3: preset.shaderColor3,
-                                  lightShaderColor1: preset.lightShaderColor1,
-                                  lightShaderColor2: preset.lightShaderColor2,
-                                  lightShaderColor3: preset.lightShaderColor3,
-                                },
-                              }))
-                            }
-                            className={`flex cursor-pointer items-center justify-between rounded-xl border p-3 text-left transition-all ${
-                              active
-                                ? 'border-primary bg-primary/15'
-                                : 'border-white/10 bg-background/60 hover:border-white/25'
-                            }`}
-                          >
-                            <div>
-                              <div className="text-xs font-bold text-foreground">
-                                {preset.name}
-                              </div>
-                              <div className="mt-1 flex items-center gap-1.5">
-                                <span
-                                  className="h-3.5 w-3.5 rounded-full border border-white/20"
-                                  style={{ backgroundColor: preset.primaryColor }}
-                                />
-                                <span
-                                  className="h-3.5 w-3.5 rounded-full border border-white/20"
-                                  style={{ backgroundColor: preset.kickerColor }}
-                                />
-                                <span
-                                  className="h-3.5 w-3.5 rounded-full border border-white/20"
-                                  style={{ backgroundColor: preset.navActiveColor }}
-                                />
-                              </div>
-                            </div>
-                            {active && <Check className="h-4 w-4 text-primary" />}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  {/* Expandable Advanced Color Wheel Harmonizer & Fine-Tuning */}
+                  <div className="rounded-2xl border border-white/10 bg-background/50 p-4 shadow-lg">
+                    <button
+                      type="button"
+                      onClick={() => setShowAdvancedColors((prev) => !prev)}
+                      className="flex w-full cursor-pointer items-center justify-between text-left transition-colors hover:text-primary"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <SlidersHorizontal className="h-4 w-4 text-primary" />
+                        <div>
+                          <h4 className="text-sm font-bold text-foreground">
+                            Advanced Master Color Wheel &amp; Fine-Tuning
+                          </h4>
+                          <p className="text-[11px] text-muted-foreground">
+                            Harmonize complete 360° palettes or adjust individual WebGL shader ribbon voids.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="rounded-lg border border-white/10 bg-background/60 p-1.5 text-muted-foreground">
+                        {showAdvancedColors ? (
+                          <ChevronUp className="h-4 w-4" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4" />
+                        )}
+                      </div>
+                    </button>
 
-                  {/* Custom Color Pickers with Chromatic Wheel & Gradient Options */}
-                  <div>
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <label className={LABEL_CLS}>Custom Color Palette (Full Wheel &amp; Gradient Control)</label>
-                      <span className="text-[11px] font-medium text-muted-foreground">
-                        Click any color to open the chromatic color wheel or gradient builder
-                      </span>
-                    </div>
+                    {showAdvancedColors && (
+                      <div className="mt-5 space-y-6 border-t border-white/10 pt-5">
+                        <MasterColorWheel
+                          currentTheme={draft.theme}
+                          onApplyPalette={handleApplyHarmonizedPalette}
+                          brandName={draft.brandName}
+                          logoSrc={draft.logoSrc}
+                        />
 
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      <ColorFieldWithWheel
-                        label="Primary Brand Color"
-                        value={draft.theme.primaryColor}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', primaryColor: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Kicker / Eyebrow Accent"
-                        value={draft.theme.kickerColor}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', kickerColor: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Active Nav Pill &amp; Accent"
-                        value={draft.theme.navActiveColor}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', navActiveColor: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Website Background (Solid / Gradient)"
-                        value={draft.theme.darkBg}
-                        allowGradient={true}
-                        bgType={draft.theme.bgType || 'solid'}
-                        bgGradient={draft.theme.bgGradient || 'linear-gradient(135deg, #09080f 0%, #200a38 100%)'}
-                        bgGradientStart={draft.theme.bgGradientStart || '#09080f'}
-                        bgGradientEnd={draft.theme.bgGradientEnd || '#200a38'}
-                        bgGradientAngle={draft.theme.bgGradientAngle || 135}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', darkBg: v, bgType: 'solid' as const };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                        onGradientChange={(cfg) => {
-                          setDraft((d) => {
-                            const next = {
-                              ...d.theme,
-                              preset: 'custom',
-                              darkBg: cfg.type === 'solid' ? cfg.gradient : d.theme.darkBg,
-                              bgType: cfg.type,
-                              bgGradient: cfg.gradient,
-                              bgGradientStart: cfg.start,
-                              bgGradientEnd: cfg.end,
-                              bgGradientAngle: cfg.angle,
-                            };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Dark Card Surface"
-                        value={draft.theme.darkCard}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', darkCard: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Primary Text (Headings)"
-                        value={draft.theme.textColor || '#faf9ff'}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', textColor: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Secondary Muted Text"
-                        value={draft.theme.mutedTextColor || '#a29bb8'}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', mutedTextColor: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Hero Shader Ribbon 1"
-                        value={draft.theme.shaderColor1}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', shaderColor1: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Hero Shader Base Void"
-                        value={draft.theme.shaderColor2}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', shaderColor2: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-
-                      <ColorFieldWithWheel
-                        label="Hero Shader Ribbon 2"
-                        value={draft.theme.shaderColor3}
-                        onChange={(v) => {
-                          setDraft((d) => {
-                            const next = { ...d.theme, preset: 'custom', shaderColor3: v };
-                            applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
-                            return { ...d, theme: next };
-                          });
-                        }}
-                      />
-                    </div>
+                        {/* Granular Individual Color Pickers */}
+                        <div>
+                          <h5 className="mb-2 text-xs font-bold uppercase tracking-wider text-foreground">
+                            Granular Channel Controls
+                          </h5>
+                          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <ColorFieldWithWheel
+                              label="Brand Primary Accent"
+                              value={draft.theme.primaryColor}
+                              onChange={(v) => {
+                                setDraft((d) => {
+                                  const next = { ...d.theme, preset: 'custom', primaryColor: v };
+                                  applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                                  return { ...d, theme: next };
+                                });
+                              }}
+                            />
+                            <ColorFieldWithWheel
+                              label="Secondary Kicker Glow"
+                              value={draft.theme.kickerColor}
+                              onChange={(v) => {
+                                setDraft((d) => {
+                                  const next = { ...d.theme, preset: 'custom', kickerColor: v };
+                                  applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                                  return { ...d, theme: next };
+                                });
+                              }}
+                            />
+                            <ColorFieldWithWheel
+                              label="Hero Shader Ribbon 1"
+                              value={draft.theme.shaderColor1}
+                              onChange={(v) => {
+                                setDraft((d) => {
+                                  const next = { ...d.theme, preset: 'custom', shaderColor1: v };
+                                  applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                                  return { ...d, theme: next };
+                                });
+                              }}
+                            />
+                            <ColorFieldWithWheel
+                              label="Hero Shader Base Void"
+                              value={draft.theme.shaderColor2}
+                              onChange={(v) => {
+                                setDraft((d) => {
+                                  const next = { ...d.theme, preset: 'custom', shaderColor2: v };
+                                  applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                                  return { ...d, theme: next };
+                                });
+                              }}
+                            />
+                            <ColorFieldWithWheel
+                              label="Hero Shader Ribbon 2"
+                              value={draft.theme.shaderColor3}
+                              onChange={(v) => {
+                                setDraft((d) => {
+                                  const next = { ...d.theme, preset: 'custom', shaderColor3: v };
+                                  applyDynamicThemeStyles(next, d.brandName, d.logoSrc);
+                                  return { ...d, theme: next };
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sound Engine Controls */}

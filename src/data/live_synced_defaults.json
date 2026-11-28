@@ -82,7 +82,11 @@
     "bgGradientStart": "#09080f",
     "bgType": "solid",
     "kickerColor": "#0b15a8",
-    "lightShaderColor2": "#fff5f5"
+    "lightShaderColor2": "#fff5f5",
+    "gradientStart": "#ff0000",
+    "gradientMid": "#ff7300",
+    "gradientEnd": "#ff2600",
+    "gradientId": ""
   },
   "sound": {
     "profile": "studio",

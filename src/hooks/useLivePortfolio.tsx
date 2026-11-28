@@ -232,6 +232,10 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
     lightShaderColor1: sanitizeHexColor(t.lightShaderColor1, def.theme.lightShaderColor1),
     lightShaderColor2: sanitizeHexColor(t.lightShaderColor2, def.theme.lightShaderColor2),
     lightShaderColor3: sanitizeHexColor(t.lightShaderColor3, def.theme.lightShaderColor3),
+    gradientStart: sanitizeHexColor(t.gradientStart, '#ff0000'),
+    gradientMid: sanitizeHexColor(t.gradientMid, '#ff7300'),
+    gradientEnd: sanitizeHexColor(t.gradientEnd, '#ff2600'),
+    gradientId: typeof t.gradientId === 'string' ? t.gradientId.trim().slice(0, 40) : '',
   };
 
   const s = raw.sound || def.sound;
@@ -305,6 +309,14 @@ export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, l
   root.style.setProperty('--kicker', theme.kickerColor);
   root.style.setProperty('--nav-active', theme.navActiveColor);
   root.style.setProperty('--accent', theme.navActiveColor);
+
+  const gradStart = theme.gradientStart || theme.primaryColor;
+  const gradMid = theme.gradientMid || theme.kickerColor;
+  const gradEnd = theme.gradientEnd || theme.primaryColor;
+  root.style.setProperty(
+    '--primary-gradient',
+    `linear-gradient(135deg, ${gradStart} 0%, ${gradMid} 50%, ${gradEnd} 100%)`
+  );
 
   if (theme.textColor) {
     root.style.setProperty('--foreground', theme.textColor);

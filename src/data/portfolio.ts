@@ -69,6 +69,10 @@ export interface ThemeConfig {
   lightShaderColor1: string;
   lightShaderColor2: string;
   lightShaderColor3: string;
+  gradientStart?: string;
+  gradientMid?: string;
+  gradientEnd?: string;
+  gradientId?: string;
 }
 
 export interface SoundConfig {
@@ -100,6 +104,10 @@ export interface ThemePreset {
   lightShaderColor1: string;
   lightShaderColor2: string;
   lightShaderColor3: string;
+  gradientStart?: string;
+  gradientMid?: string;
+  gradientEnd?: string;
+  gradientId?: string;
 }
 
 export const THEME_PRESETS: ThemePreset[] = [
