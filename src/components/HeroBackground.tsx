@@ -1,20 +1,54 @@
 import React from 'react';
+import { HeroShader } from './HeroShader';
 
 export interface HeroBackgroundProps {
-  styleType?: 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
+  styleType?: 'original-shader' | 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
   customImageUrl?: string;
   primaryColor?: string;
   kickerColor?: string;
+  shaderColors?: {
+    dark?: { color1: string; color2: string; color3: string };
+    light?: { color1: string; color2: string; color3: string };
+  };
   className?: string;
 }
 
 export function HeroBackground({
-  styleType = 'geometric-waves',
+  styleType = 'original-shader',
   customImageUrl,
   primaryColor = '#a855f7',
   kickerColor = '#38e8d6',
+  shaderColors,
   className = '',
 }: HeroBackgroundProps) {
+  // 0. Original Dynamic WebGL Shader (Artist Approved Signature Design)
+  if (styleType === 'original-shader' || !styleType) {
+    return (
+      <div className={`pointer-events-none absolute inset-0 overflow-hidden select-none ${className}`}>
+        <HeroShader
+          color1={shaderColors?.dark?.color1 || primaryColor || '#7c3aed'}
+          color2={shaderColors?.dark?.color2 || '#09080f'}
+          color3={shaderColors?.dark?.color3 || kickerColor || '#38e8d6'}
+          lightColor1={shaderColors?.light?.color1 || '#c4b5fd'}
+          lightColor2={shaderColors?.light?.color2 || '#f6f5fb'}
+          lightColor3={shaderColors?.light?.color3 || '#99f6e4'}
+          speed={0.35}
+          scale={1}
+          noise={0.08}
+          className="absolute inset-0 h-full w-full"
+        />
+        {/* Subtle readability vignette overlay to ensure typography and foreground pop */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 45%, rgba(9, 8, 15, 0.12) 0%, rgba(9, 8, 15, 0.42) 60%, rgba(9, 8, 15, 0.82) 100%)',
+          }}
+        />
+      </div>
+    );
+  }
+
   // 1. Geometric Fluid Waves (Bespoke organic wave curves & geometric tech accents)
   if (styleType === 'geometric-waves') {
     return (

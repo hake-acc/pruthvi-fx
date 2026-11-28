@@ -221,9 +221,9 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
     customFont: (t.customFont || '').trim().slice(0, 80),
     customBodyFont: (t.customBodyFont || '').trim().slice(0, 80),
     customFontUrl: typeof t.customFontUrl === 'string' && t.customFontUrl.length < 600000 ? t.customFontUrl.trim() : '',
-    bgStyle: (['geometric-waves', 'liquid-silk', 'cosmic-aurora', 'cyber-mesh', 'minimal-obsidian', 'custom-image'].includes(t.bgStyle as string)
-      ? (t.bgStyle as 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image')
-      : 'geometric-waves'),
+    bgStyle: (['original-shader', 'geometric-waves', 'liquid-silk', 'cosmic-aurora', 'cyber-mesh', 'minimal-obsidian', 'custom-image'].includes(t.bgStyle as string)
+      ? (t.bgStyle as 'original-shader' | 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image')
+      : 'original-shader'),
     bgImageUrl: typeof t.bgImageUrl === 'string' && t.bgImageUrl.trim().length < 500 ? t.bgImageUrl.trim() : '',
     showCurls: t.showCurls !== false,
     shaderColor1: sanitizeHexColor(t.shaderColor1, def.theme.shaderColor1),

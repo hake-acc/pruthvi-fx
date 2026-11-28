@@ -64,7 +64,7 @@
     "defaultMode": "dark",
     "shaderColor3": "#a915f9",
     "customFont": "",
-    "bgStyle": "geometric-waves",
+    "bgStyle": "original-shader",
     "lightShaderColor1": "#fca5a5",
     "bgGradient": "linear-gradient(135deg, #09080f 0%, #200a38 100%)",
     "bgImageUrl": "",

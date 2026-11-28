@@ -60,7 +60,7 @@ export interface ThemeConfig {
   customFont?: string;
   customBodyFont?: string;
   customFontUrl?: string;
-  bgStyle?: 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
+  bgStyle?: 'original-shader' | 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
   bgImageUrl?: string;
   showCurls?: boolean;
   shaderColor1: string;

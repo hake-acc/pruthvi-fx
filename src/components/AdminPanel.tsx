@@ -1803,15 +1803,22 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                       <h4 className="text-sm font-bold">Hero &amp; Website Background Style</h4>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Choose from 100% original, copyright-clean boutique background styles matching your purple aesthetic, or upload your own. The previous artist's shader has been completely replaced.
+                      The original artist has permitted using the signature WebGL refractive shader background! You can also choose from bespoke organic geometric waves, cosmic nebulae, or upload your own wallpaper.
                     </p>
 
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {[
                         {
+                          id: 'original-shader',
+                          name: 'Original Dynamic Shader',
+                          badge: 'Artist Approved • Original',
+                          desc: 'The original signature WebGL refractive wave shader with real-time responsive color ribbons.',
+                          preview: 'bg-gradient-to-br from-[#7c3aed] via-[#09080f] to-[#38e8d6]',
+                        },
+                        {
                           id: 'geometric-waves',
                           name: 'Geometric Fluid Waves',
-                          badge: 'Your Sample Reference',
+                          badge: 'Geometric Sample',
                           desc: 'Deep purple organic layered waves, floating concentric rings, & tech dot grid matrix.',
                           preview: 'bg-gradient-to-br from-[#1a0f35] to-[#09080f]',
                         },
@@ -1851,7 +1858,7 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                           preview: 'bg-card',
                         },
                       ].map((sample) => {
-                        const active = (draft.theme.bgStyle || 'geometric-waves') === sample.id;
+                        const active = (draft.theme.bgStyle || 'original-shader') === sample.id;
                         return (
                           <button
                             key={sample.id}

@@ -492,10 +492,14 @@ export default function App() {
               className="hero-glass pointer-events-none absolute inset-0 z-0 overflow-hidden"
             >
               <HeroBackground
-                styleType={data.theme.bgStyle || 'geometric-waves'}
+                styleType={data.theme.bgStyle || 'original-shader'}
                 customImageUrl={data.theme.bgImageUrl}
                 primaryColor={data.theme.primaryColor}
                 kickerColor={data.theme.kickerColor}
+                shaderColors={{
+                  dark: data.shader.dark,
+                  light: data.shader.light,
+                }}
               />
             </div>
 
