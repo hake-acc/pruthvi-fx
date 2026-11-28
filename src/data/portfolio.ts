@@ -58,6 +58,8 @@ export interface ThemeConfig {
   displayFont?: string;
   bodyFont?: string;
   customFont?: string;
+  customBodyFont?: string;
+  customFontUrl?: string;
   bgStyle?: 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image';
   bgImageUrl?: string;
   showCurls?: boolean;

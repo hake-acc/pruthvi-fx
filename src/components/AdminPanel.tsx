@@ -52,8 +52,9 @@ import { applyLiveSoundSettings, playClickSound, playOpenSound } from '../lib/so
 import { BOOTSTRAPPED_ADMIN_EMAIL } from '../firebase';
 import { ColorFieldWithWheel } from './ColorPickerWheel';
 import { MasterColorWheel, type HarmonizedPalette } from './MasterColorWheel';
+import { TypographyStudio } from './TypographyStudio';
 
-type AdminTab = 'brand' | 'theme' | 'about' | 'work' | 'clients' | 'faq' | 'contact';
+type AdminTab = 'brand' | 'theme' | 'typography' | 'about' | 'work' | 'clients' | 'faq' | 'contact';
 type WorkSubTab = 'categories' | 'thumbnails' | 'before-after';
 type ServerAuthMode = 'checking' | 'setup' | 'login' | 'google-only';
 
@@ -819,7 +820,8 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
 
   const tabs: { id: AdminTab; label: string; icon: ReactNode }[] = [
     { id: 'brand', label: 'Brand & Logo', icon: <Sparkles className="h-4 w-4" /> },
-    { id: 'theme', label: 'Theme & Sound', icon: <Palette className="h-4 w-4" /> },
+    { id: 'theme', label: 'Theme & Color', icon: <Palette className="h-4 w-4" /> },
+    { id: 'typography', label: 'Fonts & Type', icon: <Type className="h-4 w-4" /> },
     { id: 'about', label: 'About', icon: <UserIcon className="h-4 w-4" /> },
     { id: 'work', label: 'Work & Cats', icon: <Layers className="h-4 w-4" /> },
     { id: 'clients', label: 'Clients (YT)', icon: <Users className="h-4 w-4" /> },
@@ -1780,137 +1782,19 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                     </div>
                   </div>
 
-                  {/* Typography & Custom Fonts Customizer */}
-                  <div className="rounded-2xl border border-white/10 bg-background/50 p-4 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Type className="h-4 w-4 text-primary" />
-                      <h4 className="text-sm font-bold">Typography &amp; Studio Fonts</h4>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Choose high-contrast boutique studio fonts for headlines and body text, or enter any custom Google Font. Changes reflect live across the entire website instantly.
-                    </p>
-
-                    {/* Display Font Grid */}
-                    <div>
-                      <label className={LABEL_CLS}>Headline / Display Font</label>
-                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                        {[
-                          { name: 'Outfit', desc: 'Punchy & Geometric' },
-                          { name: 'Syne', desc: 'Avant-Garde Editorial' },
-                          { name: 'Space Grotesk', desc: 'Cyber & Technical' },
-                          { name: 'Bricolage Grotesque', desc: 'Expressive Modern' },
-                          { name: 'Cinzel', desc: 'Cinematic Luxury' },
-                          { name: 'Playfair Display', desc: 'Boutique Serif' },
-                          { name: 'Cabinet Grotesk', desc: 'Swiss Editorial' },
-                          { name: 'Inter', desc: 'Clean Neo-Grotesque' },
-                        ].map((font) => (
-                          <button
-                            key={font.name}
-                            type="button"
-                            onClick={() =>
-                              setDraft((d) => ({
-                                ...d,
-                                theme: { ...d.theme, displayFont: font.name, customFont: '' },
-                              }))
-                            }
-                            className={`flex cursor-pointer flex-col rounded-xl border p-2.5 text-left transition-all ${
-                              (!draft.theme.customFont && (draft.theme.displayFont || 'Outfit') === font.name)
-                                ? 'border-primary bg-primary/15 text-foreground shadow-glow'
-                                : 'border-white/10 bg-background/60 text-muted-foreground hover:border-white/25 hover:text-foreground'
-                            }`}
-                          >
-                            <span className="text-xs font-bold">{font.name}</span>
-                            <span className="text-[10px] text-muted-foreground">{font.desc}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Body Font Grid */}
-                    <div>
-                      <label className={LABEL_CLS}>Body &amp; Tagline Font</label>
-                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                        {[
-                          { name: 'Plus Jakarta Sans', desc: 'Clean & Legible' },
-                          { name: 'Inter', desc: 'Modern System Standard' },
-                          { name: 'Outfit', desc: 'Geometric Flow' },
-                          { name: 'Space Grotesk', desc: 'Tech Monospace Feel' },
-                        ].map((font) => (
-                          <button
-                            key={font.name}
-                            type="button"
-                            onClick={() =>
-                              setDraft((d) => ({
-                                ...d,
-                                theme: { ...d.theme, bodyFont: font.name },
-                              }))
-                            }
-                            className={`flex cursor-pointer flex-col rounded-xl border p-2.5 text-left transition-all ${
-                              (draft.theme.bodyFont || 'Plus Jakarta Sans') === font.name
-                                ? 'border-primary bg-primary/15 text-foreground shadow-glow'
-                                : 'border-white/10 bg-background/60 text-muted-foreground hover:border-white/25 hover:text-foreground'
-                            }`}
-                          >
-                            <span className="text-xs font-bold">{font.name}</span>
-                            <span className="text-[10px] text-muted-foreground">{font.desc}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Custom Google Font Input */}
-                    <div className="rounded-xl border border-white/10 bg-background/80 p-3">
-                      <label className={LABEL_CLS}>Or Enter Any Custom Google Font</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={draft.theme.customFont || ''}
-                          onChange={(e) =>
-                            setDraft((d) => ({
-                              ...d,
-                              theme: { ...d.theme, customFont: e.target.value },
-                            }))
-                          }
-                          placeholder="e.g. Righteous, Bebas Neue, Montserrat, Urbanist..."
-                          className={INPUT_CLS}
-                        />
-                        {draft.theme.customFont && (
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setDraft((d) => ({
-                                ...d,
-                                theme: { ...d.theme, customFont: '' },
-                              }))
-                            }
-                            className="cursor-pointer rounded-xl border border-white/15 px-3 text-xs font-semibold hover:border-primary"
-                          >
-                            Reset
-                          </button>
-                        )}
-                      </div>
-                      <p className="mt-1.5 text-[11px] text-muted-foreground">
-                        Auto-loads Google Web Fonts on the fly without changing HTML.
-                      </p>
-                    </div>
-
-                    {/* Live Typography Preview Box */}
-                    <div className="rounded-xl border border-white/15 bg-card/70 p-4 backdrop-blur-sm">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Live Typography Preview</span>
-                      <h2
-                        className="mt-1 text-2xl font-black text-foreground"
-                        style={{ fontFamily: `"${draft.theme.customFont || draft.theme.displayFont || 'Outfit'}", sans-serif` }}
-                      >
-                        CREATING THUMBNAILS THAT COMMAND MILLIONS OF VIEWS
-                      </h2>
-                      <p
-                        className="mt-1.5 text-xs text-muted-foreground"
-                        style={{ fontFamily: `"${draft.theme.bodyFont || 'Plus Jakarta Sans'}", sans-serif` }}
-                      >
-                        High-converting YouTube graphic design with bespoke color grading, 3D character manipulation, and atmospheric depth.
-                      </p>
-                    </div>
-                  </div>
+                  {/* Typography & Custom Fonts Studio */}
+                  <TypographyStudio
+                    theme={draft.theme}
+                    onChange={(partial) => {
+                      setDraft((d) => {
+                        const nextTheme = { ...d.theme, ...partial };
+                        applyDynamicThemeStyles(nextTheme, d.brandName, d.logoSrc);
+                        return { ...d, theme: nextTheme };
+                      });
+                    }}
+                    onSave={() => void handleSaveConfig(draft, 'Typography & fonts published live!')}
+                    syncing={syncing}
+                  />
 
                   {/* Background Style & Samples (Bespoke Non-Infringing Styles) */}
                   <div className="rounded-2xl border border-white/10 bg-background/50 p-4 space-y-4">
@@ -2072,7 +1956,53 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                 </div>
               )}
 
-              {/* TAB 3: ABOUT */}
+              {/* TAB: FONTS & TYPOGRAPHY STUDIO */}
+              {tab === 'typography' && (
+                <div className="space-y-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                    <div>
+                      <div className="flex items-center gap-2.5">
+                        <div className="grid h-10 w-10 place-items-center rounded-2xl bg-primary/20 text-primary shadow-glow">
+                          <Type className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="font-display text-xl font-extrabold text-foreground">
+                            Typography &amp; Custom Fonts Studio
+                          </h3>
+                          <p className="text-xs text-muted-foreground">
+                            Restore the original portfolio font (Outfit), choose from boutique editorial fonts, or upload and enter any custom font live.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      disabled={syncing}
+                      onClick={() => void handleSaveConfig(draft, 'Typography & fonts published live!')}
+                      className="flex cursor-pointer items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-glow hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+                    >
+                      <Check className="h-4 w-4" />
+                      <span>{syncing ? 'Publishing Live...' : 'Publish Fonts Live'}</span>
+                    </button>
+                  </div>
+
+                  <TypographyStudio
+                    theme={draft.theme}
+                    onChange={(partial) => {
+                      setDraft((d) => {
+                        const nextTheme = { ...d.theme, ...partial };
+                        applyDynamicThemeStyles(nextTheme, d.brandName, d.logoSrc);
+                        return { ...d, theme: nextTheme };
+                      });
+                    }}
+                    onSave={() => void handleSaveConfig(draft, 'Typography & fonts published live!')}
+                    syncing={syncing}
+                  />
+                </div>
+              )}
+
+              {/* TAB: ABOUT */}
               {tab === 'about' && (
                 <div className="space-y-5">
                   <div>

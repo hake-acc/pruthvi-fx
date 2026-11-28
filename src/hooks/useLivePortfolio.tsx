@@ -219,6 +219,8 @@ function sanitizeSiteConfig(raw: SiteConfigPayload): SiteConfigPayload {
     displayFont: (t.displayFont || def.theme.displayFont || 'Outfit').trim().slice(0, 60),
     bodyFont: (t.bodyFont || def.theme.bodyFont || 'Plus Jakarta Sans').trim().slice(0, 60),
     customFont: (t.customFont || '').trim().slice(0, 80),
+    customBodyFont: (t.customBodyFont || '').trim().slice(0, 80),
+    customFontUrl: typeof t.customFontUrl === 'string' && t.customFontUrl.length < 600000 ? t.customFontUrl.trim() : '',
     bgStyle: (['geometric-waves', 'liquid-silk', 'cosmic-aurora', 'cyber-mesh', 'minimal-obsidian', 'custom-image'].includes(t.bgStyle as string)
       ? (t.bgStyle as 'geometric-waves' | 'liquid-silk' | 'cosmic-aurora' | 'cyber-mesh' | 'minimal-obsidian' | 'custom-image')
       : 'geometric-waves'),
@@ -313,8 +315,35 @@ export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, l
 
   // Live dynamic typography & Google Font injection
   const displayFont = (theme.displayFont || 'Outfit').trim();
-  const bodyFont = (theme.bodyFont || 'Plus Jakarta Sans').trim();
+  const bodyFont = (theme.customBodyFont || theme.bodyFont || 'Plus Jakarta Sans').trim();
   const customFont = (theme.customFont || '').trim();
+  const customFontUrl = (theme.customFontUrl || '').trim();
+
+  // Dynamic @font-face injection for custom font URLs or uploaded font files
+  if (customFontUrl) {
+    let fontFaceEl = document.getElementById('dynamic-custom-font-face') as HTMLStyleElement | null;
+    if (!fontFaceEl) {
+      fontFaceEl = document.createElement('style');
+      fontFaceEl.id = 'dynamic-custom-font-face';
+      document.head.appendChild(fontFaceEl);
+    }
+    if (
+      customFontUrl.includes('.css') ||
+      customFontUrl.includes('fonts.googleapis.com') ||
+      customFontUrl.includes('use.typekit.net')
+    ) {
+      fontFaceEl.textContent = `@import url("${customFontUrl}");`;
+    } else {
+      const familyName = customFont || 'CustomUserFont';
+      fontFaceEl.textContent = `
+        @font-face {
+          font-family: "${familyName}";
+          src: url("${customFontUrl}") format("woff2"), url("${customFontUrl}");
+          font-display: swap;
+        }
+      `;
+    }
+  }
 
   const fontsToLoad = new Set<string>();
   if (displayFont && !['sans-serif', 'system-ui', 'monospace'].includes(displayFont.toLowerCase())) {
@@ -323,8 +352,11 @@ export function applyDynamicThemeStyles(theme: ThemeConfig, brandName: string, l
   if (bodyFont && !['sans-serif', 'system-ui', 'monospace'].includes(bodyFont.toLowerCase())) {
     fontsToLoad.add(bodyFont);
   }
-  if (customFont && !['sans-serif', 'system-ui', 'monospace'].includes(customFont.toLowerCase())) {
+  if (customFont && !customFontUrl && !['sans-serif', 'system-ui', 'monospace'].includes(customFont.toLowerCase())) {
     fontsToLoad.add(customFont);
+  }
+  if (theme.customBodyFont && !['sans-serif', 'system-ui', 'monospace'].includes(theme.customBodyFont.toLowerCase())) {
+    fontsToLoad.add(theme.customBodyFont);
   }
 
   if (fontsToLoad.size > 0) {
