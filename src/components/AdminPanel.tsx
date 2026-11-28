@@ -51,6 +51,7 @@ import { compressImageFile } from '../lib/imageUtils';
 import { applyLiveSoundSettings, playClickSound, playOpenSound } from '../lib/sound';
 import { BOOTSTRAPPED_ADMIN_EMAIL } from '../firebase';
 import { ColorFieldWithWheel } from './ColorPickerWheel';
+import { MasterColorWheel, type HarmonizedPalette } from './MasterColorWheel';
 
 type AdminTab = 'brand' | 'theme' | 'about' | 'work' | 'clients' | 'faq' | 'contact';
 type WorkSubTab = 'categories' | 'thumbnails' | 'before-after';
@@ -573,6 +574,36 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
     } catch (error) {
       notify('err', formatFriendlyError(error, 'Failed to save changes.'));
     }
+  };
+
+  const handleApplyHarmonizedPalette = (palette: HarmonizedPalette) => {
+    setDraft((d) => {
+      const nextTheme = {
+        ...d.theme,
+        preset: 'custom',
+        primaryColor: palette.primaryColor,
+        kickerColor: palette.kickerColor,
+        navActiveColor: palette.navActiveColor,
+        darkBg: palette.darkBg,
+        darkCard: palette.darkCard,
+        shaderColor1: palette.shaderColor1,
+        shaderColor2: palette.shaderColor2,
+        shaderColor3: palette.shaderColor3,
+        lightShaderColor1: palette.lightShaderColor1,
+        lightShaderColor2: palette.lightShaderColor2,
+        lightShaderColor3: palette.lightShaderColor3,
+        textColor: palette.textColor,
+        mutedTextColor: palette.mutedTextColor,
+        bgGradient: palette.bgGradient,
+        bgGradientStart: palette.bgGradientStart,
+        bgGradientEnd: palette.bgGradientEnd,
+      };
+      applyDynamicThemeStyles(nextTheme, d.brandName, d.logoSrc);
+      return {
+        ...d,
+        theme: nextTheme,
+      };
+    });
   };
 
   const handleSaveCategory = async () => {
@@ -1427,6 +1458,14 @@ export function AdminPanel({ open, onClose }: AdminPanelProps) {
                       </button>
                     ))}
                   </div>
+
+                  {/* MASTER COLOR WHEEL: 1 Big Wheel That Sets Entire Site Palette with Cooler/Warmer Harmonies */}
+                  <MasterColorWheel
+                    currentTheme={draft.theme}
+                    onApplyPalette={handleApplyHarmonizedPalette}
+                    brandName={draft.brandName}
+                    logoSrc={draft.logoSrc}
+                  />
 
                   {/* Quick Theme Presets */}
                   <div>
